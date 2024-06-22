@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/member")
 @RequiredArgsConstructor
-public class UserController {
+public class MemberController {
 
     private final MemberService memberService;
 
@@ -29,7 +29,7 @@ public class UserController {
             response = new SignUpResponse(String.valueOf(HttpStatus.OK.value()), HttpStatus.OK.name());
         }
 
-        return ResponseEntity.ok().body(response);
+        return ResponseEntity.ok(response);
     }
 
 }
