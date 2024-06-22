@@ -22,10 +22,10 @@ public class UserController {
 
     @PostMapping("/signup")
     public SignUpResponse doSignUp(@Valid @RequestBody SignUpRequest request) throws Exception {
-        SignUpResponse response = new SignUpResponse(HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.name());
+        SignUpResponse response = new SignUpResponse(String.valueOf(HttpStatus.BAD_REQUEST.value()), HttpStatus.BAD_REQUEST.name());
         long userSeq = userService.saveUser(request);
         if(0L != userSeq) {
-            response = new SignUpResponse(HttpStatus.OK.value(), HttpStatus.OK.name());
+            response = new SignUpResponse(String.valueOf(HttpStatus.OK.value()), HttpStatus.OK.name());
         }
         log.info("response : {}", response);
         return response;

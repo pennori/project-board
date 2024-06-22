@@ -93,7 +93,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         String result =
                 objectMapper.writeValueAsString(
                         new LoginResponse(
-                                HttpStatus.OK.value(),
+                                String.valueOf(HttpStatus.OK.value()),
                                 HttpStatus.OK.name(),
                                 token
                         )
@@ -109,7 +109,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         String result =
                 objectMapper.writeValueAsString(
                         new ErrorResponse(
-                                HttpStatus.UNAUTHORIZED.value(),
+                                String.valueOf(HttpStatus.UNAUTHORIZED.value()),
                                 HttpStatus.UNAUTHORIZED.name())
                 );
         response.setStatus(HttpStatus.UNAUTHORIZED.value());

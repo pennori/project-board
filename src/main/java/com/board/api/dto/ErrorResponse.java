@@ -6,7 +6,7 @@ import lombok.ToString;
 @Getter
 @ToString(callSuper = true)
 public class ErrorResponse extends CommonResponse {
-    public ErrorResponse(int resultCode, String resultMsg) {
+    public ErrorResponse(String resultCode, String resultMsg) {
         super(resultCode, resultMsg);
     }
 }

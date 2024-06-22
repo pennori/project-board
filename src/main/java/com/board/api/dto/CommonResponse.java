@@ -8,6 +8,6 @@ import lombok.ToString;
 @AllArgsConstructor
 @ToString
 public abstract class CommonResponse {
-    private int resultCode;
+    private String resultCode;
     private String resultMsg;
 }

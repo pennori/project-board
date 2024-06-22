@@ -8,7 +8,7 @@ import lombok.ToString;
 public class LoginResponse extends CommonResponse {
     private final String token;
 
-    public LoginResponse(int resultCode, String resultMsg, String token) {
+    public LoginResponse(String resultCode, String resultMsg, String token) {
         super(resultCode, resultMsg);
         this.token = token;
     }
