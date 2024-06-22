@@ -9,23 +9,23 @@ import lombok.Setter;
 @Entity
 @Getter
 @NoArgsConstructor
-public class UserRole {
+public class MemberRole {
 
     @Builder
-    public UserRole(String name) {
+    public MemberRole(String name) {
         this.name = name;
     }
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(nullable = false)
-    private Long userRoleId;
+    private Long memberRoleId;
 
     @Column(nullable = false)
     private String name;
 
     @Setter
     @OneToOne
-    @JoinColumn(name = "user_seq")
-    private AppUser appUser;
+    @JoinColumn(name = "member_id")
+    private Member member;
 }

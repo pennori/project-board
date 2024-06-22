@@ -10,15 +10,15 @@ import lombok.ToString;
 @ToString(callSuper = true)
 @Getter
 @NoArgsConstructor
-public class AppUser extends DateAndAuthor {
+public class Member extends DateAndAuthor {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(nullable = false)
-    private Long userSeq;
+    private Long memberId;
 
     @Column(nullable = false, unique = true)
-    private String userId;
+    private String email;
 
     @Column(nullable = false)
     private String password;
@@ -32,17 +32,17 @@ public class AppUser extends DateAndAuthor {
     @Column(nullable = false)
     private String idValue;
 
-    @OneToOne(mappedBy = "appUser", cascade = CascadeType.ALL)
-    private UserRole userRole;
+    @OneToOne(mappedBy = "member", cascade = CascadeType.ALL)
+    private MemberRole memberRole;
 
-    public void setUserRole(UserRole userRole) {
-        userRole.setAppUser(this);
-        this.userRole = userRole;
+    public void setMemberRole(MemberRole memberRole) {
+        memberRole.setMember(this);
+        this.memberRole = memberRole;
     }
 
     @Builder
-    public AppUser(String userId, String password, String name, String idType, String idValue) {
-        this.userId = userId;
+    public Member(String email, String password, String name, String idType, String idValue) {
+        this.email = email;
         this.password = password;
         this.name = name;
         this.idType = idType;

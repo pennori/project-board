@@ -1,7 +1,7 @@
 package com.board.api.repository;
 
-import com.board.api.entity.AppUser;
+import com.board.api.entity.Member;
 
 public interface CustomUserRepository {
-    AppUser getUserByUserId(String userId);
+    Member getUserByEmail(String email);
 }

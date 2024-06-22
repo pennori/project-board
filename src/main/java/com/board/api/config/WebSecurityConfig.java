@@ -58,8 +58,8 @@ public class WebSecurityConfig {
                 (auth) -> auth.requestMatchers(
                         "/hello",
                         "/",
-                        "/user/signup",
-                        "/user/login"
+                        "/member/signup",
+                        "/member/login"
                 ).permitAll().anyRequest().authenticated()
         );
 
@@ -69,7 +69,7 @@ public class WebSecurityConfig {
         // 필터 추가 LoginFilter 로 UsernamePasswordAuthenticationFilter 대체
         LoginFilter loginFilter = new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil);
         // Spring Security 에서 참조하는 login url 을 변경
-        loginFilter.setFilterProcessesUrl("/user/login");
+        loginFilter.setFilterProcessesUrl("/member/login");
         // Spring security 에서 참조하는 키 값 username 을 userId 로 변경
         loginFilter.setUsernameParameter("userId");
         http.addFilterAt(loginFilter, UsernamePasswordAuthenticationFilter.class);

@@ -1,6 +1,6 @@
 package com.board.api.security;
 
-import com.board.api.entity.AppUser;
+import com.board.api.entity.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -11,23 +11,23 @@ import java.util.Collection;
 @RequiredArgsConstructor
 public class CustomUserDetails implements UserDetails {
 
-    private final AppUser appUser;
+    private final Member member;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Collection<GrantedAuthority> collection = new ArrayList<>();
-        collection.add((GrantedAuthority) () -> appUser.getUserRole().getName());
+        collection.add((GrantedAuthority) () -> member.getMemberRole().getName());
         return collection;
     }
 
     @Override
     public String getPassword() {
-        return appUser.getPassword();
+        return member.getPassword();
     }
 
     @Override
     public String getUsername() {
-        // username 대신 userId 로 대체
-        return appUser.getUserId();
+        // username 대신 email 로 대체
+        return member.getEmail();
     }
 }

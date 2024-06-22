@@ -1,6 +1,6 @@
 package com.board.api.entity;
 
-import com.board.api.constants.Auther;
+import com.board.api.constants.Author;
 import jakarta.persistence.MappedSuperclass;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
@@ -24,13 +24,13 @@ public class DateAndAuthor {
     public void prePersist(){
         this.createdAt = LocalDateTime.now();
         this.updatedAt = this.createdAt;
-        this.createdBy = Auther.SYSTEM_SEQ;
+        this.createdBy = Author.SYSTEM_ID;
         this.updatedBy = this.createdBy;
     }
 
     @PreUpdate
     public void preUpdate(){
         this.updatedAt = LocalDateTime.now();
-        this.updatedBy = Auther.SYSTEM_SEQ;
+        this.updatedBy = Author.SYSTEM_ID;
     }
 }

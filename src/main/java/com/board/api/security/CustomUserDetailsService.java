@@ -1,7 +1,7 @@
 package com.board.api.security;
 
-import com.board.api.entity.AppUser;
-import com.board.api.repository.UserRepository;
+import com.board.api.entity.Member;
+import com.board.api.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -13,15 +13,15 @@ import org.springframework.util.ObjectUtils;
 @RequiredArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {
 
-    private final UserRepository userRepository;
+    private final MemberRepository memberRepository;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        AppUser appUser = userRepository.findByUserId(username);
+        Member member = memberRepository.findByEmail(username);
 
-        if(!ObjectUtils.isEmpty(appUser)) {
+        if(!ObjectUtils.isEmpty(member)) {
             // UserDetails에 담아서 return하면 AutneticationManager가 검증
-            return new CustomUserDetails(appUser);
+            return new CustomUserDetails(member);
         }
 
         return null;
