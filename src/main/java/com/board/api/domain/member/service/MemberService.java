@@ -1,6 +1,7 @@
 package com.board.api.domain.member.service;
 
 import com.board.api.domain.member.dto.request.SignUpRequest;
+import com.board.api.domain.point.entity.Point;
 import com.board.api.global.encryption.BidirectionalCryptUtil;
 import com.board.api.domain.member.entity.Member;
 import com.board.api.domain.member.entity.MemberRole;
@@ -31,20 +32,25 @@ public class MemberService {
             return 0L;
         }
 
-        MemberRole memberRole =
-                MemberRole.builder()
-                        .name(RoleType.USER.name())
-                        .build();
         Member member =
                 Member.builder()
                         .email(request.getUserId())
                         .password(passwordEncoder.encode(request.getPassword()))
                         .name(request.getName())
                         .idType(request.getIdType())
-                        .idValue(cryptUtil.encryptAES256(request.getIdValue()))
+                        .idValue(cryptUtil.encrypt(request.getIdValue()))
+                        .build();
+
+        memberRepository.save(member);
+
+        MemberRole memberRole =
+                MemberRole.builder()
+                        .name(RoleType.USER.name())
                         .build();
         member.setMemberRole(memberRole);
-        memberRepository.save(member);
+
+        Point point = new Point(0L);
+        member.setPoint(point);
 
         return member.getMemberId();
     }

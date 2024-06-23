@@ -22,7 +22,7 @@ public class BidirectionalCryptUtil {
         this.iv = iv;
     }
 
-    public String encryptAES256(String raw) throws Exception {
+    public String encrypt(String raw) throws Exception {
         Cipher cipher = Cipher.getInstance(alg);
         SecretKeySpec keySpec = new SecretKeySpec(key.getBytes(), "AES");
         IvParameterSpec ivParamSpec = new IvParameterSpec(iv.getBytes());
@@ -33,7 +33,7 @@ public class BidirectionalCryptUtil {
         return Base64.getEncoder().encodeToString(encrypted);
     }
 
-    public String decryptAES256(String encrypt) throws Exception {
+    public String decrypt(String encrypt) throws Exception {
         Cipher cipher = Cipher.getInstance(alg);
         SecretKeySpec keySpec = new SecretKeySpec(key.getBytes(), "AES");
         IvParameterSpec ivParamSpec = new IvParameterSpec(iv.getBytes());
