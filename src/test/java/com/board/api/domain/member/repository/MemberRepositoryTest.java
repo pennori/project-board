@@ -1,14 +1,18 @@
 package com.board.api.domain.member.repository;
 
 import com.board.api.domain.member.entity.Member;
+import com.board.api.domain.member.entity.MemberRole;
+import com.board.api.domain.point.entity.Point;
 import com.board.api.global.config.QueryDSLConfig;
+
+import com.board.api.global.enums.RoleType;
+import static org.assertj.core.api.Assertions.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.context.annotation.Import;
-import org.springframework.util.Assert;
 
 @DisplayName("MemberRepository 테스트")
 @DataJpaTest
@@ -28,6 +32,16 @@ class MemberRepositoryTest {
                         .name("name")
                         .regNo("regNo")
                         .build();
+
+        MemberRole memberRole =
+                MemberRole.builder()
+                        .name(RoleType.USER.name())
+                        .build();
+        member.setMemberRole(memberRole);
+
+        Point point = Point.builder().total(1L).build();
+        member.setPoint(point);
+
         testEntityManager.persist(member);
     }
 
@@ -41,7 +55,7 @@ class MemberRepositoryTest {
         boolean exists = memberRepository.existsByEmail("email@gmail.com");
 
         // then
-        Assert.isTrue(exists, "email 로 존재 여부 조회 불가");
+        assertThat(exists).isTrue();
     }
 
     @DisplayName("email 로 회원정보 조회")
@@ -54,6 +68,19 @@ class MemberRepositoryTest {
         Member member = memberRepository.findByEmail("email@gmail.com");
 
         // then
-        Assert.isTrue(member.getMemberId() > 0L, "email 로 entity 조회 불가");
+        assertThat(member.getMemberId()).isGreaterThan(0L);
+    }
+
+    @DisplayName("email 로 Point 의 항목 조회")
+    @Test
+    void getPointByEmail() {
+        // given
+        initData();
+
+        // when
+        Long total = memberRepository.getPointByEmail("email@gmail.com");
+
+        // then
+        assertThat(total).isGreaterThan(0L);
     }
 }

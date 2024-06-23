@@ -3,6 +3,7 @@ package com.board.api.domain.point.entity;
 import com.board.api.domain.member.entity.Member;
 import com.board.api.global.entity.DateAndAuthor;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -24,6 +25,7 @@ public class Point extends DateAndAuthor {
     @JoinColumn(name = "member_id")
     private Member member;
 
+    @Builder
     public Point(Long total) {
         this.total = total;
     }
