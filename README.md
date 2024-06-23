@@ -1,4 +1,4 @@
-# project-board 
+# project-board
 #### 게시판 이용자의 포인트 관리 서비스
 
 ## 사양
@@ -48,6 +48,7 @@
 #### 댓글에 대한 댓글은 작성될 수 없음.
 #### 게시물과 댓글은 수정/삭제될 수 있음.
 
+
 ## 제약사항
 
 #### 모든 요청과 응답에 대해서 application/json 타입으로 구현.
@@ -55,12 +56,14 @@
 #### 인증 토큰의 유효시간은 발급 후 30분.
 #### /member/** 이외의 API는 인증 대상
 
+
 ## 개발 환경
 
 #### Language : Java 17
 #### Framework : Spring Boot 3.3.1
 #### DB : H2 Embedded DB
 #### Build : Gradle 8.8
+
 
 ## 실행 방법
 
