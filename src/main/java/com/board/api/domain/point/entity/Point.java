@@ -1,7 +1,8 @@
-package com.board.api.domain.member.entity;
+package com.board.api.domain.point.entity;
 
+import com.board.api.domain.member.entity.Member;
+import com.board.api.global.entity.DateAndAuthor;
 import jakarta.persistence.*;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -9,23 +10,21 @@ import lombok.Setter;
 @Entity
 @Getter
 @NoArgsConstructor
-public class MemberRole {
-
+public class Point extends DateAndAuthor {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(nullable = false)
-    private Long memberRoleId;
+    private Long pointId;
 
     @Column(nullable = false)
-    private String name;
+    private Long total;
 
     @Setter
     @OneToOne
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @Builder
-    public MemberRole(String name) {
-        this.name = name;
+    public Point(Long total) {
+        this.total = total;
     }
 }

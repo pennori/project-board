@@ -1,5 +1,6 @@
 package com.board.api.domain.member.entity;
 
+import com.board.api.domain.point.entity.Point;
 import com.board.api.global.entity.DateAndAuthor;
 import jakarta.persistence.*;
 import lombok.Builder;
@@ -36,9 +37,17 @@ public class Member extends DateAndAuthor {
     @OneToOne(mappedBy = "member", cascade = CascadeType.ALL)
     private MemberRole memberRole;
 
+    @OneToOne(mappedBy = "member", cascade = CascadeType.ALL)
+    private Point point;
+
     public void setMemberRole(MemberRole memberRole) {
         memberRole.setMember(this);
         this.memberRole = memberRole;
+    }
+
+    public void setPoint(Point point) {
+        point.setMember(this);
+        this.point = point;
     }
 
     @Builder
