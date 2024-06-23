@@ -1,6 +1,5 @@
-package com.board.api.domain.member.dto.response;
+package com.board.api.global.dto.response;
 
-import com.board.api.global.dto.response.CommonResponse;
 import lombok.Getter;
 import lombok.ToString;
 

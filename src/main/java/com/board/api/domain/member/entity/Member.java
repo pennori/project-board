@@ -29,10 +29,7 @@ public class Member extends DateAndAuthor {
     private String name;
 
     @Column(nullable = false)
-    private String idType;
-
-    @Column(nullable = false)
-    private String idValue;
+    private String regNo;
 
     @OneToOne(mappedBy = "member", cascade = CascadeType.ALL)
     private MemberRole memberRole;
@@ -51,12 +48,11 @@ public class Member extends DateAndAuthor {
     }
 
     @Builder
-    public Member(String email, String password, String name, String idType, String idValue) {
+    public Member(String email, String password, String name, String regNo) {
         this.email = email;
         this.password = password;
         this.name = name;
-        this.idType = idType;
-        this.idValue = idValue;
+        this.regNo = regNo;
     }
 
 }

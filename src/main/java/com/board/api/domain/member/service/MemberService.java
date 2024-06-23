@@ -27,18 +27,17 @@ public class MemberService {
     @Transactional(propagation = Propagation.REQUIRED)
     public long saveMember(SignUpRequest request) throws Exception {
         Assert.notNull(request, HttpStatus.BAD_REQUEST.name());
-        boolean exists = memberRepository.existsByEmail(request.getUserId());
+        boolean exists = memberRepository.existsByEmail(request.getEmail());
         if (exists) {
             return 0L;
         }
 
         Member member =
                 Member.builder()
-                        .email(request.getUserId())
+                        .email(request.getEmail())
                         .password(passwordEncoder.encode(request.getPassword()))
                         .name(request.getName())
-                        .idType(request.getIdType())
-                        .idValue(cryptUtil.encrypt(request.getIdValue()))
+                        .regNo(cryptUtil.encrypt(request.getRegNo()))
                         .build();
 
         memberRepository.save(member);

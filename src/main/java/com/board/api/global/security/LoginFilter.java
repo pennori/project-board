@@ -1,6 +1,6 @@
 package com.board.api.global.security;
 
-import com.board.api.domain.member.dto.response.ErrorResponse;
+import com.board.api.global.dto.response.ErrorResponse;
 import com.board.api.domain.member.dto.request.LoginRequest;
 import com.board.api.domain.member.dto.response.LoginResponse;
 import com.board.api.global.jwt.JWTUtil;
@@ -52,7 +52,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
                                 LoginRequest.class
                         );
 
-                username = loginRequest.getUserId();
+                username = loginRequest.getEmail();
                 password = loginRequest.getPassword();
 
                 log.info("JSON 접속. USERID : {}, USERPW : {}", username, password);
