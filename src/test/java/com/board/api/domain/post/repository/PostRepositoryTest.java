@@ -46,7 +46,7 @@ class PostRepositoryTest {
         initMember();
 
         // when
-        Post post = Post.builder().content("content").build();
+        Post post = Post.builder().title("title").content("content").build();
         Member member = memberRepository.findByEmail("email@gmail.com");
         post.setMember(member);
 

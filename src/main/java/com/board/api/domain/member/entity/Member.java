@@ -1,14 +1,15 @@
 package com.board.api.domain.member.entity;
 
+import com.board.api.domain.comment.entity.Comment;
 import com.board.api.domain.point.entity.Point;
 import com.board.api.domain.post.entity.Post;
 import com.board.api.global.entity.DateAndAuthor;
-import io.jsonwebtoken.lang.Objects;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.springframework.util.ObjectUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,6 +47,9 @@ public class Member extends DateAndAuthor {
     @OneToMany(mappedBy = "member")
     private List<Post> bunchOfPost;
 
+    @OneToMany(mappedBy = "member")
+    private List<Comment> bunchOfComment;
+
     public void setMemberRole(MemberRole memberRole) {
         memberRole.setMember(this);
         this.memberRole = memberRole;
@@ -57,7 +61,7 @@ public class Member extends DateAndAuthor {
     }
 
     public void addPost(Post post) {
-        if (Objects.isEmpty(bunchOfPost)) {
+        if (ObjectUtils.isEmpty(bunchOfPost)) {
             bunchOfPost = new ArrayList<>();
         }
         bunchOfPost.add(post);
@@ -71,4 +75,10 @@ public class Member extends DateAndAuthor {
         this.regNo = regNo;
     }
 
+    public void addComment(Comment comment) {
+        if (ObjectUtils.isEmpty(bunchOfComment)) {
+            bunchOfComment = new ArrayList<>();
+        }
+        bunchOfComment.add(comment);
+    }
 }

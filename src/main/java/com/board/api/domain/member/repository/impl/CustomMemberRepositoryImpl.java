@@ -5,15 +5,13 @@ import com.board.api.domain.member.repository.CustomMemberRepository;
 import com.board.api.domain.point.entity.QPoint;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import lombok.RequiredArgsConstructor;
 
+@RequiredArgsConstructor
 public class CustomMemberRepositoryImpl implements CustomMemberRepository {
 
     private final JPAQueryFactory queryFactory;
-
-    public CustomMemberRepositoryImpl(JPAQueryFactory queryFactory) {
-        this.queryFactory = queryFactory;
-    }
-
+    
     @Override
     public Long getPointByEmail(String email) {
         QPoint p = QPoint.point;
