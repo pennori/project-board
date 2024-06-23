@@ -4,15 +4,16 @@ import com.board.api.domain.member.entity.Member;
 import com.board.api.domain.member.entity.MemberRole;
 import com.board.api.domain.point.entity.Point;
 import com.board.api.global.config.QueryDSLConfig;
-
 import com.board.api.global.enums.RoleType;
-import static org.assertj.core.api.Assertions.*;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.context.annotation.Import;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("MemberRepository 테스트")
 @DataJpaTest
@@ -24,6 +25,8 @@ class MemberRepositoryTest {
     @Autowired
     private TestEntityManager testEntityManager;
 
+
+    @BeforeEach
     void initData() {
         Member member =
                 Member.builder()
@@ -49,7 +52,6 @@ class MemberRepositoryTest {
     @Test
     void existsByEmail() {
         // given
-        initData();
 
         // when
         boolean exists = memberRepository.existsByEmail("email@gmail.com");
@@ -62,7 +64,6 @@ class MemberRepositoryTest {
     @Test
     void findByEmail() {
         // given
-        initData();
 
         // when
         Member member = memberRepository.findByEmail("email@gmail.com");
@@ -75,7 +76,6 @@ class MemberRepositoryTest {
     @Test
     void getPointByEmail() {
         // given
-        initData();
 
         // when
         Long total = memberRepository.getPointByEmail("email@gmail.com");
