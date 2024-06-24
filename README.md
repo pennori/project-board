@@ -1,5 +1,19 @@
 # project-board
-#### 게시판 이용자의 포인트 관리 서비스
+#### 게시판 이용자의 포인트 관리 서비스 (토이 프로젝트)
+
+## 개발 환경
+
+#### Build : Gradle 8.8
+#### Language : Java 17
+#### Framework : Spring Boot 3.3.1
+#### Dependencies : Spring Web, Spring Security, Spring Data JPA, QueryDSL-JPA ,H2 Embedded DB, Lombok, JWT ...
+
+
+
+## 실행 방법
+
+#### com.board.api.ProjectBoardApplication 의 main method 실행
+#### gradle build 후 프로젝트 하위의 build/lib/project-board.jar 를 실행 (실행 가능 jar)
 
 ## 사양
 
@@ -55,17 +69,3 @@
 #### 민감정보 (주민등록번호, 비밀번호 등)는 암호화 된 상태로 저장.
 #### 인증 토큰의 유효시간은 발급 후 30분.
 #### /member/** 이외의 API는 인증 대상
-
-
-## 개발 환경
-
-#### Language : Java 17
-#### Framework : Spring Boot 3.3.1
-#### DB : H2 Embedded DB
-#### Build : Gradle 8.8
-
-
-## 실행 방법
-
-#### com.board.api.ProjectBoardApplication 의 main method 실행
-#### gradle build 후 프로젝트 하위의 build/lib/project-board.jar 를 실행 (실행 가능 jar)
