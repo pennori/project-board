@@ -6,7 +6,6 @@ import com.board.api.domain.member.entity.MemberRole;
 import com.board.api.domain.point.entity.Point;
 import com.board.api.global.config.QueryDSLConfig;
 import com.board.api.global.enums.RoleType;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,8 +24,7 @@ class PointRepositoryTest {
     @Autowired
     private TestEntityManager testEntityManager;
 
-    @BeforeEach
-    void initData() {
+    Long initData() {
         Member member =
                 Member.builder()
                         .email("email@gmail.com")
@@ -45,14 +43,18 @@ class PointRepositoryTest {
         member.setPoint(point);
 
         testEntityManager.persist(member);
+
+        return member.getMemberId();
     }
 
     @DisplayName("memberId 로 현재 point 조회")
     @Test
     void getTotalPointByMemberId(){
         // given
+        Long memberId = initData();
+
         // when
-        Long totalPoint = pointRepository.getTotalPointByMemberId(1L);
+        Long totalPoint = pointRepository.getTotalPointByMemberId(memberId);
 
         // then
         assertThat(totalPoint).isEqualTo(100L);

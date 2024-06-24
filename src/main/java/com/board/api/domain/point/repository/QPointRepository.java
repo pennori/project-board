@@ -1,5 +1,5 @@
 package com.board.api.domain.point.repository;
 
-public interface CustomPointRepository {
+public interface QPointRepository {
     Long getTotalPointByMemberId(Long memberId);
 }

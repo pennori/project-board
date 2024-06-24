@@ -1,5 +1,5 @@
 package com.board.api.domain.member.repository;
 
-public interface CustomMemberRepository {
+public interface QMemberRepository {
     Long getPointByEmail(String email);
 }

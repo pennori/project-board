@@ -1,14 +1,14 @@
 package com.board.api.domain.member.repository.impl;
 
 import com.board.api.domain.member.entity.QMember;
-import com.board.api.domain.member.repository.CustomMemberRepository;
+import com.board.api.domain.member.repository.QMemberRepository;
 import com.board.api.domain.point.entity.QPoint;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public class CustomMemberRepositoryImpl implements CustomMemberRepository {
+public class QMemberRepositoryImpl implements QMemberRepository {
 
     private final JPAQueryFactory queryFactory;
     
