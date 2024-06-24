@@ -13,7 +13,7 @@ public class QPointRepositoryImpl implements QPointRepository {
     @Override
     public Long getTotalPointByMemberId(Long memberId) {
         QPoint p = QPoint.point;
-        JPAQuery<Long> query = queryFactory.select(p.total).from(p).where(p.member.memberId.eq(memberId));
+        JPAQuery<Long> query = queryFactory.select(p.score).from(p).where(p.member.memberId.eq(memberId));
 
         return query.fetchOne();
     }

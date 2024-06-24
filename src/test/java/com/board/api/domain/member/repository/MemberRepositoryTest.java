@@ -42,7 +42,7 @@ class MemberRepositoryTest {
                         .build();
         member.setMemberRole(memberRole);
 
-        Point point = Point.builder().total(1L).build();
+        Point point = Point.builder().score(1L).build();
         member.setPoint(point);
 
         testEntityManager.persist(member);
@@ -78,7 +78,7 @@ class MemberRepositoryTest {
         // given
 
         // when
-        Long total = memberRepository.getPointByEmail("email@gmail.com");
+        Long total = memberRepository.getScoreByEmail("email@gmail.com");
 
         // then
         assertThat(total).isGreaterThan(0L);

@@ -48,7 +48,7 @@ public class MemberService {
                         .build();
         member.setMemberRole(memberRole);
 
-        Point point = new Point(0L);
+        Point point = Point.builder().score(0L).build();
         member.setPoint(point);
 
         return member.getMemberId();

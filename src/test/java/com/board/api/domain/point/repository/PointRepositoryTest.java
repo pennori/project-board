@@ -39,7 +39,7 @@ class PointRepositoryTest {
                         .build();
         member.setMemberRole(memberRole);
 
-        Point point = Point.builder().total(100L).build();
+        Point point = Point.builder().score(100L).build();
         member.setPoint(point);
 
         testEntityManager.persist(member);

@@ -13,11 +13,11 @@ public class QMemberRepositoryImpl implements QMemberRepository {
     private final JPAQueryFactory queryFactory;
     
     @Override
-    public Long getPointByEmail(String email) {
+    public Long getScoreByEmail(String email) {
         QPoint p = QPoint.point;
         QMember m = QMember.member;
 
-        JPAQuery<Long> query = queryFactory.select(p.total).from(m).innerJoin(p).on(m.memberId.eq(p.member.memberId)).where(m.email.eq(email));
+        JPAQuery<Long> query = queryFactory.select(p.score).from(m).innerJoin(p).on(m.memberId.eq(p.member.memberId)).where(m.email.eq(email));
 
         return query.fetchOne();
     }

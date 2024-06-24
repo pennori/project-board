@@ -18,7 +18,7 @@ public class Point extends DateAndAuthor {
     private Long pointId;
 
     @Column(nullable = false)
-    private Long total;
+    private Long score;
 
     @Setter
     @OneToOne
@@ -26,7 +26,7 @@ public class Point extends DateAndAuthor {
     private Member member;
 
     @Builder
-    public Point(Long total) {
-        this.total = total;
+    public Point(Long score) {
+        this.score = score;
     }
 }
