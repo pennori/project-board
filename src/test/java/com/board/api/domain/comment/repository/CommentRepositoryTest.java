@@ -3,7 +3,6 @@ package com.board.api.domain.comment.repository;
 import com.board.api.domain.comment.entity.Comment;
 import com.board.api.domain.member.entity.Member;
 import com.board.api.domain.post.entity.Post;
-import com.board.api.domain.post.repository.PostRepository;
 import com.board.api.global.config.QueryDSLConfig;
 import com.board.api.global.constants.Author;
 import org.junit.jupiter.api.DisplayName;
@@ -12,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.context.annotation.Import;
+
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -24,12 +25,9 @@ class CommentRepositoryTest {
     private CommentRepository commentRepository;
 
     @Autowired
-    private PostRepository postRepository;
-
-    @Autowired
     private TestEntityManager testEntityManager;
 
-    Post initPost(){
+    Post initPost() {
         Member member =
                 Member.builder()
                         .email("email@gmail.com")
@@ -54,6 +52,23 @@ class CommentRepositoryTest {
         return post;
     }
 
+    void initBunchOfComment(Post post, int size) {
+        if(size < 1) {
+            size = 1;
+        }
+        for (int i = 0; i < size; i++) {
+            Comment comment =
+                    Comment.builder()
+                            .content("comment")
+                            .createdBy(post.getMember().getMemberId())
+                            .build();
+            comment.setMember(post.getMember());
+            comment.setPost(post);
+
+            testEntityManager.persist(comment);
+        }
+    }
+
     @Test
     void save() {
         // given
@@ -74,6 +89,20 @@ class CommentRepositoryTest {
         assertThat(comment.getCommentId()).isGreaterThan(0L);
         assertThat(comment.getPost().getPostId()).isGreaterThan(0L);
         assertThat(comment.getMember().getMemberId()).isGreaterThan(0L);
+    }
+
+    @Test
+    void getBunchOfCommentByPost() {
+       // given
+        Post post = initPost();
+        int size = 10;
+        initBunchOfComment(post, size);
+
+       // when
+        List<Comment> bunchOfCommentByPost = commentRepository.getBunchOfCommentByPost(post.getPostId());
+
+        // then
+        assertThat(bunchOfCommentByPost.size()).isEqualTo(size);
     }
 
 }
