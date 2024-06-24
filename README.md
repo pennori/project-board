@@ -6,7 +6,7 @@
 #### Build : Gradle 8.8
 #### Language : Java 17
 #### Framework : Spring Boot 3.3.1
-#### Dependencies : Spring Web, Spring Security, Spring Data JPA, QueryDSL-JPA ,H2 Embedded DB, Lombok, JWT ...
+#### Dependencies : Spring Web, Spring Security, Spring Data JPA, QueryDSL-JPA, H2 Embedded DB, Lombok, JWT ...
 
 
 
