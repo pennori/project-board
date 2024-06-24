@@ -2,6 +2,7 @@ package com.board.api.domain.point.entity;
 
 import com.board.api.global.entity.DateAndAuthor;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -31,4 +32,14 @@ public class PointHistory extends DateAndAuthor {
 
     @Column(nullable = false)
     private Long score;
+
+    @Builder
+    public PointHistory(Long memberId, Long postId, Long commentId, String category, String action, Long score) {
+        this.memberId = memberId;
+        this.postId = postId;
+        this.commentId = commentId;
+        this.category = category;
+        this.action = action;
+        this.score = score;
+    }
 }
