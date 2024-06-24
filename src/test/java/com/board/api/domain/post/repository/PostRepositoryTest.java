@@ -48,8 +48,8 @@ class PostRepositoryTest {
         initMember();
 
         // when
-        Post post = Post.builder().title("title").content("content").build();
         Member member = memberRepository.findByEmail("email@gmail.com");
+        Post post = Post.builder().title("title").content("content").createdBy(member.getMemberId()).build();
         post.setMember(member);
 
         postRepository.save(post);

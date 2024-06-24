@@ -8,14 +8,12 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 import org.springframework.util.ObjectUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@ToString(callSuper = true)
 @Getter
 @NoArgsConstructor
 public class Member extends DateAndAuthor {
