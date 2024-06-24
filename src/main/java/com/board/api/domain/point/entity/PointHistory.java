@@ -34,7 +34,8 @@ public class PointHistory extends DateAndAuthor {
     private Long score;
 
     @Builder
-    public PointHistory(Long memberId, Long postId, Long commentId, String category, String action, Long score) {
+    public PointHistory(Long memberId, Long postId, Long commentId, String category, String action, Long score, Long createdBy) {
+        super(createdBy);
         this.memberId = memberId;
         this.postId = postId;
         this.commentId = commentId;

@@ -68,12 +68,15 @@ public class Member extends DateAndAuthor {
     }
 
     @Builder
-    public Member(String email, String password, String name, String regNo) {
+    public Member(String email, String password, String name, String regNo, Long createdBy) {
+        super(createdBy);
         this.email = email;
         this.password = password;
         this.name = name;
         this.regNo = regNo;
     }
+
+
 
     public void addComment(Comment comment) {
         if (ObjectUtils.isEmpty(bunchOfComment)) {

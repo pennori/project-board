@@ -4,6 +4,7 @@ import com.board.api.domain.member.entity.Member;
 import com.board.api.domain.member.repository.MemberRepository;
 import com.board.api.domain.post.entity.Post;
 import com.board.api.global.config.QueryDSLConfig;
+import com.board.api.global.constants.Author;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,7 @@ class PostRepositoryTest {
                         .password("password")
                         .name("name")
                         .regNo("regNo")
+                        .createdBy(Author.SYSTEM_ID)
                         .build();
 
         testEntityManager.persist(member);

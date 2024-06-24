@@ -26,7 +26,8 @@ public class Point extends DateAndAuthor {
     private Member member;
 
     @Builder
-    public Point(Long score) {
+    public Point(Long score, Long createdBy) {
+        super(createdBy);
         this.score = score;
     }
 }

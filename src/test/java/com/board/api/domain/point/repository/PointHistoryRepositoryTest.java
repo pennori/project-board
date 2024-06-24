@@ -4,6 +4,7 @@ import com.board.api.domain.point.entity.PointHistory;
 import com.board.api.domain.point.enums.Action;
 import com.board.api.domain.point.enums.Category;
 import com.board.api.global.config.QueryDSLConfig;
+import com.board.api.global.constants.Author;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +37,7 @@ class PointHistoryRepositoryTest {
                         .category(Category.POST.name())
                         .action(Action.CREATE.name())
                         .score(3L)
+                        .createdBy(Author.SYSTEM_ID)
                         .build();
 
         // when

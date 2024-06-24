@@ -40,7 +40,8 @@ public class Post extends DateAndAuthor {
     }
 
     @Builder
-    public Post(String title, String content) {
+    public Post(String title, String content, Long createdBy) {
+        super(createdBy);
         this.title = title;
         this.content = content;
     }

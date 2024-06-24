@@ -4,6 +4,7 @@ import com.board.api.domain.member.entity.Member;
 import com.board.api.domain.post.entity.Post;
 import com.board.api.global.entity.DateAndAuthor;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -36,5 +37,11 @@ public class Comment extends DateAndAuthor {
     public void setPost(Post post) {
         post.addComment(this);
         this.post = post;
+    }
+
+    @Builder
+    public Comment(String content, Long createdBy) {
+        super(createdBy);
+        this.content = content;
     }
 }

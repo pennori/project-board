@@ -4,6 +4,7 @@ import com.board.api.domain.member.entity.Member;
 import com.board.api.domain.member.entity.MemberRole;
 import com.board.api.domain.point.entity.Point;
 import com.board.api.global.config.QueryDSLConfig;
+import com.board.api.global.constants.Author;
 import com.board.api.global.enums.RoleType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -34,15 +35,21 @@ class MemberRepositoryTest {
                         .password("password")
                         .name("name")
                         .regNo("regNo")
+                        .createdBy(Author.SYSTEM_ID)
                         .build();
 
         MemberRole memberRole =
                 MemberRole.builder()
                         .name(RoleType.USER.name())
+                        .createdBy(Author.SYSTEM_ID)
                         .build();
         member.setMemberRole(memberRole);
 
-        Point point = Point.builder().score(1L).build();
+        Point point =
+                Point.builder()
+                        .score(1L)
+                        .createdBy(Author.SYSTEM_ID)
+                        .build();
         member.setPoint(point);
 
         testEntityManager.persist(member);
