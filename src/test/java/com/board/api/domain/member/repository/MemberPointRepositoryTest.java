@@ -56,7 +56,7 @@ class MemberPointRepositoryTest {
 
     @DisplayName("memberId 로 현재 point 조회")
     @Test
-    void getTotalPointByMemberId(){
+    void getScoreByMemberId(){
         // given
         Long memberId = initData();
 

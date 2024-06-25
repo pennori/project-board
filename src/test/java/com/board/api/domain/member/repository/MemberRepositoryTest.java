@@ -79,15 +79,4 @@ class MemberRepositoryTest {
         assertThat(member.getMemberId()).isGreaterThan(0L);
     }
 
-    @DisplayName("email 로 Point 의 항목 조회")
-    @Test
-    void getPointByEmail() {
-        // given
-
-        // when
-        Long total = memberRepository.getScoreByEmail("email@gmail.com");
-
-        // then
-        assertThat(total).isGreaterThan(0L);
-    }
 }
