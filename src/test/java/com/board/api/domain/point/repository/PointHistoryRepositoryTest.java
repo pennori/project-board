@@ -16,7 +16,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DisplayName("PointHistoryRepository 테스트")
 @DataJpaTest
 @Import({QueryDSLConfig.class})
-class MemberPointHistoryRepositoryTest {
+class PointHistoryRepositoryTest {
 
     @Autowired
     private PointHistoryRepository pointHistoryRepository;

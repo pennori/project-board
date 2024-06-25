@@ -1,10 +1,9 @@
-package com.board.api.domain.point.repository;
+package com.board.api.domain.member.repository;
 
 
 import com.board.api.domain.member.entity.Member;
-import com.board.api.domain.member.entity.MemberRole;
 import com.board.api.domain.member.entity.MemberPoint;
-import com.board.api.domain.member.repository.MemberPointRepository;
+import com.board.api.domain.member.entity.MemberRole;
 import com.board.api.global.config.QueryDSLConfig;
 import com.board.api.global.constants.Author;
 import com.board.api.global.enums.RoleType;
