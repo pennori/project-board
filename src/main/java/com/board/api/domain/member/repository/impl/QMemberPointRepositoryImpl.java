@@ -12,9 +12,13 @@ public class QMemberPointRepositoryImpl implements QMemberPointRepository {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public Long getScoreByMemberId(Long memberId) {
+    public Long getPoint(Long memberId) {
         QMemberPoint qmp = QMemberPoint.memberPoint;
-        JPAQuery<Long> query = queryFactory.select(qmp.score).from(qmp).where(qmp.member.memberId.eq(memberId));
+        JPAQuery<Long> query =
+                queryFactory
+                        .select(qmp.score)
+                        .from(qmp)
+                        .where(qmp.member.memberId.eq(memberId));
 
         return query.fetchOne();
     }

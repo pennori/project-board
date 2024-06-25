@@ -61,7 +61,7 @@ class MemberPointRepositoryTest {
         Long memberId = initData();
 
         // when
-        Long totalPoint = memberPointRepository.getScoreByMemberId(memberId);
+        Long totalPoint = memberPointRepository.getPoint(memberId);
 
         // then
         assertThat(totalPoint).isEqualTo(100L);

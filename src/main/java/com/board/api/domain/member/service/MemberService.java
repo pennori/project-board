@@ -1,16 +1,15 @@
 package com.board.api.domain.member.service;
 
 import com.board.api.domain.member.dto.request.SignUpRequest;
+import com.board.api.domain.member.entity.Member;
 import com.board.api.domain.member.entity.MemberPoint;
+import com.board.api.domain.member.entity.MemberRole;
+import com.board.api.domain.member.repository.MemberRepository;
 import com.board.api.global.constants.Author;
 import com.board.api.global.encryption.BidirectionalCryptUtil;
-import com.board.api.domain.member.entity.Member;
-import com.board.api.domain.member.entity.MemberRole;
 import com.board.api.global.enums.RoleType;
-import com.board.api.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -26,8 +25,8 @@ public class MemberService {
     private final BidirectionalCryptUtil cryptUtil;
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public long saveMember(SignUpRequest request) throws Exception {
-        Assert.notNull(request, HttpStatus.BAD_REQUEST.name());
+    public long createMember(SignUpRequest request) throws Exception {
+        Assert.notNull(request, "호출시 요청 정보가 비어서 들어올 수 없음");
         boolean exists = memberRepository.existsByEmail(request.getEmail());
         if (exists) {
             return 0L;

@@ -33,7 +33,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return ResponseEntity.badRequest().body(errors);
     }
 
-    @ExceptionHandler(value = { FeignException.class })
+    @ExceptionHandler(value = {FeignException.class})
     public ResponseEntity<Object> feignExceptionHandler(final FeignException ex) {
         return ResponseEntity.internalServerError().body(
                 ErrorResponse.builder()
@@ -45,6 +45,26 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(value = {RuntimeException.class})
     public ResponseEntity<Object> runtimeExceptionHandler(final RuntimeException ex) {
+        return ResponseEntity.internalServerError().body(
+                ErrorResponse.builder()
+                        .resultCode(HttpStatus.INTERNAL_SERVER_ERROR.value())
+                        .resultMsg(HttpStatus.INTERNAL_SERVER_ERROR.name())
+                        .build()
+        );
+    }
+
+    @ExceptionHandler(value = {IllegalArgumentException.class})
+    public ResponseEntity<Object> illegalArgumentExceptionHandler(final IllegalArgumentException ex) {
+        return ResponseEntity.internalServerError().body(
+                ErrorResponse.builder()
+                        .resultCode(HttpStatus.INTERNAL_SERVER_ERROR.value())
+                        .resultMsg(HttpStatus.INTERNAL_SERVER_ERROR.name())
+                        .build()
+        );
+    }
+
+    @ExceptionHandler(value = {IllegalStateException.class})
+    public ResponseEntity<Object> illegalStateExceptionHandler(final IllegalStateException ex) {
         return ResponseEntity.internalServerError().body(
                 ErrorResponse.builder()
                         .resultCode(HttpStatus.INTERNAL_SERVER_ERROR.value())
