@@ -19,7 +19,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DisplayName("PointRepository 테스트")
 @DataJpaTest
 @Import({QueryDSLConfig.class})
-class MemberMemberPointRepositoryTest {
+class MemberPointRepositoryTest {
     @Autowired
     private MemberPointRepository memberPointRepository;
     @Autowired
