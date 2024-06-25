@@ -1,14 +1,16 @@
 package com.board.api.domain.member.dto.response;
 
-import com.board.api.global.dto.response.CommonResponse;
+import com.board.api.global.dto.response.AbstractResponse;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
 
 @Getter
 @ToString(callSuper = true)
-public class LoginResponse extends CommonResponse {
+public class LoginResponse extends AbstractResponse {
     private final String token;
 
+    @Builder
     public LoginResponse(String resultCode, String resultMsg, String token) {
         super(resultCode, resultMsg);
         this.token = token;

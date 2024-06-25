@@ -23,13 +23,20 @@ public class MemberController {
 
     @PostMapping("/signup")
     public ResponseEntity<SignUpResponse> doSignUp(@Valid @RequestBody SignUpRequest request) throws Exception {
-        SignUpResponse response = new SignUpResponse(String.valueOf(HttpStatus.BAD_REQUEST.value()), HttpStatus.BAD_REQUEST.name());
-        long userSeq = memberService.saveMember(request);
-        if(0L != userSeq) {
-            response = new SignUpResponse(String.valueOf(HttpStatus.OK.value()), HttpStatus.OK.name());
+        long memberId = memberService.saveMember(request);
+        if (0L == memberId) {
+            return ResponseEntity.badRequest().body(SignUpResponse.builder()
+                    .resultCode(String.valueOf(HttpStatus.BAD_REQUEST.value()))
+                    .resultMsg(HttpStatus.BAD_REQUEST.name())
+                    .memberId("0")
+                    .build());
         }
 
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok().body(SignUpResponse.builder()
+                .resultCode(String.valueOf(HttpStatus.OK.value()))
+                .resultMsg(HttpStatus.OK.name())
+                .memberId(String.valueOf(memberId))
+                .build());
     }
 
 }

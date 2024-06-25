@@ -41,7 +41,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         String password = null;
 
         if (request.getContentType().equals(MimeTypeUtils.APPLICATION_JSON_VALUE)) {
-            try{
+            try {
                 // ObjectMapper를 이용해서 JSON 데이터를 dto에 저장 후 dto의 데이터를 이용
                 LoginRequest loginRequest =
                         objectMapper.readValue(
@@ -56,7 +56,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
                 password = loginRequest.getPassword();
 
                 log.info("JSON 접속. USERID : {}, USERPW : {}", username, password);
-            } catch(IOException e){
+            } catch (IOException e) {
                 log.error(e.getMessage());
             }
 
@@ -92,11 +92,11 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         // 성공시 Response Body 에 json 응답
         String result =
                 objectMapper.writeValueAsString(
-                        new LoginResponse(
-                                String.valueOf(HttpStatus.OK.value()),
-                                HttpStatus.OK.name(),
-                                token
-                        )
+                        LoginResponse.builder()
+                                .resultCode(String.valueOf(HttpStatus.OK.value()))
+                                .resultMsg(HttpStatus.OK.name())
+                                .token(token)
+                                .build()
                 );
         response.addHeader("Authorization", "Bearer " + token);
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
@@ -108,9 +108,10 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         //로그인 실패시 401 응답 코드 반환
         String result =
                 objectMapper.writeValueAsString(
-                        new ErrorResponse(
-                                String.valueOf(HttpStatus.UNAUTHORIZED.value()),
-                                HttpStatus.UNAUTHORIZED.name())
+                        ErrorResponse.builder()
+                                .resultCode(String.valueOf(HttpStatus.UNAUTHORIZED.value()))
+                                .resultMsg(HttpStatus.UNAUTHORIZED.name())
+                                .build()
                 );
         response.setStatus(HttpStatus.UNAUTHORIZED.value());
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);

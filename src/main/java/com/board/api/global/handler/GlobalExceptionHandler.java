@@ -23,24 +23,33 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
         Map<String, String> errors = new HashMap<>();
+
         ex.getBindingResult().getAllErrors().forEach((error) -> {
             String fieldName = ((FieldError) error).getField();
             String message = error.getDefaultMessage();
             errors.put(fieldName, message);
         });
 
-        return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+        return ResponseEntity.badRequest().body(errors);
     }
 
     @ExceptionHandler(value = { FeignException.class })
-    public ResponseEntity<Object> customExceptionHandler(final FeignException ex) {
-        return new ResponseEntity<>(new ErrorResponse(String.valueOf(HttpStatus.INTERNAL_SERVER_ERROR.value()), HttpStatus.INTERNAL_SERVER_ERROR.name()), HttpStatus.INTERNAL_SERVER_ERROR);
-
+    public ResponseEntity<Object> feignExceptionHandler(final FeignException ex) {
+        return ResponseEntity.internalServerError().body(
+                ErrorResponse.builder()
+                        .resultCode(String.valueOf(HttpStatus.INTERNAL_SERVER_ERROR.value()))
+                        .resultMsg(HttpStatus.INTERNAL_SERVER_ERROR.name())
+                        .build()
+        );
     }
 
     @ExceptionHandler(value = {RuntimeException.class})
     public ResponseEntity<Object> runtimeExceptionHandler(final RuntimeException ex) {
-        return new ResponseEntity<>(new ErrorResponse(String.valueOf(HttpStatus.INTERNAL_SERVER_ERROR.value()), HttpStatus.INTERNAL_SERVER_ERROR.name()), HttpStatus.INTERNAL_SERVER_ERROR);
-
+        return ResponseEntity.internalServerError().body(
+                ErrorResponse.builder()
+                        .resultCode(String.valueOf(HttpStatus.INTERNAL_SERVER_ERROR.value()))
+                        .resultMsg(HttpStatus.INTERNAL_SERVER_ERROR.name())
+                        .build()
+        );
     }
 }

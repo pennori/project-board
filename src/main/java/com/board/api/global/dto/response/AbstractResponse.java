@@ -7,7 +7,7 @@ import lombok.ToString;
 @Getter
 @AllArgsConstructor
 @ToString
-public abstract class CommonResponse {
+public abstract class AbstractResponse {
     private String resultCode;
     private String resultMsg;
 }
