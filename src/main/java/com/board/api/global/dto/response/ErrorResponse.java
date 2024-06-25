@@ -8,7 +8,7 @@ import lombok.ToString;
 @ToString(callSuper = true)
 public class ErrorResponse extends AbstractResponse {
     @Builder
-    public ErrorResponse(String resultCode, String resultMsg) {
+    public ErrorResponse(int resultCode, String resultMsg) {
         super(resultCode, resultMsg);
     }
 }

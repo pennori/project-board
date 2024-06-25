@@ -8,10 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
@@ -26,17 +23,22 @@ public class MemberController {
         long memberId = memberService.saveMember(request);
         if (0L == memberId) {
             return ResponseEntity.badRequest().body(SignUpResponse.builder()
-                    .resultCode(String.valueOf(HttpStatus.BAD_REQUEST.value()))
+                    .resultCode(HttpStatus.BAD_REQUEST.value())
                     .resultMsg(HttpStatus.BAD_REQUEST.name())
-                    .memberId("0")
+                    .memberId(0L)
                     .build());
         }
 
         return ResponseEntity.ok().body(SignUpResponse.builder()
-                .resultCode(String.valueOf(HttpStatus.OK.value()))
+                .resultCode(HttpStatus.OK.value())
                 .resultMsg(HttpStatus.OK.name())
-                .memberId(String.valueOf(memberId))
+                .memberId(memberId)
                 .build());
+    }
+
+    @GetMapping("/point")
+    public ResponseEntity<?> inquiryPoint() {
+        return null;
     }
 
 }

@@ -1,13 +1,16 @@
 package com.board.api.global.dto.response;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
 
 @Getter
-@AllArgsConstructor
 @ToString
 public abstract class AbstractResponse {
-    private String resultCode;
-    private String resultMsg;
+    private final String resultCode;
+    private final String resultMsg;
+
+    public AbstractResponse(int resultCode, String resultMsg) {
+        this.resultCode = String.valueOf(resultCode);
+        this.resultMsg = resultMsg;
+    }
 }

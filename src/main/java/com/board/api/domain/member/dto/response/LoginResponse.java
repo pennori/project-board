@@ -11,7 +11,7 @@ public class LoginResponse extends AbstractResponse {
     private final String token;
 
     @Builder
-    public LoginResponse(String resultCode, String resultMsg, String token) {
+    public LoginResponse(int resultCode, String resultMsg, String token) {
         super(resultCode, resultMsg);
         this.token = token;
     }

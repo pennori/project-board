@@ -37,7 +37,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<Object> feignExceptionHandler(final FeignException ex) {
         return ResponseEntity.internalServerError().body(
                 ErrorResponse.builder()
-                        .resultCode(String.valueOf(HttpStatus.INTERNAL_SERVER_ERROR.value()))
+                        .resultCode(HttpStatus.INTERNAL_SERVER_ERROR.value())
                         .resultMsg(HttpStatus.INTERNAL_SERVER_ERROR.name())
                         .build()
         );
@@ -47,7 +47,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<Object> runtimeExceptionHandler(final RuntimeException ex) {
         return ResponseEntity.internalServerError().body(
                 ErrorResponse.builder()
-                        .resultCode(String.valueOf(HttpStatus.INTERNAL_SERVER_ERROR.value()))
+                        .resultCode(HttpStatus.INTERNAL_SERVER_ERROR.value())
                         .resultMsg(HttpStatus.INTERNAL_SERVER_ERROR.name())
                         .build()
         );

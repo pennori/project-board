@@ -7,12 +7,14 @@ import lombok.ToString;
 
 @Getter
 @ToString(callSuper = true)
-public class SignUpResponse extends AbstractResponse {
+public class PointResponse extends AbstractResponse {
     private final String memberId;
+    private final String point;
 
     @Builder
-    public SignUpResponse(int resultCode, String resultMsg, Long memberId) {
+    public PointResponse(int resultCode, String resultMsg, Long memberId, Long point) {
         super(resultCode, resultMsg);
         this.memberId = String.valueOf(memberId);
+        this.point = String.valueOf(point);
     }
 }
