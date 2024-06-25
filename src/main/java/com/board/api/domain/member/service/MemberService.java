@@ -1,7 +1,7 @@
 package com.board.api.domain.member.service;
 
 import com.board.api.domain.member.dto.request.SignUpRequest;
-import com.board.api.domain.point.entity.Point;
+import com.board.api.domain.member.entity.MemberPoint;
 import com.board.api.global.constants.Author;
 import com.board.api.global.encryption.BidirectionalCryptUtil;
 import com.board.api.domain.member.entity.Member;
@@ -51,12 +51,12 @@ public class MemberService {
                         .build();
         member.setMemberRole(memberRole);
 
-        Point point =
-                Point.builder()
+        MemberPoint memberPoint =
+                MemberPoint.builder()
                         .score(0L)
                         .createdBy(Author.SYSTEM_ID)
                         .build();
-        member.setPoint(point);
+        member.setMemberPoint(memberPoint);
 
         return member.getMemberId();
     }

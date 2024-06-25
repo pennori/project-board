@@ -1,6 +1,5 @@
-package com.board.api.domain.point.entity;
+package com.board.api.domain.member.entity;
 
-import com.board.api.domain.member.entity.Member;
 import com.board.api.global.entity.DateAndAuthor;
 import jakarta.persistence.*;
 import lombok.Builder;
@@ -11,11 +10,11 @@ import lombok.Setter;
 @Entity
 @Getter
 @NoArgsConstructor
-public class Point extends DateAndAuthor {
+public class MemberPoint extends DateAndAuthor {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(nullable = false)
-    private Long pointId;
+    private Long memberPointId;
 
     @Column(nullable = false)
     private Long score;
@@ -26,7 +25,7 @@ public class Point extends DateAndAuthor {
     private Member member;
 
     @Builder
-    public Point(Long score, Long createdBy) {
+    public MemberPoint(Long score, Long createdBy) {
         super(createdBy);
         this.score = score;
     }

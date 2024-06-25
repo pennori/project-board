@@ -23,7 +23,7 @@
 * [POST] /member/login
   * 로그인 API 
   * 인증 토큰 반환 (이하의 API 호출시 인증 수단)
-* [GET] /point
+* [GET] /member/point
   * 로그인 회원의 현재 포인트 조회 API
   * 현재 포인트 반환
 * [POST] /post

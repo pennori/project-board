@@ -1,7 +1,6 @@
 package com.board.api.domain.member.entity;
 
 import com.board.api.domain.comment.entity.Comment;
-import com.board.api.domain.point.entity.Point;
 import com.board.api.domain.post.entity.Post;
 import com.board.api.global.entity.DateAndAuthor;
 import jakarta.persistence.*;
@@ -39,7 +38,7 @@ public class Member extends DateAndAuthor {
     private MemberRole memberRole;
 
     @OneToOne(mappedBy = "member", cascade = CascadeType.ALL)
-    private Point point;
+    private MemberPoint memberPoint;
 
 
     @OneToMany(mappedBy = "member")
@@ -53,9 +52,9 @@ public class Member extends DateAndAuthor {
         this.memberRole = memberRole;
     }
 
-    public void setPoint(Point point) {
-        point.setMember(this);
-        this.point = point;
+    public void setMemberPoint(MemberPoint memberPoint) {
+        memberPoint.setMember(this);
+        this.memberPoint = memberPoint;
     }
 
     public void addPost(Post post) {
