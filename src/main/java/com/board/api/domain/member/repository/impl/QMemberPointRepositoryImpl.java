@@ -1,6 +1,7 @@
 package com.board.api.domain.member.repository.impl;
 
 
+import com.board.api.domain.member.entity.QMemberPoint;
 import com.board.api.domain.member.repository.QMemberPointRepository;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -12,10 +13,9 @@ public class QMemberPointRepositoryImpl implements QMemberPointRepository {
 
     @Override
     public Long getScoreByMemberId(Long memberId) {
-//        QPoint p = QPoint.point;
-//        JPAQuery<Long> query = queryFactory.select(p.score).from(p).where(p.member.memberId.eq(memberId));
-//
-//        return query.fetchOne();
-        return null;
+        QMemberPoint qmp = QMemberPoint.memberPoint;
+        JPAQuery<Long> query = queryFactory.select(qmp.score).from(qmp).where(qmp.member.memberId.eq(memberId));
+
+        return query.fetchOne();
     }
 }

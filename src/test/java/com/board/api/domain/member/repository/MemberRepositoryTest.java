@@ -80,7 +80,7 @@ class MemberRepositoryTest {
     }
 
     @DisplayName("email 로 Point 의 항목 조회")
-    //@Test
+    @Test
     void getPointByEmail() {
         // given
 

@@ -9,6 +9,7 @@ import com.board.api.global.config.QueryDSLConfig;
 import com.board.api.global.constants.Author;
 import com.board.api.global.enums.RoleType;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
@@ -55,7 +56,7 @@ class MemberPointRepositoryTest {
     }
 
     @DisplayName("memberId 로 현재 point 조회")
-    //@Test
+    @Test
     void getTotalPointByMemberId(){
         // given
         Long memberId = initData();
