@@ -4,11 +4,10 @@ import com.board.api.domain.member.dto.CurrentPointDto;
 import com.board.api.domain.member.entity.Member;
 import com.board.api.domain.member.repository.MemberPointRepository;
 import com.board.api.domain.member.repository.MemberRepository;
+import com.board.api.global.util.AuthorizationUtil;
 import io.jsonwebtoken.lang.Assert;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -19,9 +18,7 @@ public class MemberPointService {
     private final MemberPointRepository memberPointRepository;
 
     public CurrentPointDto getPoint() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String email = authentication.getName();
-        Member member = memberRepository.findByEmail(email);
+        Member member = memberRepository.findByEmail(AuthorizationUtil.getLoginEmail());
         Assert.notNull(member, "로그인한 회원의 요청이므로 회원정보가 존재해야 함");
 
         Long point = memberPointRepository.getPoint(member.getMemberId());
