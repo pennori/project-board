@@ -86,7 +86,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(value = {IllegalStateException.class})
-    public ResponseEntity<Object> illegalStateExceptionHandler(final IllegalStateException ex) {
+    public ResponseEntity<ApiResponse<ErrorMessage>> illegalStateExceptionHandler(final IllegalStateException ex) {
         return ResponseEntity.internalServerError().body(
                 ApiResponse.<ErrorMessage>builder()
                         .resultCode(HttpStatus.INTERNAL_SERVER_ERROR.value())
