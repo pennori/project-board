@@ -1,9 +1,11 @@
 package com.board.api.domain.member.service;
 
+import com.board.api.domain.member.dto.SignUp;
 import com.board.api.domain.member.dto.request.SignUpRequest;
 import com.board.api.domain.member.entity.Member;
 import com.board.api.domain.member.entity.MemberPoint;
 import com.board.api.domain.member.entity.MemberRole;
+import com.board.api.domain.member.exception.DuplicateException;
 import com.board.api.domain.member.repository.MemberRepository;
 import com.board.api.global.constants.Author;
 import com.board.api.global.encryption.BidirectionalCryptUtil;
@@ -25,11 +27,11 @@ public class MemberService {
     private final BidirectionalCryptUtil cryptUtil;
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public long createMember(SignUpRequest request) throws Exception {
+    public SignUp createMember(SignUpRequest request) throws Exception {
         Assert.notNull(request, "호출시 요청 정보가 비어서 들어올 수 없음");
         boolean exists = memberRepository.existsByEmail(request.getEmail());
         if (exists) {
-            return 0L;
+            throw new DuplicateException("존재하는 회원입니다.");
         }
 
         Member member =
@@ -57,6 +59,6 @@ public class MemberService {
                         .build();
         member.setMemberPoint(memberPoint);
 
-        return member.getMemberId();
+        return SignUp.builder().memberId(member.getMemberId()).build();
     }
 }

@@ -1,5 +1,6 @@
 package com.board.api.domain.member.service;
 
+import com.board.api.domain.member.dto.InquiryPoint;
 import com.board.api.domain.member.entity.Member;
 import com.board.api.domain.member.repository.MemberPointRepository;
 import com.board.api.domain.member.repository.MemberRepository;
@@ -17,12 +18,14 @@ public class MemberPointService {
     private final MemberRepository memberRepository;
     private final MemberPointRepository memberPointRepository;
 
-    public Long getPoint() {
+    public InquiryPoint getPoint() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
         Member member = memberRepository.findByEmail(email);
         Assert.notNull(member, "로그인한 회원의 요청이므로 회원정보가 존재해야 함");
 
-        return memberPointRepository.getPoint(member.getMemberId());
+        Long point = memberPointRepository.getPoint(member.getMemberId());
+
+        return InquiryPoint.builder().point(point).build();
     }
 }

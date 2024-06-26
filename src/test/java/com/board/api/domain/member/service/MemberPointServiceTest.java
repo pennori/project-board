@@ -1,5 +1,6 @@
 package com.board.api.domain.member.service;
 
+import com.board.api.domain.member.dto.InquiryPoint;
 import com.board.api.domain.member.entity.Member;
 import com.board.api.domain.member.repository.MemberPointRepository;
 import com.board.api.domain.member.repository.MemberRepository;
@@ -29,16 +30,18 @@ class MemberPointServiceTest {
     void getPoint() {
         // given
         Member member = mock(Member.class);
-        given(member.getMemberId()).willReturn(Long.MAX_VALUE);
+        long memberId = 1L;
+        given(member.getMemberId()).willReturn(memberId);
         given(memberRepository.findByEmail(anyString())).willReturn(member);
 
-        long expected = 100L;
-        given(memberPointRepository.getPoint(member.getMemberId())).willReturn(expected);
+        long point = 100L;
+        given(memberPointRepository.getPoint(member.getMemberId())).willReturn(point);
 
         // when
-        Long point = memberPointService.getPoint();
+        InquiryPoint inquiryPoint = memberPointService.getPoint();
 
         // then
-        assertThat(point).isEqualTo(expected);
+        String expected = String.valueOf(point);
+        assertThat(inquiryPoint.getPoint()).isEqualTo(expected);
     }
 }

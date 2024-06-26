@@ -1,10 +1,11 @@
 package com.board.api.domain.member.controller;
 
+import com.board.api.domain.member.dto.InquiryPoint;
+import com.board.api.domain.member.dto.SignUp;
 import com.board.api.domain.member.dto.request.SignUpRequest;
-import com.board.api.domain.member.dto.response.PointResponse;
-import com.board.api.domain.member.dto.response.SignUpResponse;
 import com.board.api.domain.member.service.MemberPointService;
 import com.board.api.domain.member.service.MemberService;
+import com.board.api.global.dto.response.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,37 +23,27 @@ public class MemberController {
     private final MemberPointService memberPointService;
 
     @PostMapping("/signup")
-    public ResponseEntity<SignUpResponse> doSignUp(@Valid @RequestBody SignUpRequest request) throws Exception {
-        long memberId = memberService.createMember(request);
+    public ResponseEntity<ApiResponse<SignUp>> doSignUp(@Valid @RequestBody SignUpRequest request) throws Exception {
+        SignUp signUp = memberService.createMember(request);
 
-        if (0L == memberId) {
-            return ResponseEntity.badRequest()
-                    .body(SignUpResponse.builder()
-                            .resultCode(HttpStatus.BAD_REQUEST.value())
-                            .resultMsg(HttpStatus.BAD_REQUEST.name())
-                            .memberId(0L)
-                            .build()
-                    );
-        }
-
-        return ResponseEntity.ok()
-                .body(SignUpResponse.builder()
+        return ResponseEntity.ok().body(
+                ApiResponse.<SignUp>builder()
                         .resultCode(HttpStatus.OK.value())
-                        .resultMsg(HttpStatus.OK.name())
-                        .memberId(memberId)
+                        .resultMessage(HttpStatus.OK.name())
+                        .data(signUp)
                         .build()
-                );
+        );
     }
 
     @GetMapping("/point")
-    public ResponseEntity<PointResponse> inquiryPoint() {
-        Long point = memberPointService.getPoint();
+    public ResponseEntity<ApiResponse<InquiryPoint>> inquiryPoint() {
+        InquiryPoint inquiryPoint = memberPointService.getPoint();
 
         return ResponseEntity.ok()
-                .body(PointResponse.builder()
+                .body(ApiResponse.<InquiryPoint>builder()
                         .resultCode(HttpStatus.OK.value())
-                        .resultMsg(HttpStatus.OK.name())
-                        .point(point)
+                        .resultMessage(HttpStatus.OK.name())
+                        .data(inquiryPoint)
                         .build()
                 );
     }

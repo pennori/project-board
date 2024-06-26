@@ -1,6 +1,8 @@
 package com.board.api.global.handler;
 
-import com.board.api.global.dto.response.ErrorResponse;
+import com.board.api.domain.member.exception.DuplicateException;
+import com.board.api.global.dto.response.ApiResponse;
+import com.board.api.global.dto.ErrorMessage;
 import feign.FeignException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -30,25 +32,44 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
             errors.put(fieldName, message);
         });
 
-        return ResponseEntity.badRequest().body(errors);
+        return ResponseEntity.badRequest().body(
+                ApiResponse.<Map<String, String>>builder()
+                        .resultCode(HttpStatus.BAD_REQUEST.value())
+                        .resultMessage(HttpStatus.BAD_REQUEST.name())
+                        .data(errors)
+                        .build()
+        );
     }
 
     @ExceptionHandler(value = {FeignException.class})
-    public ResponseEntity<Object> feignExceptionHandler(final FeignException ex) {
+    public ResponseEntity<ApiResponse<ErrorMessage>> feignExceptionHandler(final FeignException ex) {
         return ResponseEntity.internalServerError().body(
-                ErrorResponse.builder()
+                ApiResponse.<ErrorMessage>builder()
                         .resultCode(HttpStatus.INTERNAL_SERVER_ERROR.value())
-                        .resultMsg(HttpStatus.INTERNAL_SERVER_ERROR.name())
+                        .resultMessage(HttpStatus.INTERNAL_SERVER_ERROR.name())
+                        .data(new ErrorMessage(ex.getMessage()))
+                        .build()
+        );
+    }
+
+    @ExceptionHandler(value = {DuplicateException.class})
+    public ResponseEntity<ApiResponse<ErrorMessage>> duplicateExceptionHandler(final DuplicateException ex) {
+        return ResponseEntity.badRequest().body(
+                ApiResponse.<ErrorMessage>builder()
+                        .resultCode(HttpStatus.BAD_REQUEST.value())
+                        .resultMessage(HttpStatus.BAD_REQUEST.name())
+                        .data(new ErrorMessage(ex.getMessage()))
                         .build()
         );
     }
 
     @ExceptionHandler(value = {RuntimeException.class})
-    public ResponseEntity<Object> runtimeExceptionHandler(final RuntimeException ex) {
+    public ResponseEntity<ApiResponse<ErrorMessage>> runtimeExceptionHandler(final RuntimeException ex) {
         return ResponseEntity.internalServerError().body(
-                ErrorResponse.builder()
+                ApiResponse.<ErrorMessage>builder()
                         .resultCode(HttpStatus.INTERNAL_SERVER_ERROR.value())
-                        .resultMsg(HttpStatus.INTERNAL_SERVER_ERROR.name())
+                        .resultMessage(HttpStatus.INTERNAL_SERVER_ERROR.name())
+                        .data(new ErrorMessage(ex.getMessage()))
                         .build()
         );
     }
@@ -56,9 +77,10 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(value = {IllegalArgumentException.class})
     public ResponseEntity<Object> illegalArgumentExceptionHandler(final IllegalArgumentException ex) {
         return ResponseEntity.internalServerError().body(
-                ErrorResponse.builder()
+                ApiResponse.<ErrorMessage>builder()
                         .resultCode(HttpStatus.INTERNAL_SERVER_ERROR.value())
-                        .resultMsg(HttpStatus.INTERNAL_SERVER_ERROR.name())
+                        .resultMessage(HttpStatus.INTERNAL_SERVER_ERROR.name())
+                        .data(new ErrorMessage(ex.getMessage()))
                         .build()
         );
     }
@@ -66,9 +88,10 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(value = {IllegalStateException.class})
     public ResponseEntity<Object> illegalStateExceptionHandler(final IllegalStateException ex) {
         return ResponseEntity.internalServerError().body(
-                ErrorResponse.builder()
+                ApiResponse.<ErrorMessage>builder()
                         .resultCode(HttpStatus.INTERNAL_SERVER_ERROR.value())
-                        .resultMsg(HttpStatus.INTERNAL_SERVER_ERROR.name())
+                        .resultMessage(HttpStatus.INTERNAL_SERVER_ERROR.name())
+                        .data(new ErrorMessage(ex.getMessage()))
                         .build()
         );
     }

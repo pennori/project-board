@@ -1,8 +1,8 @@
 package com.board.api.global.security;
 
-import com.board.api.global.dto.response.ErrorResponse;
+import com.board.api.domain.member.dto.Login;
 import com.board.api.domain.member.dto.request.LoginRequest;
-import com.board.api.domain.member.dto.response.LoginResponse;
+import com.board.api.global.dto.response.ApiResponse;
 import com.board.api.global.jwt.JWTUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
@@ -92,10 +92,10 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         // 성공시 Response Body 에 json 응답
         String result =
                 objectMapper.writeValueAsString(
-                        LoginResponse.builder()
+                        ApiResponse.<Login>builder()
                                 .resultCode(HttpStatus.OK.value())
-                                .resultMsg(HttpStatus.OK.name())
-                                .token(token)
+                                .resultMessage(HttpStatus.OK.name())
+                                .data(Login.builder().token(token).build())
                                 .build()
                 );
         response.addHeader("Authorization", "Bearer " + token);
@@ -108,9 +108,9 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         //로그인 실패시 401 응답 코드 반환
         String result =
                 objectMapper.writeValueAsString(
-                        ErrorResponse.builder()
+                        ApiResponse.builder()
                                 .resultCode(HttpStatus.UNAUTHORIZED.value())
-                                .resultMsg(HttpStatus.UNAUTHORIZED.name())
+                                .resultMessage(HttpStatus.UNAUTHORIZED.name())
                                 .build()
                 );
         response.setStatus(HttpStatus.UNAUTHORIZED.value());
