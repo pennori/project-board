@@ -16,6 +16,7 @@ public class MemberPoint extends DateAndAuthor {
     @Column(nullable = false)
     private Long memberPointId;
 
+    @Setter
     @Column(nullable = false)
     private Long score;
 
