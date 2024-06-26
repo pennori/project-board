@@ -16,7 +16,7 @@ public class CustomUserDetails implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Collection<GrantedAuthority> collection = new ArrayList<>();
-        collection.add((GrantedAuthority) () -> memberDto.getRole());
+        collection.add((GrantedAuthority) memberDto::getRole);
         return collection;
     }
 
@@ -29,6 +29,10 @@ public class CustomUserDetails implements UserDetails {
     public String getUsername() {
         // username 대신 email 로 대체
         return memberDto.getEmail();
+    }
+
+    public Long getMemberId() {
+        return memberDto.getMemberId();
     }
 
 }
