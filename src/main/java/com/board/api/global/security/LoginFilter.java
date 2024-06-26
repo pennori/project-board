@@ -1,6 +1,6 @@
 package com.board.api.global.security;
 
-import com.board.api.domain.member.dto.Login;
+import com.board.api.domain.member.dto.LoginDto;
 import com.board.api.domain.member.dto.request.LoginRequest;
 import com.board.api.global.dto.response.ApiResponse;
 import com.board.api.global.jwt.JWTUtil;
@@ -92,10 +92,10 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         // 성공시 Response Body 에 json 응답
         String result =
                 objectMapper.writeValueAsString(
-                        ApiResponse.<Login>builder()
+                        ApiResponse.<LoginDto>builder()
                                 .resultCode(HttpStatus.OK.value())
                                 .resultMessage(HttpStatus.OK.name())
-                                .data(Login.builder().token(token).build())
+                                .data(LoginDto.builder().token(token).build())
                                 .build()
                 );
         response.addHeader("Authorization", "Bearer " + token);

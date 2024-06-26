@@ -4,11 +4,11 @@ import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-public class InquiryPoint {
+public class CurrentPointDto {
     private final String point;
 
     @Builder
-    public InquiryPoint(Long point) {
+    public CurrentPointDto(Long point) {
         this.point = String.valueOf(point);
     }
 }

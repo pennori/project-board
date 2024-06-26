@@ -1,6 +1,6 @@
 package com.board.api.domain.member.service;
 
-import com.board.api.domain.member.dto.InquiryPoint;
+import com.board.api.domain.member.dto.CurrentPointDto;
 import com.board.api.domain.member.entity.Member;
 import com.board.api.domain.member.repository.MemberPointRepository;
 import com.board.api.domain.member.repository.MemberRepository;
@@ -38,10 +38,10 @@ class MemberPointServiceTest {
         given(memberPointRepository.getPoint(member.getMemberId())).willReturn(point);
 
         // when
-        InquiryPoint inquiryPoint = memberPointService.getPoint();
+        CurrentPointDto currentPointDto = memberPointService.getPoint();
 
         // then
         String expected = String.valueOf(point);
-        assertThat(inquiryPoint.getPoint()).isEqualTo(expected);
+        assertThat(currentPointDto.getPoint()).isEqualTo(expected);
     }
 }

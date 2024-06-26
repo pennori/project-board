@@ -1,7 +1,6 @@
 package com.board.api.global.jwt;
 
-import com.board.api.domain.member.entity.Member;
-import com.board.api.domain.member.entity.MemberRole;
+import com.board.api.domain.member.dto.MemberDto;
 import com.board.api.global.security.CustomUserDetails;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -54,14 +53,16 @@ public class JWTFilter extends OncePerRequestFilter {
         // 토큰에서 username과 role 획득
         String username = jwtUtil.getUsername(token);
         String role = jwtUtil.getRole(token);
-        MemberRole memberRole = MemberRole.builder().name(role).build();
 
-        // user 를 생성하여 값 set
-        Member member = Member.builder().email(username).password("temppassword").build();
-        member.setMemberRole(memberRole);
-
+        // MemberDto 를 생성하여 값 set
+        MemberDto memberDto =
+                MemberDto.builder()
+                        .email(username)
+                        .password("temppassword")
+                        .role(role)
+                        .build();
         // UserDetails에 회원 정보 객체 담기
-        CustomUserDetails customUserDetails = new CustomUserDetails(member);
+        CustomUserDetails customUserDetails = new CustomUserDetails(memberDto);
 
         // 스프링 시큐리티 인증 토큰 생성
         Authentication authToken = new UsernamePasswordAuthenticationToken(customUserDetails, null, customUserDetails.getAuthorities());

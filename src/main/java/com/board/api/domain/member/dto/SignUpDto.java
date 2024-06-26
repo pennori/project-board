@@ -5,11 +5,11 @@ import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-public class SignUp {
+public class SignUpDto {
     private final String memberId;
 
     @Builder
-    public SignUp(Long memberId) {
+    public SignUpDto(Long memberId) {
         this.memberId = String.valueOf(memberId);
     }
 }

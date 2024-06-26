@@ -1,7 +1,7 @@
 package com.board.api.domain.member.controller;
 
-import com.board.api.domain.member.dto.InquiryPoint;
-import com.board.api.domain.member.dto.SignUp;
+import com.board.api.domain.member.dto.CurrentPointDto;
+import com.board.api.domain.member.dto.SignUpDto;
 import com.board.api.domain.member.dto.request.SignUpRequest;
 import com.board.api.domain.member.service.MemberPointService;
 import com.board.api.domain.member.service.MemberService;
@@ -23,27 +23,27 @@ public class MemberController {
     private final MemberPointService memberPointService;
 
     @PostMapping("/signup")
-    public ResponseEntity<ApiResponse<SignUp>> doSignUp(@Valid @RequestBody SignUpRequest request) throws Exception {
-        SignUp signUp = memberService.createMember(request);
+    public ResponseEntity<ApiResponse<SignUpDto>> doSignUp(@Valid @RequestBody SignUpRequest request) throws Exception {
+        SignUpDto signUpDto = memberService.createMember(request);
 
         return ResponseEntity.ok().body(
-                ApiResponse.<SignUp>builder()
+                ApiResponse.<SignUpDto>builder()
                         .resultCode(HttpStatus.OK.value())
                         .resultMessage(HttpStatus.OK.name())
-                        .data(signUp)
+                        .data(signUpDto)
                         .build()
         );
     }
 
     @GetMapping("/point")
-    public ResponseEntity<ApiResponse<InquiryPoint>> inquiryPoint() {
-        InquiryPoint inquiryPoint = memberPointService.getPoint();
+    public ResponseEntity<ApiResponse<CurrentPointDto>> getCurrentPoint() {
+        CurrentPointDto currentPointDto = memberPointService.getPoint();
 
         return ResponseEntity.ok()
-                .body(ApiResponse.<InquiryPoint>builder()
+                .body(ApiResponse.<CurrentPointDto>builder()
                         .resultCode(HttpStatus.OK.value())
                         .resultMessage(HttpStatus.OK.name())
-                        .data(inquiryPoint)
+                        .data(currentPointDto)
                         .build()
                 );
     }

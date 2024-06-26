@@ -1,6 +1,6 @@
 package com.board.api.domain.member.service;
 
-import com.board.api.domain.member.dto.SignUp;
+import com.board.api.domain.member.dto.SignUpDto;
 import com.board.api.domain.member.dto.request.SignUpRequest;
 import com.board.api.domain.member.entity.Member;
 import com.board.api.domain.member.entity.MemberPoint;
@@ -27,7 +27,7 @@ public class MemberService {
     private final BidirectionalCryptUtil cryptUtil;
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public SignUp createMember(SignUpRequest request) throws Exception {
+    public SignUpDto createMember(SignUpRequest request) throws Exception {
         Assert.notNull(request, "호출시 요청 정보가 비어서 들어올 수 없음");
         boolean exists = memberRepository.existsByEmail(request.getEmail());
         if (exists) {
@@ -59,6 +59,6 @@ public class MemberService {
                         .build();
         member.setMemberPoint(memberPoint);
 
-        return SignUp.builder().memberId(member.getMemberId()).build();
+        return SignUpDto.builder().memberId(member.getMemberId()).build();
     }
 }
