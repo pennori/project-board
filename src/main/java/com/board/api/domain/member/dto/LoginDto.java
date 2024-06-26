@@ -4,11 +4,8 @@ import lombok.Builder;
 import lombok.Getter;
 
 @Getter
+@Builder
 public class LoginDto {
     private final String token;
 
-    @Builder
-    public LoginDto(String token) {
-        this.token = token;
-    }
 }
