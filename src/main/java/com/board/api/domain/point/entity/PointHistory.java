@@ -21,7 +21,7 @@ public class PointHistory extends DateAndAuthor {
     @Column(nullable = false)
     private Long postId;
 
-    @Column(nullable = false)
+    @Column()
     private Long commentId;
 
     @Column(nullable = false)

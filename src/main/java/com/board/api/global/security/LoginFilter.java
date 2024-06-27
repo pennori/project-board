@@ -55,7 +55,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
                 username = loginRequest.getEmail();
                 password = loginRequest.getPassword();
 
-                log.info("JSON 접속. USERID : {}, USERPW : {}", username, password);
+                log.info("JSON 접속. email : {}, password : {}", username, password);
             } catch (IOException e) {
                 log.error(e.getMessage());
             }

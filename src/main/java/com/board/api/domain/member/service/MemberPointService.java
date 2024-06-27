@@ -19,7 +19,7 @@ public class MemberPointService {
 
     public CurrentPointDto getPoint() {
         Member member = memberRepository.findByEmail(AuthorizationUtil.getLoginEmail());
-        Assert.notNull(member, "로그인한 회원의 요청이므로 회원정보가 존재해야 함");
+        Assert.notNull(member, "로그인한 회원의 요청이므로 회원정보가 존재해야 합니다.");
 
         Long point = memberPointRepository.getPoint(member.getMemberId());
 

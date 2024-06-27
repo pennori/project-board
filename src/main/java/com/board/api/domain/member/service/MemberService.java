@@ -28,7 +28,7 @@ public class MemberService {
 
     @Transactional(propagation = Propagation.REQUIRED)
     public SignUpDto createMember(SignUpRequest request) throws Exception {
-        Assert.notNull(request, "호출시 요청 정보가 비어서 들어올 수 없음");
+        Assert.notNull(request, "호출시 요청 정보가 비어서 들어올 수 없습니다.");
         boolean exists = memberRepository.existsByEmail(request.getEmail());
         if (exists) {
             throw new DuplicateException("존재하는 회원입니다.");

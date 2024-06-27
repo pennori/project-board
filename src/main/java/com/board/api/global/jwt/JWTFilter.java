@@ -2,6 +2,7 @@ package com.board.api.global.jwt;
 
 import com.board.api.domain.member.dto.MemberDto;
 import com.board.api.global.security.CustomUserDetails;
+import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -29,11 +30,11 @@ public class JWTFilter extends OncePerRequestFilter {
         // Authorization 헤더 검증
         if (authorization == null || !authorization.startsWith("Bearer ")) {
 
-            log.info("token null");
-            filterChain.doFilter(request, response);
+            log.info("token is null");
+//            filterChain.doFilter(request, response);
 
             // 조건이 해당되면 메소드 종료 (필수)
-            return;
+            throw new JwtException("token is null");
         }
 
         log.info("authorization now");
@@ -43,11 +44,11 @@ public class JWTFilter extends OncePerRequestFilter {
         // 토큰 소멸 시간 검증
         if (jwtUtil.isExpired(token)) {
 
-            log.info("token expired");
-            filterChain.doFilter(request, response);
+            log.info("token has expired");
+//            filterChain.doFilter(request, response);
 
             // 조건이 해당되면 메소드 종료 (필수)
-            return;
+            throw new JwtException("token has expired");
         }
 
         // 토큰에서 username과 role 획득

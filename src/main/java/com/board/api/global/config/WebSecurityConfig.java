@@ -1,5 +1,6 @@
 package com.board.api.global.config;
 
+import com.board.api.global.jwt.JWTExceptionFilter;
 import com.board.api.global.jwt.JWTFilter;
 import com.board.api.global.jwt.JWTUtil;
 import com.board.api.global.security.LoginFilter;
@@ -65,6 +66,9 @@ public class WebSecurityConfig {
 
         // JWTFilter 등록
         http.addFilterBefore(new JWTFilter(jwtUtil), LoginFilter.class);
+
+        // JWTExceptionFilter 등록
+        http.addFilterBefore(new JWTExceptionFilter(), JWTFilter.class);
 
         // 필터 추가 LoginFilter 로 UsernamePasswordAuthenticationFilter 대체
         LoginFilter loginFilter = new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil);
