@@ -13,9 +13,12 @@ import com.board.api.domain.post.dto.request.PostRequest;
 import com.board.api.domain.post.entity.Post;
 import com.board.api.domain.post.repository.PostRepository;
 import com.board.api.global.util.AuthorizationUtil;
+import io.jsonwebtoken.lang.Assert;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 
 @Slf4j
@@ -26,9 +29,12 @@ public class PostService {
     private final PostRepository postRepository;
     private final PointHistoryRepository pointHistoryRepository;
 
+    @Transactional(propagation = Propagation.REQUIRED)
     public PostCreationDto createPost(PostRequest postRequest) {
         // post 저장
         Member member = memberRepository.findByEmail(AuthorizationUtil.getLoginEmail());
+        Assert.notNull(member, "로그인한 회원의 요청이므로 회원정보가 존재해야 함");
+
         Post post =
                 Post.builder()
                         .title(postRequest.getTitle())
