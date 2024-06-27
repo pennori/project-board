@@ -9,7 +9,7 @@ import com.board.api.domain.member.repository.MemberRepository;
 import com.board.api.domain.point.repository.PointHistoryRepository;
 import com.board.api.domain.post.dto.PostCreationDto;
 import com.board.api.domain.post.dto.PostViewDto;
-import com.board.api.domain.post.dto.request.PostRequest;
+import com.board.api.domain.post.dto.request.PostCreateRequest;
 import com.board.api.domain.post.entity.Post;
 import com.board.api.domain.post.exception.PostException;
 import com.board.api.domain.post.repository.PostRepository;
@@ -56,12 +56,12 @@ class PostServiceTest {
         given(member.getMemberPoint()).willReturn(memberPoint);
         given(memberPoint.getScore()).willReturn(10L);
 
-        PostRequest postRequest = mock(PostRequest.class);
-        given(postRequest.getTitle()).willReturn("title");
-        given(postRequest.getContent()).willReturn("content");
+        PostCreateRequest postCreateRequest = mock(PostCreateRequest.class);
+        given(postCreateRequest.getTitle()).willReturn("title");
+        given(postCreateRequest.getContent()).willReturn("content");
 
         // when
-        PostCreationDto dto = postService.createPost(postRequest);
+        PostCreationDto dto = postService.createPost(postCreateRequest);
 
         // then
         assertThat(dto).isNotNull();

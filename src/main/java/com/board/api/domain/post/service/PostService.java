@@ -12,8 +12,10 @@ import com.board.api.domain.point.entity.PointHistory;
 import com.board.api.domain.point.enums.PointType;
 import com.board.api.domain.point.repository.PointHistoryRepository;
 import com.board.api.domain.post.dto.PostCreationDto;
+import com.board.api.domain.post.dto.PostModifyDto;
 import com.board.api.domain.post.dto.PostViewDto;
-import com.board.api.domain.post.dto.request.PostRequest;
+import com.board.api.domain.post.dto.request.PostModifyRequest;
+import com.board.api.domain.post.dto.request.PostCreateRequest;
 import com.board.api.domain.post.entity.Post;
 import com.board.api.domain.post.exception.PostException;
 import com.board.api.domain.post.repository.PostRepository;
@@ -39,16 +41,33 @@ public class PostService {
     private final PointHistoryRepository pointHistoryRepository;
     private final CommentRepository commentRepository;
 
+    public PostModifyDto modifyPost(PostModifyRequest request) {
+        Assert.notNull(request, "호출시 요청 정보가 비어서 들어올 수 없습니다.");
+        // Post
+        Optional<Post> optionalPost = postRepository.findById(Long.valueOf(request.getPostId()));
+        if(optionalPost.isEmpty()) {
+            throw new PostException("Post 가 존재하지 않습니다.");
+        }
+
+        Post post = optionalPost.get();
+        post.setTitle(request.getTitle());
+        post.setContent(request.getContent());
+
+        return PostModifyDto.builder()
+                .postId(post.getPostId())
+                .build();
+    }
+
     @Transactional
-    public PostCreationDto createPost(PostRequest postRequest) {
+    public PostCreationDto createPost(PostCreateRequest request) {
         // post 저장
         Member member = memberRepository.findByEmail(AuthorizationUtil.getLoginEmail());
         Assert.notNull(member, "로그인한 회원의 요청이므로 회원정보가 존재해야 합니다.");
 
         Post post =
                 Post.builder()
-                        .title(postRequest.getTitle())
-                        .content(postRequest.getContent())
+                        .title(request.getTitle())
+                        .content(request.getContent())
                         .createdBy(member.getMemberId())
                         .build();
         post.setMember(member);

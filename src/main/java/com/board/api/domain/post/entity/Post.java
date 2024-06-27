@@ -7,6 +7,7 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.util.ObjectUtils;
 
 import java.util.ArrayList;
@@ -21,9 +22,11 @@ public class Post extends DateAndAuthor {
     @Column(nullable = false)
     private Long postId;
 
+    @Setter
     @Column(nullable = false)
     private String title;
 
+    @Setter
     @Column(nullable = false)
     private String content;
 
