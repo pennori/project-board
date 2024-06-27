@@ -2,8 +2,8 @@ package com.board.api.global.handler;
 
 import com.board.api.domain.member.exception.MemberException;
 import com.board.api.domain.post.exception.PostException;
-import com.board.api.global.dto.response.ApiResponse;
 import com.board.api.global.dto.ErrorMessage;
+import com.board.api.global.dto.response.ApiResponse;
 import feign.FeignException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
