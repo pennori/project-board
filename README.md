@@ -36,7 +36,7 @@
 * [GET] /post/{postId}
   * 게시물 상세 조회 API
   * 게시물 정보, 댓글 정보 반환
-* [PUT] /post/{postId}
+* [PUT] /post
   * 게시물 수정 API
   * 작성자가 아니면 수정 불가
   * 수정된 게시물 id 반환
