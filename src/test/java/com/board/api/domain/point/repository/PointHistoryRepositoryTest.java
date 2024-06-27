@@ -21,10 +21,6 @@ class PointHistoryRepositoryTest {
     @Autowired
     private PointHistoryRepository pointHistoryRepository;
 
-    Long initData() {
-        return 0L;
-    }
-
     @DisplayName("Point 증감 이력 저장")
     @Test
     void save() {
