@@ -15,7 +15,7 @@ public class QCommentRepositoryImpl implements QCommentRepository {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public List<Comment> getBunchOfCommentByPost(Long postId) {
+    public List<Comment> getBunchOfComment(Long postId) {
         QComment comment = QComment.comment;
 
         JPAQuery<Comment> query = queryFactory.selectFrom(comment).where(comment.post.postId.eq(postId));

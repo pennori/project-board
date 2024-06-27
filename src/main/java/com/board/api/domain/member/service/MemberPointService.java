@@ -9,6 +9,7 @@ import io.jsonwebtoken.lang.Assert;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
@@ -17,6 +18,7 @@ public class MemberPointService {
     private final MemberRepository memberRepository;
     private final MemberPointRepository memberPointRepository;
 
+    @Transactional(readOnly = true)
     public CurrentPointDto getPoint() {
         Member member = memberRepository.findByEmail(AuthorizationUtil.getLoginEmail());
         Assert.notNull(member, "로그인한 회원의 요청이므로 회원정보가 존재해야 합니다.");

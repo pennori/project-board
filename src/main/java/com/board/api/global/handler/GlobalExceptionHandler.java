@@ -1,6 +1,7 @@
 package com.board.api.global.handler;
 
-import com.board.api.domain.member.exception.DuplicateException;
+import com.board.api.domain.member.exception.MemberException;
+import com.board.api.domain.post.exception.PostException;
 import com.board.api.global.dto.response.ApiResponse;
 import com.board.api.global.dto.ErrorMessage;
 import feign.FeignException;
@@ -52,8 +53,19 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         );
     }
 
-    @ExceptionHandler(value = {DuplicateException.class})
-    public ResponseEntity<ApiResponse<ErrorMessage>> duplicateExceptionHandler(final DuplicateException ex) {
+    @ExceptionHandler(value = {MemberException.class})
+    public ResponseEntity<ApiResponse<ErrorMessage>> memberExceptionHandler(final MemberException ex) {
+        return ResponseEntity.badRequest().body(
+                ApiResponse.<ErrorMessage>builder()
+                        .resultCode(HttpStatus.BAD_REQUEST.value())
+                        .resultMessage(HttpStatus.BAD_REQUEST.name())
+                        .data(new ErrorMessage(ex.getMessage()))
+                        .build()
+        );
+    }
+
+    @ExceptionHandler(value = {PostException.class})
+    public ResponseEntity<ApiResponse<ErrorMessage>> postExceptionHandler(final PostException ex) {
         return ResponseEntity.badRequest().body(
                 ApiResponse.<ErrorMessage>builder()
                         .resultCode(HttpStatus.BAD_REQUEST.value())

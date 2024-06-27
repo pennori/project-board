@@ -5,5 +5,5 @@ import com.board.api.domain.comment.entity.Comment;
 import java.util.List;
 
 public interface QCommentRepository {
-    List<Comment> getBunchOfCommentByPost(Long postId);
+    List<Comment> getBunchOfComment(Long postId);
 }
