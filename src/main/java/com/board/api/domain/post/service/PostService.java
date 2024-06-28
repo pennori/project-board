@@ -27,9 +27,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 
 @Slf4j
@@ -81,7 +79,7 @@ public class PostService {
     public PostViewDto viewPost(Long postId) {
         // Post
         Optional<Post> optionalPost = postRepository.findById(postId);
-        if(optionalPost.isEmpty()) {
+        if (optionalPost.isEmpty()) {
             throw new PostException("Post 가 존재하지 않습니다.");
         }
         Post post = optionalPost.get();
@@ -120,14 +118,14 @@ public class PostService {
         Assert.notNull(request, "호출시 요청 정보가 비어서 들어올 수 없습니다.");
         // Post
         Optional<Post> optionalPost = postRepository.findById(Long.valueOf(request.getPostId()));
-        if(optionalPost.isEmpty()) {
+        if (optionalPost.isEmpty()) {
             throw new PostException("Post 가 존재하지 않습니다.");
         }
 
         Post post = optionalPost.get();
 
         // 로그인 사용자가 글 작성자가 아니면 수정 불가
-        if(!authorizationUtil.getLoginEmail().equals(post.getMember().getEmail())) {
+        if (!authorizationUtil.getLoginEmail().equals(post.getMember().getEmail())) {
             throw new PostException("Post 에 대한 권한이 없습니다.");
         }
 
@@ -143,22 +141,87 @@ public class PostService {
     public void deletePost(Long postId) {
         // Post
         Optional<Post> optionalPost = postRepository.findById(postId);
-        if(optionalPost.isEmpty()) {
+        if (optionalPost.isEmpty()) {
             throw new PostException("Post 가 존재하지 않습니다.");
         }
         Post post = optionalPost.get();
 
+        // 삭제시 차감할 포인트 설정
+        Map<String, Long> delPoint = new HashMap<>();
+
+        // 게시물 작성 포인트 3점
+        Long postMemberId = post.getMember().getMemberId();
+        delPoint.put("post_member_" + postMemberId, delPoint.getOrDefault("post_member_" + postMemberId, 0L) + PointType.CREATE_POST.getScore());
+
+        // PointHistory param
+        List<PointHistory> bunchOfPointHistory = new ArrayList<>();
+
         // comment 삭제
         List<Comment> bunchOfComment = post.getBunchOfComment();
-        if(!ObjectUtils.isEmpty(bunchOfComment)) {
+        if (!ObjectUtils.isEmpty(bunchOfComment)) {
+
+            for (Comment comment : bunchOfComment) {
+                Long decrease = 0L;
+                Long commentMemberId = comment.getMember().getMemberId();
+                // 게시물 작성자 외
+                if (!Objects.equals(commentMemberId, postMemberId)) {
+                    delPoint.put("post_member_" + postMemberId, delPoint.getOrDefault("post_member_" + postMemberId, 0L) + PointType.CREATE_BY.getScore());
+                    delPoint.put("comment_member_" + commentMemberId, delPoint.getOrDefault("comment_member_" + commentMemberId, 0L) + PointType.CREATE_COMMENT.getScore());
+
+                    decrease = PointType.DELETE_COMMENT.getScore();
+                }
+
+                // comment 삭제에 대한 point history 집합
+                PointHistory pointHistory =
+                        PointHistory.builder()
+                                .memberId(commentMemberId)
+                                .postId(postId)
+                                .commentId(comment.getCommentId())
+                                .category(Category.COMMENT.name())
+                                .action(Action.DELETE.name())
+                                .score(decrease)
+                                .createdBy(postMemberId)
+                                .build();
+                bunchOfPointHistory.add(pointHistory);
+
+            }
+
             commentRepository.deleteAll(bunchOfComment);
         }
 
-        // post 삭제.
+        // post 삭제에 대한 point history 저장
+        PointHistory pointHistory =
+                PointHistory.builder()
+                        .memberId(postMemberId)
+                        .postId(postId)
+                        .commentId(0L)
+                        .category(Category.POST.name())
+                        .action(Action.DELETE.name())
+                        .score(PointType.DELETE_POST.getScore())
+                        .createdBy(postMemberId)
+                        .build();
+        bunchOfPointHistory.add(pointHistory);
+
+        // post 삭제
         postRepository.delete(post);
 
-        // MemberPoint 조정
-
         // PointHistory 저장
+        pointHistoryRepository.saveAll(bunchOfPointHistory);
+
+        // 차감할 포인트가 있는 사용자에 대한 포인트 차감 및 이력 처리
+        for (Map.Entry<String, Long> entry : delPoint.entrySet()) {
+            String key = entry.getKey();
+            Long memberIdForDelete = Long.valueOf(key.split("_")[2]);
+            Long scoreForDelete = entry.getValue();
+
+            Optional<Member> optionalMember = memberRepository.findById(memberIdForDelete);
+            if (optionalMember.isPresent()) {
+                // MemberPoint 조정
+                MemberPoint memberPoint = optionalMember.get().getMemberPoint();
+                memberPoint.setScore(memberPoint.getScore() - scoreForDelete);
+            }
+
+        }
+
     }
 }
