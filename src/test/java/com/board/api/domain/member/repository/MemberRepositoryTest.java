@@ -5,7 +5,7 @@ import com.board.api.domain.member.entity.MemberRole;
 import com.board.api.domain.member.entity.MemberPoint;
 import com.board.api.global.config.QueryDSLConfig;
 import com.board.api.global.constants.Author;
-import com.board.api.global.enums.RoleType;
+import com.board.api.global.enums.Role;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -40,7 +40,7 @@ class MemberRepositoryTest {
 
         MemberRole memberRole =
                 MemberRole.builder()
-                        .name(RoleType.USER.name())
+                        .name(Role.USER.name())
                         .createdBy(Author.SYSTEM_ID)
                         .build();
         member.setMemberRole(memberRole);

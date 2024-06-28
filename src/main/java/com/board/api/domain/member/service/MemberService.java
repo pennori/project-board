@@ -9,9 +9,10 @@ import com.board.api.domain.member.exception.MemberException;
 import com.board.api.domain.member.repository.MemberRepository;
 import com.board.api.global.constants.Author;
 import com.board.api.global.encryption.BidirectionalCryptUtil;
-import com.board.api.global.enums.RoleType;
+import com.board.api.global.enums.Role;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.EnumUtils;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,6 +34,10 @@ public class MemberService {
             throw new MemberException("존재하는 회원입니다.");
         }
 
+        if(!EnumUtils.isValidEnum(Role.class, request.getRole())) {
+            throw new MemberException("유효한 권한이 아닙니다.");
+        }
+
         Member member =
                 Member.builder()
                         .email(request.getEmail())
@@ -46,7 +51,7 @@ public class MemberService {
 
         MemberRole memberRole =
                 MemberRole.builder()
-                        .name(RoleType.USER.name())
+                        .name(request.getRole())
                         .createdBy(Author.SYSTEM_ID)
                         .build();
         member.setMemberRole(memberRole);

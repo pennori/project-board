@@ -1,5 +1,5 @@
 package com.board.api.global.enums;
 
-public enum RoleType {
+public enum Role {
     ADMIN, USER
 }

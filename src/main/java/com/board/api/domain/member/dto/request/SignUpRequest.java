@@ -27,7 +27,10 @@ public class SignUpRequest {
     @Size(min = 1, max = 10, message = "name 은/는 1 ~ 10자 입니다.")
     private String name;
 
-    @NotBlank(message = "regNo is a required input.")
+    @NotBlank(message = "regNo 은/는 필수 값입니다.")
     @Pattern(regexp = "^(?:[0-9]{2}(?:0[1-9]|1[0-2])(?:0[1-9]|[1,2][0-9]|3[0,1]))-[1-8][0-9]{6}$", message = "유효하지 않은 regNo 입니다.")
     private String regNo;
+
+    @NotBlank(message = "role 은/는 필수 값입니다.")
+    private String role;
 }
