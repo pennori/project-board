@@ -8,8 +8,10 @@ import com.board.api.domain.member.entity.MemberPoint;
 import com.board.api.domain.member.repository.MemberRepository;
 import com.board.api.domain.point.repository.PointHistoryRepository;
 import com.board.api.domain.post.dto.PostCreationDto;
+import com.board.api.domain.post.dto.PostModifyDto;
 import com.board.api.domain.post.dto.PostViewDto;
 import com.board.api.domain.post.dto.request.PostCreateRequest;
+import com.board.api.domain.post.dto.request.PostModifyRequest;
 import com.board.api.domain.post.entity.Post;
 import com.board.api.domain.post.exception.PostException;
 import com.board.api.domain.post.repository.PostRepository;
@@ -106,14 +108,47 @@ class PostServiceTest {
         given(commentRepository.getBunchOfComment(postId)).willReturn(bunchOfComment);
 
         // when
-        PostViewDto postViewDto = postService.viewPost(postId);
+        PostViewDto dto = postService.viewPost(postId);
 
         // then
-        assertThat(postViewDto).isNotNull();
-        assertThat(postViewDto.getPostId()).isEqualTo(String.valueOf(postId));
-        assertThat(postViewDto.getBunchOfCommentViewDto()).isNotNull();
-        assertThat(postViewDto.getBunchOfCommentViewDto().size()).isGreaterThan(0);
-        assertThat(postViewDto.getBunchOfCommentViewDto().get(0)).isInstanceOf(CommentViewDto.class);
-        assertThat(postViewDto.getBunchOfCommentViewDto().get(0).getCommentId()).isEqualTo(String.valueOf(commentId));
+        assertThat(dto).isNotNull();
+        assertThat(dto.getPostId()).isEqualTo(String.valueOf(postId));
+        assertThat(dto.getBunchOfCommentViewDto()).isNotNull();
+        assertThat(dto.getBunchOfCommentViewDto().size()).isGreaterThan(0);
+        assertThat(dto.getBunchOfCommentViewDto().get(0)).isInstanceOf(CommentViewDto.class);
+        assertThat(dto.getBunchOfCommentViewDto().get(0).getCommentId()).isEqualTo(String.valueOf(commentId));
+    }
+
+    @Test
+    void modifyPostThrowPostException() {
+        // given
+        PostModifyRequest request = mock(PostModifyRequest.class);
+        given(request.getPostId()).willReturn("1");
+
+        given(postRepository.findById(anyLong())).willReturn(Optional.empty());
+        // when then
+        assertThatThrownBy(() -> postService.modifyPost(request))
+                .isInstanceOf(PostException.class)
+                .hasMessageContaining("Post 가 존재하지 않습니다.");
+
+    }
+
+    @Test
+    void modifyPost() {
+        // given
+        PostModifyRequest request = mock(PostModifyRequest.class);
+        given(request.getPostId()).willReturn("1");
+        given(request.getTitle()).willReturn("title");
+        given(request.getContent()).willReturn("content");
+
+        Post post = mock(Post.class);
+        given(post.getPostId()).willReturn(1L);
+
+        given(postRepository.findById(anyLong())).willReturn(Optional.of(post));
+        // when
+        PostModifyDto dto = postService.modifyPost(request);
+        // then
+        assertThat(dto).isNotNull();
+        assertThat(dto.getPostId()).isEqualTo("1");
     }
 }

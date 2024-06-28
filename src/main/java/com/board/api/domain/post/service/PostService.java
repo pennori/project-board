@@ -41,23 +41,6 @@ public class PostService {
     private final PointHistoryRepository pointHistoryRepository;
     private final CommentRepository commentRepository;
 
-    public PostModifyDto modifyPost(PostModifyRequest request) {
-        Assert.notNull(request, "호출시 요청 정보가 비어서 들어올 수 없습니다.");
-        // Post
-        Optional<Post> optionalPost = postRepository.findById(Long.valueOf(request.getPostId()));
-        if(optionalPost.isEmpty()) {
-            throw new PostException("Post 가 존재하지 않습니다.");
-        }
-
-        Post post = optionalPost.get();
-        post.setTitle(request.getTitle());
-        post.setContent(request.getContent());
-
-        return PostModifyDto.builder()
-                .postId(post.getPostId())
-                .build();
-    }
-
     @Transactional
     public PostCreationDto createPost(PostCreateRequest request) {
         // post 저장
@@ -128,6 +111,24 @@ public class PostService {
                 .updatedAt(post.getUpdatedAt())
                 .updatedBy(post.getUpdatedBy())
                 .bunchOfCommentViewDto(bunchOfCommentViewDto)
+                .build();
+    }
+
+    @Transactional
+    public PostModifyDto modifyPost(PostModifyRequest request) {
+        Assert.notNull(request, "호출시 요청 정보가 비어서 들어올 수 없습니다.");
+        // Post
+        Optional<Post> optionalPost = postRepository.findById(Long.valueOf(request.getPostId()));
+        if(optionalPost.isEmpty()) {
+            throw new PostException("Post 가 존재하지 않습니다.");
+        }
+
+        Post post = optionalPost.get();
+        post.setTitle(request.getTitle());
+        post.setContent(request.getContent());
+
+        return PostModifyDto.builder()
+                .postId(post.getPostId())
                 .build();
     }
 }
