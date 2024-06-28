@@ -40,11 +40,12 @@ public class PostService {
     private final PostRepository postRepository;
     private final PointHistoryRepository pointHistoryRepository;
     private final CommentRepository commentRepository;
+    private final AuthorizationUtil authorizationUtil;
 
     @Transactional
     public PostCreationDto createPost(PostCreateRequest request) {
         // post 저장
-        Member member = memberRepository.findByEmail(AuthorizationUtil.getLoginEmail());
+        Member member = memberRepository.findByEmail(authorizationUtil.getLoginEmail());
         Assert.notNull(member, "로그인한 회원의 요청이므로 회원정보가 존재해야 합니다.");
 
         Post post =
@@ -124,11 +125,40 @@ public class PostService {
         }
 
         Post post = optionalPost.get();
+
+        // 로그인 사용자가 글 작성자가 아니면 수정 불가
+        if(!authorizationUtil.getLoginEmail().equals(post.getMember().getEmail())) {
+            throw new PostException("Post 에 대한 권한이 없습니다.");
+        }
+
         post.setTitle(request.getTitle());
         post.setContent(request.getContent());
 
         return PostModifyDto.builder()
                 .postId(post.getPostId())
                 .build();
+    }
+
+    @Transactional
+    public void deletePost(Long postId) {
+        // Post
+        Optional<Post> optionalPost = postRepository.findById(postId);
+        if(optionalPost.isEmpty()) {
+            throw new PostException("Post 가 존재하지 않습니다.");
+        }
+        Post post = optionalPost.get();
+
+        // comment 삭제
+        List<Comment> bunchOfComment = post.getBunchOfComment();
+        if(!ObjectUtils.isEmpty(bunchOfComment)) {
+            commentRepository.deleteAll(bunchOfComment);
+        }
+
+        // post 삭제.
+        postRepository.delete(post);
+
+        // MemberPoint 조정
+
+        // PointHistory 저장
     }
 }
