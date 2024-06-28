@@ -63,4 +63,16 @@ public class PostController {
                         .build()
         );
     }
+
+    @DeleteMapping("/post/{postId}")
+    public ResponseEntity<ApiResponse<?>> deletePost(Long postId) {
+        postService.deletePost(postId);
+
+        return ResponseEntity.ok().body(
+                ApiResponse.builder()
+                        .resultCode(HttpStatus.OK.value())
+                        .resultMessage(HttpStatus.OK.name())
+                        .build()
+        );
+    }
 }

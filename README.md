@@ -45,9 +45,6 @@
 * [POST] /comment
   * 게시물에 대한 댓글 작성 API
   * 게시물 id 와 작성한 댓글 id 반환
-* [PUT] /comment/{commentId}
-  * 로그인 회원의 게시물에 대한 댓글 수정 API
-  * 수정된 댓글이 속한 게시물 id 와 작성한 댓글 id 반환
 * [DELETE] /comment/{commentId}
   * 로그인 회원의 게시물에 대한 댓글 삭제 API
 
