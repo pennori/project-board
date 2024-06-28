@@ -46,7 +46,7 @@ public class CommentService {
         // Post
         Optional<Post> optionalPost = postRepository.findById(Long.valueOf(request.getPostId()));
         if (optionalPost.isEmpty()) {
-            throw new CommentException("Post 가 존재하지 않습니다.");
+            throw new PostException("Post 가 존재하지 않습니다.");
         }
         Post post = optionalPost.get();
 
@@ -60,17 +60,49 @@ public class CommentService {
         comment.setMember(member);
         commentRepository.save(comment);
 
-        // point + 2
-        MemberPoint memberPoint = member.getMemberPoint();
-        memberPoint.setScore(memberPoint.getScore() + PointType.CREATE_COMMENT.getScore());
-        memberPoint.setUpdatedBy(member.getMemberId());
+        // 게시물 작성자
+        Member postMember = post.getMember();
 
-        // point + 1
-        MemberPoint memberPointForPost = post.getMember().getMemberPoint();
-        memberPointForPost.setScore(memberPointForPost.getScore() + PointType.CREATE_BY.getScore());
-        memberPointForPost.setUpdatedBy(post.getMember().getMemberId());
+        // 게시물 작성자와 댓글 작성자가 다른 경우만 포인트 증감 처리
+        if (!member.getMemberId().equals(postMember.getMemberId())) {
 
-        createPointHistory(member, post, comment);
+            // point + 2
+            MemberPoint memberPointFromMember = member.getMemberPoint();
+            memberPointFromMember.setScore(memberPointFromMember.getScore() + PointType.CREATE_COMMENT.getScore());
+            memberPointFromMember.setUpdatedBy(member.getMemberId());
+
+            // point + 1
+            MemberPoint memberPointFromPost = postMember.getMemberPoint();
+            memberPointFromPost.setScore(memberPointFromPost.getScore() + PointType.CREATE_BY.getScore());
+            memberPointFromPost.setUpdatedBy(member.getMemberId());
+
+            PointHistory pointHistoryForComment =
+                    PointHistory.builder()
+                            .memberId(member.getMemberId())
+                            .postId(post.getPostId())
+                            .commentId(comment.getCommentId())
+                            .category(Category.COMMENT.name())
+                            .action(Action.CREATE.name())
+                            .score(PointType.CREATE_COMMENT.getScore())
+                            .createdBy(member.getMemberId())
+                            .build();
+            PointHistory pointHistoryForPost =
+                    PointHistory.builder()
+                            .memberId(postMember.getMemberId())
+                            .postId(post.getPostId())
+                            .commentId(comment.getCommentId())
+                            .category(Category.COMMENT.name())
+                            .action(Action.CREATE_BY.name())
+                            .score(PointType.CREATE_BY.getScore())
+                            .createdBy(member.getMemberId())
+                            .build();
+
+            List<PointHistory> bunchOfPointHistory = new ArrayList<>();
+            bunchOfPointHistory.add(pointHistoryForComment);
+            bunchOfPointHistory.add(pointHistoryForPost);
+
+            pointHistoryRepository.saveAll(bunchOfPointHistory);
+        }
 
         return CommentDto.builder()
                 .postId(post.getPostId())
@@ -78,41 +110,12 @@ public class CommentService {
                 .build();
     }
 
-    private void createPointHistory(Member member, Post post, Comment comment) {
-        PointHistory pointHistoryForComment =
-                PointHistory.builder()
-                        .memberId(member.getMemberId())
-                        .postId(post.getPostId())
-                        .commentId(comment.getCommentId())
-                        .category(Category.COMMENT.name())
-                        .action(Action.DELETE.name())
-                        .score(PointType.DELETE_COMMENT.getScore())
-                        .createdBy(member.getMemberId())
-                        .build();
-        PointHistory pointHistoryForPost =
-                PointHistory.builder()
-                        .memberId(member.getMemberId())
-                        .postId(post.getPostId())
-                        .commentId(comment.getCommentId())
-                        .category(Category.COMMENT.name())
-                        .action(Action.DELETE_BY.name())
-                        .score(PointType.DELETE_BY.getScore())
-                        .createdBy(member.getMemberId())
-                        .build();
-
-        List<PointHistory> bunchOfPointHistory = new ArrayList<>();
-        bunchOfPointHistory.add(pointHistoryForComment);
-        bunchOfPointHistory.add(pointHistoryForPost);
-
-        pointHistoryRepository.saveAll(bunchOfPointHistory);
-    }
-
     @Transactional
     public void deleteComment(Long commentId) {
         // Comment
         Optional<Comment> optionalComment = commentRepository.findById(commentId);
         if(optionalComment.isEmpty()) {
-            throw new PostException("Comment 가 존재하지 않습니다.");
+            throw new CommentException("Comment 가 존재하지 않습니다.");
         }
         Comment comment = optionalComment.get();
         // Member
@@ -125,7 +128,50 @@ public class CommentService {
             throw new CommentException("Comment 에 대한 권한이 없습니다.");
         }
 
-        createPointHistory(member, post, comment);
+        // 게시물 작성자
+        Member postMember = post.getMember();
+
+        // 게시물 작성자와 댓글 작성자가 다른 경우만 포인트 증감 처리
+        if (!member.getMemberId().equals(postMember.getMemberId())) {
+
+            // point - 2
+            MemberPoint memberPointFromMember = member.getMemberPoint();
+            memberPointFromMember.setScore(memberPointFromMember.getScore() + PointType.DELETE_COMMENT.getScore());
+            memberPointFromMember.setUpdatedBy(member.getMemberId());
+
+            // point - 1
+            MemberPoint memberPointFromPost = postMember.getMemberPoint();
+            memberPointFromPost.setScore(memberPointFromPost.getScore() + PointType.DELETE_BY.getScore());
+            memberPointFromPost.setUpdatedBy(member.getMemberId());
+
+            PointHistory pointHistoryForComment =
+                    PointHistory.builder()
+                            .memberId(member.getMemberId())
+                            .postId(post.getPostId())
+                            .commentId(comment.getCommentId())
+                            .category(Category.COMMENT.name())
+                            .action(Action.DELETE.name())
+                            .score(PointType.DELETE_COMMENT.getScore())
+                            .createdBy(member.getMemberId())
+                            .build();
+
+            PointHistory pointHistoryForPost =
+                    PointHistory.builder()
+                            .memberId(postMember.getMemberId())
+                            .postId(post.getPostId())
+                            .commentId(comment.getCommentId())
+                            .category(Category.COMMENT.name())
+                            .action(Action.DELETE_BY.name())
+                            .score(PointType.DELETE_BY.getScore())
+                            .createdBy(member.getMemberId())
+                            .build();
+
+            List<PointHistory> bunchOfPointHistory = new ArrayList<>();
+            bunchOfPointHistory.add(pointHistoryForComment);
+            bunchOfPointHistory.add(pointHistoryForPost);
+
+            pointHistoryRepository.saveAll(bunchOfPointHistory);
+        }
 
         commentRepository.delete(comment);
     }

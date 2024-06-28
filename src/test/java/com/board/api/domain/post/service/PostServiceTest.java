@@ -30,6 +30,7 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 
+
 @DisplayName("PostService 테스트")
 @SpringBootTest
 class PostServiceTest {
@@ -77,7 +78,7 @@ class PostServiceTest {
         assertThat(dto).isNotNull();
     }
 
-    @DisplayName("Post 생성시 예외 발생")
+    @DisplayName("Post 조회시 예외 발생")
     @Test
     void viewPostThrowPostException() {
         // given

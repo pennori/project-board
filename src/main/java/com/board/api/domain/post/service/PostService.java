@@ -169,7 +169,7 @@ public class PostService {
             for (Comment comment : bunchOfComment) {
                 Long decrease = 0L;
                 Long commentMemberId = comment.getMember().getMemberId();
-                // 게시물 작성자 외
+                // 게시물 작성자와 댓글 작성자가 다른 경우만 포인트 증감 처리
                 if (!Objects.equals(commentMemberId, postMemberId)) {
                     delPoint.put("post_member_" + postMemberId, delPoint.getOrDefault("post_member_" + postMemberId, 0L) + PointType.CREATE_BY.getScore());
                     delPoint.put("comment_member_" + commentMemberId, delPoint.getOrDefault("comment_member_" + commentMemberId, 0L) + PointType.CREATE_COMMENT.getScore());
