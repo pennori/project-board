@@ -42,10 +42,11 @@ public class PostService {
 
     @Transactional
     public PostCreationDto createPost(PostCreateRequest request) {
-        // post 저장
+        Assert.notNull(request, "호출시 요청 정보가 비어서 들어올 수 없습니다.");
+        // Member
         Member member = memberRepository.findByEmail(authorizationUtil.getLoginEmail());
         Assert.notNull(member, "로그인한 회원의 요청이므로 회원정보가 존재해야 합니다.");
-
+        // post 저장
         Post post =
                 Post.builder()
                         .title(request.getTitle())
@@ -146,7 +147,12 @@ public class PostService {
         }
         Post post = optionalPost.get();
 
-        // 삭제시 차감할 포인트 설정
+        // 로그인 사용자가 글 작성자가 아니면 삭제 불가
+        if (!authorizationUtil.getLoginEmail().equals(post.getMember().getEmail())) {
+            throw new PostException("Post 에 대한 권한이 없습니다.");
+        }
+
+        // 삭제시 차감할 포인트 집합 설정
         Map<String, Long> delPoint = new HashMap<>();
 
         // 게시물 작성 포인트 3점

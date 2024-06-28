@@ -42,7 +42,7 @@
   * 수정된 게시물 id 반환
 * [DELETE] /post/{postId}
   * 게시물 삭제 API
-* [POST] /comment/{postId}
+* [POST] /comment
   * 게시물에 대한 댓글 작성 API
   * 게시물 id 와 작성한 댓글 id 반환
 * [PUT] /comment/{commentId}
