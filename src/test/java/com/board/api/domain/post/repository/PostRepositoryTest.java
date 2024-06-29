@@ -90,6 +90,7 @@ class PostRepositoryTest {
         assertThat(page.getTotalPages()).isEqualTo(2);
         assertThat(page.getTotalElements()).isEqualTo(20);
         assertThat(page.getContent().get(0)).isInstanceOf(PostListViewDto.class);
+        assertThat(page.getContent().get(0).getTitle()).isEqualTo("title");
     }
 
 }
