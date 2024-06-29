@@ -1,4 +1,5 @@
 package com.board.api.domain.post.repository.impl;
+
 import com.board.api.domain.post.dto.PostListViewDto;
 import com.board.api.domain.post.entity.QPost;
 import com.board.api.domain.post.repository.QPostRepository;
@@ -36,4 +37,5 @@ public class QPostRepositoryImpl implements QPostRepository {
 
         return PageableExecutionUtils.getPage(fetch, pageable, count::fetchOne);
     }
+
 }

@@ -15,6 +15,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -83,7 +84,7 @@ class PostRepositoryTest {
         initPost(20);
 
         // when
-        Pageable pageable = PageRequest.of(0, 10);
+        Pageable pageable = PageRequest.of(1, 10, Sort.Direction.DESC, "post_id");
         Page<PostListViewDto> page = postRepository.getList(pageable);
 
         // then
@@ -91,6 +92,7 @@ class PostRepositoryTest {
         assertThat(page.getTotalElements()).isEqualTo(20);
         assertThat(page.getContent().get(0)).isInstanceOf(PostListViewDto.class);
         assertThat(page.getContent().get(0).getTitle()).isEqualTo("title");
+        System.out.println("========" + page.getContent().get(0).getPostId());
     }
 
 }

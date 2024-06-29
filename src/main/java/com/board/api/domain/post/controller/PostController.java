@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -38,7 +39,7 @@ public class PostController {
     }
 
     @GetMapping("/post")
-    public ResponseEntity<ApiResponse<Page<PostListViewDto>>> listViewPost(Pageable pageable) {
+    public ResponseEntity<ApiResponse<Page<PostListViewDto>>> listViewPost(@PageableDefault Pageable pageable) {
         Page<PostListViewDto> bunchOfDto = postService.listViewPost(pageable);
 
         return ResponseEntity.ok().body(
