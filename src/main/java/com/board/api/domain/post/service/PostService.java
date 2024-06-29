@@ -153,11 +153,11 @@ public class PostService {
         }
 
         // 삭제시 차감할 포인트 집합 설정
-        Map<String, Long> delPoint = new HashMap<>();
+        Map<String, Long> decreaseCase = new HashMap<>();
 
         // 게시물 작성 포인트 3점
         Long postMemberId = post.getMember().getMemberId();
-        delPoint.put("post_member_" + postMemberId, delPoint.getOrDefault("post_member_" + postMemberId, 0L) + PointType.CREATE_POST.getScore());
+        decreaseCase.put("post_member_" + postMemberId, decreaseCase.getOrDefault("post_member_" + postMemberId, 0L) + PointType.CREATE_POST.getScore());
 
         // PointHistory param
         List<PointHistory> bunchOfPointHistory = new ArrayList<>();
@@ -171,8 +171,8 @@ public class PostService {
                 Long commentMemberId = comment.getMember().getMemberId();
                 // 게시물 작성자와 댓글 작성자가 다른 경우만 포인트 증감 처리
                 if (!Objects.equals(commentMemberId, postMemberId)) {
-                    delPoint.put("post_member_" + postMemberId, delPoint.getOrDefault("post_member_" + postMemberId, 0L) + PointType.CREATE_BY.getScore());
-                    delPoint.put("comment_member_" + commentMemberId, delPoint.getOrDefault("comment_member_" + commentMemberId, 0L) + PointType.CREATE_COMMENT.getScore());
+                    decreaseCase.put("post_member_" + postMemberId, decreaseCase.getOrDefault("post_member_" + postMemberId, 0L) + PointType.CREATE_BY.getScore());
+                    decreaseCase.put("comment_member_" + commentMemberId, decreaseCase.getOrDefault("comment_member_" + commentMemberId, 0L) + PointType.CREATE_COMMENT.getScore());
 
                     decrease = PointType.DELETE_COMMENT.getScore();
                 }
@@ -208,14 +208,14 @@ public class PostService {
                         .build();
         bunchOfPointHistory.add(pointHistory);
 
-        // post 삭제
-        postRepository.delete(post);
-
         // PointHistory 저장
         pointHistoryRepository.saveAll(bunchOfPointHistory);
 
+        // post 삭제
+        postRepository.delete(post);
+
         // 차감할 포인트가 있는 사용자에 대한 포인트 차감 및 이력 처리
-        for (Map.Entry<String, Long> entry : delPoint.entrySet()) {
+        for (Map.Entry<String, Long> entry : decreaseCase.entrySet()) {
             String key = entry.getKey();
             Long memberIdForDelete = Long.valueOf(key.split("_")[2]);
             Long scoreForDelete = entry.getValue();

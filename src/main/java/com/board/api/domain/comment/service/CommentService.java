@@ -66,12 +66,12 @@ public class CommentService {
         // 게시물 작성자와 댓글 작성자가 다른 경우만 포인트 증감 처리
         if (!member.getMemberId().equals(postMember.getMemberId())) {
 
-            // point + 2
+            // 댓글 작성자 point + 2
             MemberPoint memberPointFromMember = member.getMemberPoint();
             memberPointFromMember.setScore(memberPointFromMember.getScore() + PointType.CREATE_COMMENT.getScore());
             memberPointFromMember.setUpdatedBy(member.getMemberId());
 
-            // point + 1
+            // 게시물 작성자 point + 1
             MemberPoint memberPointFromPost = postMember.getMemberPoint();
             memberPointFromPost.setScore(memberPointFromPost.getScore() + PointType.CREATE_BY.getScore());
             memberPointFromPost.setUpdatedBy(member.getMemberId());
@@ -134,12 +134,12 @@ public class CommentService {
         // 게시물 작성자와 댓글 작성자가 다른 경우만 포인트 증감 처리
         if (!member.getMemberId().equals(postMember.getMemberId())) {
 
-            // point - 2
+            // 댓글 작성자 point - 2
             MemberPoint memberPointFromMember = member.getMemberPoint();
             memberPointFromMember.setScore(memberPointFromMember.getScore() + PointType.DELETE_COMMENT.getScore());
             memberPointFromMember.setUpdatedBy(member.getMemberId());
 
-            // point - 1
+            // 게시물 작성자 point - 1
             MemberPoint memberPointFromPost = postMember.getMemberPoint();
             memberPointFromPost.setScore(memberPointFromPost.getScore() + PointType.DELETE_BY.getScore());
             memberPointFromPost.setUpdatedBy(member.getMemberId());
