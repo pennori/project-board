@@ -21,6 +21,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.mock.mockito.MockBeans;
 import org.springframework.security.test.context.support.WithMockUser;
 
 import java.time.LocalDateTime;
@@ -34,6 +35,7 @@ import static org.mockito.BDDMockito.*;
 
 @DisplayName("PostService 테스트")
 @SpringBootTest
+@MockBeans(@MockBean(PointHistoryRepository.class))
 class PostServiceTest {
 
     @Autowired
@@ -44,9 +46,6 @@ class PostServiceTest {
 
     @MockBean
     private MemberRepository memberRepository;
-
-    @MockBean
-    private PointHistoryRepository pointHistoryRepository;
 
     @MockBean
     private CommentRepository commentRepository;
