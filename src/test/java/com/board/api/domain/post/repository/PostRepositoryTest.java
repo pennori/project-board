@@ -81,18 +81,19 @@ class PostRepositoryTest {
     @Test
     void getList(){
         // given
-        initPost(20);
+        int qty = 20;
+        initPost(qty);
 
         // when
-        Pageable pageable = PageRequest.of(1, 10, Sort.Direction.DESC, "post_id");
+        Pageable pageable = PageRequest.of(0, 10, Sort.Direction.DESC, "postId");
         Page<PostListViewDto> page = postRepository.getList(pageable);
 
         // then
         assertThat(page.getTotalPages()).isEqualTo(2);
-        assertThat(page.getTotalElements()).isEqualTo(20);
+        assertThat(page.getTotalElements()).isEqualTo(qty);
         assertThat(page.getContent().get(0)).isInstanceOf(PostListViewDto.class);
         assertThat(page.getContent().get(0).getTitle()).isEqualTo("title");
-        System.out.println("========" + page.getContent().get(0).getPostId());
+        assertThat(page.getContent().get(0).getPostId()).isEqualTo(String.valueOf(qty));
     }
 
 }
