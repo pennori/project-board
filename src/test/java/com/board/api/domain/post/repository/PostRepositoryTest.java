@@ -2,6 +2,7 @@ package com.board.api.domain.post.repository;
 
 import com.board.api.domain.member.entity.Member;
 import com.board.api.domain.member.repository.MemberRepository;
+import com.board.api.domain.post.dto.PostListViewDto;
 import com.board.api.domain.post.entity.Post;
 import com.board.api.global.config.QueryDSLConfig;
 import com.board.api.global.constants.Author;
@@ -11,8 +12,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.context.annotation.Import;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("PostRepositoryTest")
 @DataJpaTest
@@ -28,7 +32,7 @@ class PostRepositoryTest {
     @Autowired
     TestEntityManager testEntityManager;
 
-    void initMember(){
+    Member initMember() {
         Member member =
                 Member.builder()
                         .email("email@gmail.com")
@@ -39,11 +43,24 @@ class PostRepositoryTest {
                         .build();
 
         testEntityManager.persist(member);
+
+        return member;
+    }
+
+    void initPost(int qty) {
+        Member member = initMember();
+
+        for(int i = 0; i < qty; i++) {
+            Post post = Post.builder().title("title").content("content").createdBy(member.getMemberId()).build();
+            post.setMember(member);
+
+            testEntityManager.persist(post);
+        }
     }
 
     @DisplayName("Post 저장시 Post 만 insert")
     @Test
-    void save(){
+    void save() {
         // given
         initMember();
 
@@ -57,6 +74,22 @@ class PostRepositoryTest {
         // then
         assertThat(post.getPostId()).isGreaterThan(0L);
         assertThat(post.getMember().getMemberId()).isEqualTo(member.getMemberId());
+    }
+
+    @DisplayName("Post 목록 조회")
+    @Test
+    void getList(){
+        // given
+        initPost(20);
+
+        // when
+        Pageable pageable = PageRequest.of(0, 10);
+        Page<PostListViewDto> page = postRepository.getList(pageable);
+
+        // then
+        assertThat(page.getTotalPages()).isEqualTo(2);
+        assertThat(page.getTotalElements()).isEqualTo(20);
+        assertThat(page.getContent().get(0)).isInstanceOf(PostListViewDto.class);
     }
 
 }

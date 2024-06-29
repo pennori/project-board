@@ -12,6 +12,7 @@ import com.board.api.domain.point.entity.PointHistory;
 import com.board.api.domain.point.enums.PointType;
 import com.board.api.domain.point.repository.PointHistoryRepository;
 import com.board.api.domain.post.dto.PostCreationDto;
+import com.board.api.domain.post.dto.PostListViewDto;
 import com.board.api.domain.post.dto.PostModifyDto;
 import com.board.api.domain.post.dto.PostViewDto;
 import com.board.api.domain.post.dto.request.PostModifyRequest;
@@ -23,6 +24,8 @@ import com.board.api.global.util.AuthorizationUtil;
 import io.jsonwebtoken.lang.Assert;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
@@ -229,5 +232,10 @@ public class PostService {
 
         }
 
+    }
+
+    @Transactional(readOnly = true)
+    public Page<PostListViewDto> listViewPost(Pageable pageable) {
+        return postRepository.getList(pageable);
     }
 }
