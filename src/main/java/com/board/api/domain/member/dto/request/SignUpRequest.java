@@ -14,23 +14,23 @@ import lombok.ToString;
 @ToString
 @NoArgsConstructor
 public class SignUpRequest {
-    @NotBlank(message = "email 은/는 필수 값입니다.")
-    @Email(regexp = "^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$", message = "유효하지 않은 email 입니다.")
-    @Size(min = 1, max = 255, message = "email 은/는 1 ~ 255자 입니다.")
+    @NotBlank
+    @Email(regexp = "^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$")
+    @Size(min = 1, max = 255)
     private String email;
 
-    @NotBlank(message = "password 은/는 필수 값입니다.")
-    @Size(min = 8, max = 16, message = "password 은/는 8 ~ 16자 입니다.")
+    @NotBlank
+    @Size(min = 8, max = 16)
     private String password;
 
-    @NotBlank(message = "name 은/는 필수 값입니다.")
-    @Size(min = 1, max = 10, message = "name 은/는 1 ~ 10자 입니다.")
+    @NotBlank
+    @Size(min = 1, max = 10)
     private String name;
 
-    @NotBlank(message = "regNo 은/는 필수 값입니다.")
-    @Pattern(regexp = "^(?:[0-9]{2}(?:0[1-9]|1[0-2])(?:0[1-9]|[1,2][0-9]|3[0,1]))-[1-8][0-9]{6}$", message = "유효하지 않은 regNo 입니다.")
+    @NotBlank
+    @Pattern(regexp = "^(?:[0-9]{2}(?:0[1-9]|1[0-2])(?:0[1-9]|[1,2][0-9]|3[0,1]))-[1-8][0-9]{6}$")
     private String regNo;
 
-    @NotBlank(message = "role 은/는 필수 값입니다.")
+    @NotBlank
     private String role;
 }

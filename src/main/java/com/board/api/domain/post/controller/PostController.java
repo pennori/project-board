@@ -6,10 +6,10 @@ import com.board.api.domain.post.dto.PostModifyDto;
 import com.board.api.domain.post.dto.PostViewDto;
 import com.board.api.domain.post.dto.request.PostCreateRequest;
 import com.board.api.domain.post.dto.request.PostModifyRequest;
-import com.board.api.domain.post.exception.PostException;
 import com.board.api.domain.post.service.*;
 import com.board.api.global.dto.response.ApiResponse;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -55,12 +55,8 @@ public class PostController {
     }
 
     @GetMapping("/post/{postId}")
-    public ResponseEntity<ApiResponse<PostViewDto>> viewPost(@PathVariable String postId) {
-        if (!postId.chars().allMatch(Character::isDigit)) {
-            throw new PostException("id 값이 숫자 형식이 아닙니다.");
-        }
-
-        PostViewDto dto = postViewService.viewPost(Long.parseLong(postId));
+    public ResponseEntity<ApiResponse<PostViewDto>> viewPost(@PathVariable @Positive Long postId) {
+        PostViewDto dto = postViewService.viewPost(postId);
 
         return ResponseEntity.ok().body(
                 ApiResponse.<PostViewDto>builder()
@@ -83,7 +79,7 @@ public class PostController {
     }
 
     @DeleteMapping("/post/{postId}")
-    public ResponseEntity<ApiResponse<?>> deletePost(@PathVariable Long postId) {
+    public ResponseEntity<ApiResponse<?>> deletePost(@PathVariable @Positive Long postId) {
         postDeleteService.deletePost(postId);
 
         return ResponseEntity.ok().body(

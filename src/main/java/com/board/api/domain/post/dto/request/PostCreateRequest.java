@@ -13,10 +13,10 @@ import lombok.ToString;
 @NoArgsConstructor
 public class PostCreateRequest {
 
-    @NotBlank(message = "title 은/는 필수 값입니다.")
-    @Size(min = 1, max = 255, message = "title 은/는 1 ~ 255자 입니다.")
+    @NotBlank
+    @Size(min = 1, max = 255)
     private String title;
-    @NotBlank(message = "content 은/는 필수 값입니다.")
-    @Size(min = 1, max = 255, message = "content 은/는 1 ~ 255자 입니다.")
+    @NotBlank
+    @Size(min = 1, max = 255)
     private String content;
 }

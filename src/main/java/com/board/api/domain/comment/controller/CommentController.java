@@ -6,6 +6,7 @@ import com.board.api.domain.comment.service.CommentCreateService;
 import com.board.api.domain.comment.service.CommentDeleteService;
 import com.board.api.global.dto.response.ApiResponse;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -32,7 +33,7 @@ public class CommentController {
     }
 
     @DeleteMapping("/comment/{commentId}")
-    public ResponseEntity<ApiResponse<?>> deleteComment(@PathVariable Long commentId) {
+    public ResponseEntity<ApiResponse<?>> deleteComment(@PathVariable @Positive Long commentId) {
         commentDeleteService.deleteComment(commentId);
 
         return ResponseEntity.ok().body(
