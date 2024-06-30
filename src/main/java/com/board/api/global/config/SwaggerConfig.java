@@ -36,7 +36,7 @@ public class SwaggerConfig {
     private Info getApiInfo() {
         return new Info()
                 .title("게시판 이용자의 포인트 관리 서비스 (토이 프로젝트)")
-                .description("Specification")
+                .description("Java 17 & Spring Boot 3.3.1")
                 .version("1.0.0");
     }
 }
