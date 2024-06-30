@@ -7,6 +7,7 @@ import com.board.api.domain.member.entity.MemberRole;
 import com.board.api.global.config.QueryDSLConfig;
 import com.board.api.global.constants.Author;
 import com.board.api.global.enums.Role;
+import com.board.api.global.util.QueryDSLUtil;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +19,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("PointRepository 테스트")
 @DataJpaTest
-@Import({QueryDSLConfig.class})
+@Import({QueryDSLConfig.class, QueryDSLUtil.class})
 class MemberPointRepositoryTest {
     @Autowired
     private MemberPointRepository memberPointRepository;

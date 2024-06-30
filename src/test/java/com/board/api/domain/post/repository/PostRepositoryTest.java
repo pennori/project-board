@@ -6,6 +6,7 @@ import com.board.api.domain.post.dto.PostListViewDto;
 import com.board.api.domain.post.entity.Post;
 import com.board.api.global.config.QueryDSLConfig;
 import com.board.api.global.constants.Author;
+import com.board.api.global.util.QueryDSLUtil;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("PostRepositoryTest")
 @DataJpaTest
-@Import({QueryDSLConfig.class})
+@Import({QueryDSLConfig.class, QueryDSLUtil.class})
 class PostRepositoryTest {
 
     @Autowired
