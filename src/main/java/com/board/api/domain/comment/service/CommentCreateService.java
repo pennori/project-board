@@ -10,7 +10,7 @@ import com.board.api.domain.member.enums.Action;
 import com.board.api.domain.member.enums.Category;
 import com.board.api.domain.member.repository.MemberRepository;
 import com.board.api.domain.point.entity.Point;
-import com.board.api.domain.point.enums.PointType;
+import com.board.api.domain.point.enums.PointEvent;
 import com.board.api.domain.point.repository.PointRepository;
 import com.board.api.domain.post.entity.Post;
 import com.board.api.domain.post.exception.PostException;
@@ -66,12 +66,12 @@ public class CommentCreateService {
 
             // 댓글 작성자 point + 2
             MemberPoint memberPointFromMember = member.getMemberPoint();
-            memberPointFromMember.setScore(memberPointFromMember.getScore() + PointType.CREATE_COMMENT.getScore());
+            memberPointFromMember.setScore(memberPointFromMember.getScore() + PointEvent.CREATE_COMMENT.getScore());
             memberPointFromMember.setUpdatedBy(member.getMemberId());
 
             // 게시물 작성자 point + 1
             MemberPoint memberPointFromPost = postMember.getMemberPoint();
-            memberPointFromPost.setScore(memberPointFromPost.getScore() + PointType.CREATE_BY.getScore());
+            memberPointFromPost.setScore(memberPointFromPost.getScore() + PointEvent.CREATE_BY.getScore());
             memberPointFromPost.setUpdatedBy(member.getMemberId());
 
             Point pointForComment =
@@ -81,7 +81,7 @@ public class CommentCreateService {
                             .commentId(comment.getCommentId())
                             .category(Category.COMMENT.name())
                             .action(Action.CREATE.name())
-                            .score(PointType.CREATE_COMMENT.getScore())
+                            .score(PointEvent.CREATE_COMMENT.getScore())
                             .createdBy(member.getMemberId())
                             .build();
             Point pointForPost =
@@ -91,7 +91,7 @@ public class CommentCreateService {
                             .commentId(comment.getCommentId())
                             .category(Category.COMMENT.name())
                             .action(Action.CREATE_BY.name())
-                            .score(PointType.CREATE_BY.getScore())
+                            .score(PointEvent.CREATE_BY.getScore())
                             .createdBy(member.getMemberId())
                             .build();
 

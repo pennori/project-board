@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public enum PointType {
+public enum PointEvent {
     CREATE_POST(3L),
     DELETE_POST(-3L),
     CREATE_COMMENT(2L),

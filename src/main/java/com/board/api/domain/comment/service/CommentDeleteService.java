@@ -8,7 +8,7 @@ import com.board.api.domain.member.entity.MemberPoint;
 import com.board.api.domain.member.enums.Action;
 import com.board.api.domain.member.enums.Category;
 import com.board.api.domain.point.entity.Point;
-import com.board.api.domain.point.enums.PointType;
+import com.board.api.domain.point.enums.PointEvent;
 import com.board.api.domain.point.repository.PointRepository;
 import com.board.api.domain.post.entity.Post;
 import com.board.api.global.util.AuthorizationUtil;
@@ -55,12 +55,12 @@ public class CommentDeleteService {
 
             // 댓글 작성자 point - 2
             MemberPoint memberPointFromMember = member.getMemberPoint();
-            memberPointFromMember.setScore(memberPointFromMember.getScore() + PointType.DELETE_COMMENT.getScore());
+            memberPointFromMember.setScore(memberPointFromMember.getScore() + PointEvent.DELETE_COMMENT.getScore());
             memberPointFromMember.setUpdatedBy(member.getMemberId());
 
             // 게시물 작성자 point - 1
             MemberPoint memberPointFromPost = postMember.getMemberPoint();
-            memberPointFromPost.setScore(memberPointFromPost.getScore() + PointType.DELETE_BY.getScore());
+            memberPointFromPost.setScore(memberPointFromPost.getScore() + PointEvent.DELETE_BY.getScore());
             memberPointFromPost.setUpdatedBy(member.getMemberId());
 
             Point pointForComment =
@@ -70,7 +70,7 @@ public class CommentDeleteService {
                             .commentId(comment.getCommentId())
                             .category(Category.COMMENT.name())
                             .action(Action.DELETE.name())
-                            .score(PointType.DELETE_COMMENT.getScore())
+                            .score(PointEvent.DELETE_COMMENT.getScore())
                             .createdBy(member.getMemberId())
                             .build();
 
@@ -81,7 +81,7 @@ public class CommentDeleteService {
                             .commentId(comment.getCommentId())
                             .category(Category.COMMENT.name())
                             .action(Action.DELETE_BY.name())
-                            .score(PointType.DELETE_BY.getScore())
+                            .score(PointEvent.DELETE_BY.getScore())
                             .createdBy(member.getMemberId())
                             .build();
 
