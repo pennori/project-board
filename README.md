@@ -15,6 +15,19 @@
 #### com.board.api.ProjectBoardApplication 의 main method 실행
 #### gradle build 후 프로젝트 하위의 build/lib/project-board.jar 를 실행 (실행 가능 jar)
 
+## 테스트 방법
+
+#### Swagger
+* /swagger-ui/index.html 접속해서 진행
+  * /member/signup 가입
+  * /member/login 으로 jwt token 발급
+  * authorization 항목에 bearer 빼고 token 입력해서 인증
+  * 그 외 End Point 로 테스트
+
+#### Postman
+* 아래 json 파일을 Postman 에 import 후 진행 
+  * 프로젝트 내 /postman/project-board test.postman_collection.json
+
 ## 사양
 
 #### 게시물/댓글 작성시 이벤트가 발생하고 아래 API 로 이벤트를 전달.

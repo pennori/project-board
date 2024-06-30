@@ -56,10 +56,11 @@ public class WebSecurityConfig {
         // 경로별 인가 작업
         http.authorizeHttpRequests(
                 (auth) -> auth.requestMatchers(
-                        "/hello",
-                        "/",
                         "/member/signup",
-                        "/member/login"
+                        "/member/login",
+                        "/v3/api-docs/**",
+                        "/swagger-ui/**",
+                        "/swagger-resources/**"
                 ).permitAll().anyRequest().authenticated()
         );
 

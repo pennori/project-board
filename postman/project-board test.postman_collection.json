@@ -1,0 +1,645 @@
+{
+	"info": {
+		"_postman_id": "cb57f8f9-7fe1-49a4-b0df-0fd7796707a8",
+		"name": "project-board test",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "23214819"
+	},
+	"item": [
+		{
+			"name": "signup_ok",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\" : \"sample@gmail.com\",\r\n    \"password\" :\"Qq09iu!@1238798\",\r\n    \"name\" : \"테스\",\r\n    \"regNo\" : \"001123-3111111\",\r\n    \"role\" : \"USER\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost/member/signup",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"member",
+						"signup"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "signup_fail cause by role",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\" : \"sample@gmail.com\",\r\n    \"password\" :\"Qq09iu!@1238798\",\r\n    \"name\" : \"테스\",\r\n    \"regNo\" : \"001123-3111111\",\r\n    \"role\" : \"abc\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost/member/signup",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"member",
+						"signup"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "signup_fail cause by invalid request",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\" : \"sample@gmail.com\",\r\n\r\n    \"name\" : \"테스\",\r\n    \"regNo\" : \"001123-3111111\",\r\n    \"role\" : \"USER\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost/member/signup",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"member",
+						"signup"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "signup_fail cause by invalid email",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\" : \"samplegmail.com\",\r\n    \"password\" :\"Qq09iu!@1238798\",\r\n    \"name\" : \"테스\",\r\n    \"regNo\" : \"001123-3111111\",\r\n    \"role\" : \"USER\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost/member/signup",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"member",
+						"signup"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "login_ok",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\" : \"sample@gmail.com\",\r\n    \"password\" :\"Qq09iu!@1238798\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost/member/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"member",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "login_fail cause by invalid password",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\" : \"sample@gmail.com\",\r\n    \"password\" :\"Qq09iu!@1238798xx\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost/member/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"member",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "point_ok",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InNhbXBsZUBnbWFpbC5jb20iLCJyb2xlIjoiVVNFUiIsImlhdCI6MTcxOTM4ODU3NiwiZXhwIjoxNzE5MzkwMzc2fQ.A_MMqUnQvqgx-bEkFFsvQ5UpNYYCtkQEPpwWyeBV1nA",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost/member/point",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"member",
+						"point"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "post_ok",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InNhbXBsZUBnbWFpbC5jb20iLCJyb2xlIjoiVVNFUiIsImlhdCI6MTcxOTc2MTc0NSwiZXhwIjoxNzE5NzYzNTQ1fQ.bqaCN4f3jugLa79yINRaU8qshgvK8a5-T74hNv28JUU",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"title\" : \"sample@gmail.com\",\r\n    \"content\" :\"Qq09iu!@1238798\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost/post",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"post"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "post_fail cause by invalid token",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InNhbXBsZUBnbWFpbC5jb20iLCJyb2xlIjoiVVNFUiIsImlhdCI6MTcxODI4NTk3OSwiZXhwIjoxNzE4Mjg3Nzc5fQ.crJzFdJ2Txm2Uol0-RxMWx8q7RE4Ma-nFAp1s4baHXk",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\" : \"sample@gmail.com\",\r\n    \"password\" :\"Qq09iu!@1238798\",\r\n    \"name\" : \"테스\",\r\n    \"regNo\" : \"001123-3111111\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost/point",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"point"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "post/{postId} ok",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InNhbXBsZUBnbWFpbC5jb20iLCJyb2xlIjoiVVNFUiIsImlhdCI6MTcxOTc2MTc0NSwiZXhwIjoxNzE5NzYzNTQ1fQ.bqaCN4f3jugLa79yINRaU8qshgvK8a5-T74hNv28JUU",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost/post/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"post",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "post ok",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InNhbXBsZUBnbWFpbC5jb20iLCJyb2xlIjoiVVNFUiIsImlhdCI6MTcxOTc0NTg4MiwiZXhwIjoxNzE5NzQ3NjgyfQ.DWU6JHW2v31hlpPIFg-tZFVj_V0i_27YbDuyKFu_s78",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost/post?page=0&sort=postId,desc",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"post"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "0"
+						},
+						{
+							"key": "sort",
+							"value": "postId,desc"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "post/{postId} fail cause by no param",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InNhbXBsZUBnbWFpbC5jb20iLCJyb2xlIjoiVVNFUiIsImlhdCI6MTcxOTUwMDg5MSwiZXhwIjoxNzE5NTAyNjkxfQ.3Ysp8--Uf_lXfl8C9fL1cmv4BBIp4IzeD0zxaWg8KzE",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost/post",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"post"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "post/{postId} fail cause by str param",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InNhbXBsZUBnbWFpbC5jb20iLCJyb2xlIjoiVVNFUiIsImlhdCI6MTcxOTUwMDg5MSwiZXhwIjoxNzE5NTAyNjkxfQ.3Ysp8--Uf_lXfl8C9fL1cmv4BBIp4IzeD0zxaWg8KzE",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost/post/as",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"post",
+						"as"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "post_ok",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InNhbXBsZUBnbWFpbC5jb20iLCJyb2xlIjoiVVNFUiIsImlhdCI6MTcxOTc2MTc0NSwiZXhwIjoxNzE5NzYzNTQ1fQ.bqaCN4f3jugLa79yINRaU8qshgvK8a5-T74hNv28JUU",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"postId\" : \"1\",\r\n    \"title\" : \"sample@gmail.com\",\r\n    \"content\" :\"Qq09iu!@1238798eyJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InNhbXBsZUBnbWFpbC5jb20iLCJyb2xlIjoiVVNFUiIsImlhdCI6MTcxOTU1OTU0NSwiZXhwIjoxNzE5NTYxMzQ1fQ.V-oTytu2UIkI6FOPuAD_pATLCCUCk0yNLkEP47wuVzk\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost/post",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"post"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "post_ok",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InNhbXBsZUBnbWFpbC5jb20iLCJyb2xlIjoiVVNFUiIsImlhdCI6MTcxOTc2MDA4OCwiZXhwIjoxNzE5NzYxODg4fQ.kRfQyYSW1V7mvwlqaQCN3R3LmWIHlNwwRSstKTUKB_c",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost/post/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"post",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "comment_ok",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6IjNzYW1wbGVAZ21haWwuY29tIiwicm9sZSI6IlVTRVIiLCJpYXQiOjE3MTk3NDU5MDksImV4cCI6MTcxOTc0NzcwOX0.b-YUpT1y1qm8Ar8swp_4qPrnTZSP7CEEoQ_LkvtZqIs",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"postId\" : \"1\",\r\n    \"title\" :\"Qq09iu!@1238798\",\r\n    \"content\" : \"테스\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost/comment",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"comment"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "comment_ok",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6IjNzYW1wbGVAZ21haWwuY29tIiwicm9sZSI6IlVTRVIiLCJpYXQiOjE3MTk3NDU5MDksImV4cCI6MTcxOTc0NzcwOX0.b-YUpT1y1qm8Ar8swp_4qPrnTZSP7CEEoQ_LkvtZqIs",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost/comment/4",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"comment",
+						"4"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
