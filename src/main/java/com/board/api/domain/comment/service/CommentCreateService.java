@@ -21,6 +21,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,6 +39,7 @@ public class CommentCreateService {
     private final AuthorizationUtil authorizationUtil;
     private final MessageSource messageSource;
 
+    @Transactional
     public CommentDto createComment(CommentRequest request) {
         Assert.notNull(request, "호출시 요청 정보가 비어서 들어올 수 없습니다.");
 
@@ -45,20 +47,10 @@ public class CommentCreateService {
         Assert.notNull(member, "로그인한 회원의 요청이므로 회원정보가 존재해야 합니다.");
 
         // Post
-        Optional<Post> optionalPost = postRepository.findById(Long.valueOf(request.getPostId()));
-        if (optionalPost.isEmpty()) {
-            throw new PostException(messageSource.getMessage("exception.notfound", new String[]{"Post"}, Locale.getDefault()));
-        }
-        Post post = optionalPost.get();
+        Post post = getPost(request);
 
         // Comment
-        Comment comment =
-                Comment.builder()
-                        .content(request.getContent())
-                        .createdBy(member.getMemberId())
-                        .build();
-        comment.setPost(post);
-        comment.setMember(member);
+        Comment comment = initComment(request, member, post);
         commentRepository.save(comment);
 
         // 게시물 작성자
@@ -66,42 +58,9 @@ public class CommentCreateService {
 
         // 게시물 작성자와 댓글 작성자가 다른 경우만 포인트 증감 처리
         if (!member.getMemberId().equals(postMember.getMemberId())) {
+            increaseMemberPoint(member, postMember);
 
-            // 댓글 작성자 point + 2
-            MemberPoint memberPointFromMember = member.getMemberPoint();
-            memberPointFromMember.setScore(memberPointFromMember.getScore() + PointEvent.CREATE_COMMENT.getScore());
-            memberPointFromMember.setUpdatedBy(member.getMemberId());
-
-            // 게시물 작성자 point + 1
-            MemberPoint memberPointFromPost = postMember.getMemberPoint();
-            memberPointFromPost.setScore(memberPointFromPost.getScore() + PointEvent.CREATE_BY.getScore());
-            memberPointFromPost.setUpdatedBy(member.getMemberId());
-
-            Point pointForComment =
-                    Point.builder()
-                            .memberId(member.getMemberId())
-                            .postId(post.getPostId())
-                            .commentId(comment.getCommentId())
-                            .category(Category.COMMENT.name())
-                            .action(Action.CREATE.name())
-                            .score(PointEvent.CREATE_COMMENT.getScore())
-                            .createdBy(member.getMemberId())
-                            .build();
-            Point pointForPost =
-                    Point.builder()
-                            .memberId(postMember.getMemberId())
-                            .postId(post.getPostId())
-                            .commentId(comment.getCommentId())
-                            .category(Category.COMMENT.name())
-                            .action(Action.CREATE_BY.name())
-                            .score(PointEvent.CREATE_BY.getScore())
-                            .createdBy(member.getMemberId())
-                            .build();
-
-            List<Point> bunchOfPoint = new ArrayList<>();
-            bunchOfPoint.add(pointForComment);
-            bunchOfPoint.add(pointForPost);
-
+            List<Point> bunchOfPoint = initBunchOfPoint(member, post, comment, postMember);
             pointRepository.saveAll(bunchOfPoint);
         }
 
@@ -109,6 +68,66 @@ public class CommentCreateService {
                 .postId(post.getPostId())
                 .commentId(comment.getCommentId())
                 .build();
+    }
+
+    private void increaseMemberPoint(Member member, Member postMember) {
+        // 댓글 작성자 point + 2
+        MemberPoint memberPointFromMember = member.getMemberPoint();
+        memberPointFromMember.setScore(memberPointFromMember.getScore() + PointEvent.CREATE_COMMENT.getScore());
+        memberPointFromMember.setUpdatedBy(member.getMemberId());
+
+        // 게시물 작성자 point + 1
+        MemberPoint memberPointFromPost = postMember.getMemberPoint();
+        memberPointFromPost.setScore(memberPointFromPost.getScore() + PointEvent.CREATE_BY.getScore());
+        memberPointFromPost.setUpdatedBy(member.getMemberId());
+    }
+
+    private List<Point> initBunchOfPoint(Member member, Post post, Comment comment, Member postMember) {
+        Point pointForComment =
+                Point.builder()
+                        .memberId(member.getMemberId())
+                        .postId(post.getPostId())
+                        .commentId(comment.getCommentId())
+                        .category(Category.COMMENT.name())
+                        .action(Action.CREATE.name())
+                        .score(PointEvent.CREATE_COMMENT.getScore())
+                        .createdBy(member.getMemberId())
+                        .build();
+        Point pointForPost =
+                Point.builder()
+                        .memberId(postMember.getMemberId())
+                        .postId(post.getPostId())
+                        .commentId(comment.getCommentId())
+                        .category(Category.COMMENT.name())
+                        .action(Action.CREATE_BY.name())
+                        .score(PointEvent.CREATE_BY.getScore())
+                        .createdBy(member.getMemberId())
+                        .build();
+
+        List<Point> bunchOfPoint = new ArrayList<>();
+        bunchOfPoint.add(pointForComment);
+        bunchOfPoint.add(pointForPost);
+        return bunchOfPoint;
+    }
+
+    private Comment initComment(CommentRequest request, Member member, Post post) {
+        Comment comment =
+                Comment.builder()
+                        .content(request.getContent())
+                        .createdBy(member.getMemberId())
+                        .build();
+        comment.setPost(post);
+        comment.setMember(member);
+        return comment;
+    }
+
+    private Post getPost(CommentRequest request) {
+        Optional<Post> optionalPost = postRepository.findById(Long.valueOf(request.getPostId()));
+        if (optionalPost.isEmpty()) {
+            throw new PostException(messageSource.getMessage("exception.notfound", new String[]{"Post"}, Locale.getDefault()));
+        }
+
+        return optionalPost.get();
     }
 
 }

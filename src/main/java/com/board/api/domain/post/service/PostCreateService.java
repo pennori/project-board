@@ -36,21 +36,18 @@ public class PostCreateService {
         Member member = memberRepository.findByEmail(authorizationUtil.getLoginEmail());
         Assert.notNull(member, "로그인한 회원의 요청이므로 회원정보가 존재해야 합니다.");
         // post 저장
-        Post post =
-                Post.builder()
-                        .title(request.getTitle())
-                        .content(request.getContent())
-                        .createdBy(member.getMemberId())
-                        .build();
-        post.setMember(member);
-        postRepository.save(post);
+        Post post = savePost(request, member);
 
         // point +3
-        MemberPoint memberPoint = member.getMemberPoint();
-        memberPoint.setScore(memberPoint.getScore() + PointEvent.CREATE_POST.getScore());
-        memberPoint.setUpdatedBy(member.getMemberId());
+        increaseMemberPoint(member);
 
         // point history 저장
+        savePoint(member, post);
+
+        return PostCreationDto.builder().postId(post.getPostId()).build();
+    }
+
+    private void savePoint(Member member, Post post) {
         Point point =
                 Point.builder()
                         .postId(post.getPostId())
@@ -61,7 +58,23 @@ public class PostCreateService {
                         .createdBy(member.getMemberId())
                         .build();
         pointRepository.save(point);
+    }
 
-        return PostCreationDto.builder().postId(post.getPostId()).build();
+    private void increaseMemberPoint(Member member) {
+        MemberPoint memberPoint = member.getMemberPoint();
+        memberPoint.setScore(memberPoint.getScore() + PointEvent.CREATE_POST.getScore());
+        memberPoint.setUpdatedBy(member.getMemberId());
+    }
+
+    private Post savePost(PostCreateRequest request, Member member) {
+        Post post =
+                Post.builder()
+                        .title(request.getTitle())
+                        .content(request.getContent())
+                        .createdBy(member.getMemberId())
+                        .build();
+        post.setMember(member);
+        postRepository.save(post);
+        return post;
     }
 }

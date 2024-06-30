@@ -55,46 +55,53 @@ public class CommentDeleteService {
 
         // 게시물 작성자와 댓글 작성자가 다른 경우만 포인트 증감 처리
         if (!member.getMemberId().equals(postMember.getMemberId())) {
+            decreaseMemberPoint(member, postMember);
 
-            // 댓글 작성자 point - 2
-            MemberPoint memberPointFromMember = member.getMemberPoint();
-            memberPointFromMember.setScore(memberPointFromMember.getScore() + PointEvent.DELETE_COMMENT.getScore());
-            memberPointFromMember.setUpdatedBy(member.getMemberId());
-
-            // 게시물 작성자 point - 1
-            MemberPoint memberPointFromPost = postMember.getMemberPoint();
-            memberPointFromPost.setScore(memberPointFromPost.getScore() + PointEvent.DELETE_BY.getScore());
-            memberPointFromPost.setUpdatedBy(member.getMemberId());
-
-            Point pointForComment =
-                    Point.builder()
-                            .memberId(member.getMemberId())
-                            .postId(post.getPostId())
-                            .commentId(comment.getCommentId())
-                            .category(Category.COMMENT.name())
-                            .action(Action.DELETE.name())
-                            .score(PointEvent.DELETE_COMMENT.getScore())
-                            .createdBy(member.getMemberId())
-                            .build();
-
-            Point pointForPost =
-                    Point.builder()
-                            .memberId(postMember.getMemberId())
-                            .postId(post.getPostId())
-                            .commentId(comment.getCommentId())
-                            .category(Category.COMMENT.name())
-                            .action(Action.DELETE_BY.name())
-                            .score(PointEvent.DELETE_BY.getScore())
-                            .createdBy(member.getMemberId())
-                            .build();
-
-            List<Point> bunchOfPoint = new ArrayList<>();
-            bunchOfPoint.add(pointForComment);
-            bunchOfPoint.add(pointForPost);
-
+            List<Point> bunchOfPoint = initBunchOfPoint(comment, member, post, postMember);
             pointRepository.saveAll(bunchOfPoint);
         }
 
         commentRepository.delete(comment);
+    }
+
+    private List<Point> initBunchOfPoint(Comment comment, Member member, Post post, Member postMember) {
+        Point pointForComment =
+                Point.builder()
+                        .memberId(member.getMemberId())
+                        .postId(post.getPostId())
+                        .commentId(comment.getCommentId())
+                        .category(Category.COMMENT.name())
+                        .action(Action.DELETE.name())
+                        .score(PointEvent.DELETE_COMMENT.getScore())
+                        .createdBy(member.getMemberId())
+                        .build();
+
+        Point pointForPost =
+                Point.builder()
+                        .memberId(postMember.getMemberId())
+                        .postId(post.getPostId())
+                        .commentId(comment.getCommentId())
+                        .category(Category.COMMENT.name())
+                        .action(Action.DELETE_BY.name())
+                        .score(PointEvent.DELETE_BY.getScore())
+                        .createdBy(member.getMemberId())
+                        .build();
+
+        List<Point> bunchOfPoint = new ArrayList<>();
+        bunchOfPoint.add(pointForComment);
+        bunchOfPoint.add(pointForPost);
+        return bunchOfPoint;
+    }
+
+    private void decreaseMemberPoint(Member member, Member postMember) {
+        // 댓글 작성자 point - 2
+        MemberPoint memberPointFromMember = member.getMemberPoint();
+        memberPointFromMember.setScore(memberPointFromMember.getScore() + PointEvent.DELETE_COMMENT.getScore());
+        memberPointFromMember.setUpdatedBy(member.getMemberId());
+
+        // 게시물 작성자 point - 1
+        MemberPoint memberPointFromPost = postMember.getMemberPoint();
+        memberPointFromPost.setScore(memberPointFromPost.getScore() + PointEvent.DELETE_BY.getScore());
+        memberPointFromPost.setUpdatedBy(member.getMemberId());
     }
 }

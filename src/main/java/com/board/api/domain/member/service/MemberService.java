@@ -42,6 +42,34 @@ public class MemberService {
             throw new MemberException(messageSource.getMessage("exception.invalidrole", null, Locale.getDefault()));
         }
 
+        Member member = saveMember(request);
+
+        saveMemberRole(request, member);
+
+        saveMemberPoint(member);
+
+        return SignUpDto.builder().memberId(member.getMemberId()).build();
+    }
+
+    private void saveMemberPoint(Member member) {
+        MemberPoint memberPoint =
+                MemberPoint.builder()
+                        .score(0L)
+                        .createdBy(Author.SYSTEM_ID)
+                        .build();
+        member.setMemberPoint(memberPoint);
+    }
+
+    private void saveMemberRole(SignUpRequest request, Member member) {
+        MemberRole memberRole =
+                MemberRole.builder()
+                        .name(request.getRole())
+                        .createdBy(Author.SYSTEM_ID)
+                        .build();
+        member.setMemberRole(memberRole);
+    }
+
+    private Member saveMember(SignUpRequest request) throws Exception {
         Member member =
                 Member.builder()
                         .email(request.getEmail())
@@ -52,21 +80,6 @@ public class MemberService {
                         .build();
 
         memberRepository.save(member);
-
-        MemberRole memberRole =
-                MemberRole.builder()
-                        .name(request.getRole())
-                        .createdBy(Author.SYSTEM_ID)
-                        .build();
-        member.setMemberRole(memberRole);
-
-        MemberPoint memberPoint =
-                MemberPoint.builder()
-                        .score(0L)
-                        .createdBy(Author.SYSTEM_ID)
-                        .build();
-        member.setMemberPoint(memberPoint);
-
-        return SignUpDto.builder().memberId(member.getMemberId()).build();
+        return member;
     }
 }
