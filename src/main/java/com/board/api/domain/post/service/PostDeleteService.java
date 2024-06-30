@@ -16,6 +16,7 @@ import com.board.api.domain.post.repository.PostRepository;
 import com.board.api.global.util.AuthorizationUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
@@ -32,21 +33,20 @@ public class PostDeleteService {
     private final PointRepository pointRepository;
     private final CommentRepository commentRepository;
     private final AuthorizationUtil authorizationUtil;
-
-
+    private final MessageSource messageSource;
 
     @Transactional
     public void deletePost(Long postId) {
         // Post
         Optional<Post> optionalPost = postRepository.findById(postId);
         if (optionalPost.isEmpty()) {
-            throw new PostException("Post 가 존재하지 않습니다.");
+            throw new PostException(messageSource.getMessage("exception.notfound", new String[]{"Post"}, Locale.getDefault()));
         }
         Post post = optionalPost.get();
 
         // 로그인 사용자가 글 작성자가 아니면 삭제 불가
         if (!authorizationUtil.getLoginEmail().equals(post.getMember().getEmail())) {
-            throw new PostException("Post 에 대한 권한이 없습니다.");
+            throw new PostException(messageSource.getMessage("exception.unauthorized", new String[]{"Post"}, Locale.getDefault()));
         }
 
         // 삭제시 차감할 포인트 집합 설정

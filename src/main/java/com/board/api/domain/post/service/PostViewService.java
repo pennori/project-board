@@ -9,12 +9,14 @@ import com.board.api.domain.post.exception.PostException;
 import com.board.api.domain.post.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
 @Slf4j
@@ -23,13 +25,14 @@ import java.util.Optional;
 public class PostViewService {
     private final PostRepository postRepository;
     private final CommentRepository commentRepository;
+    private final MessageSource messageSource;
 
     @Transactional(readOnly = true)
     public PostViewDto viewPost(Long postId) {
         // Post
         Optional<Post> optionalPost = postRepository.findById(postId);
         if (optionalPost.isEmpty()) {
-            throw new PostException("Post 가 존재하지 않습니다.");
+            throw new PostException(messageSource.getMessage("exception.notfound", new String[]{"Post"}, Locale.getDefault()));
         }
         Post post = optionalPost.get();
 

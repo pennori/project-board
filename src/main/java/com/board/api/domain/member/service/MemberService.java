@@ -13,10 +13,13 @@ import com.board.api.global.enums.Role;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.EnumUtils;
+import org.springframework.context.MessageSource;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
+
+import java.util.Locale;
 
 @Slf4j
 @Service
@@ -25,17 +28,18 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
     private final BidirectionalCryptUtil cryptUtil;
+    private final MessageSource messageSource;
 
     @Transactional
     public SignUpDto createMember(SignUpRequest request) throws Exception {
         Assert.notNull(request, "호출시 요청 정보가 비어서 들어올 수 없습니다.");
         boolean exists = memberRepository.existsByEmail(request.getEmail());
         if (exists) {
-            throw new MemberException("존재하는 회원입니다.");
+            throw new MemberException(messageSource.getMessage("exception.notexists", null, Locale.getDefault()));
         }
 
         if(!EnumUtils.isValidEnum(Role.class, request.getRole())) {
-            throw new MemberException("유효한 권한이 아닙니다.");
+            throw new MemberException(messageSource.getMessage("exception.invalidrole", null, Locale.getDefault()));
         }
 
         Member member =

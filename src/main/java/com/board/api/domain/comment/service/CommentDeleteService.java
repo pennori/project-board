@@ -14,11 +14,13 @@ import com.board.api.domain.post.entity.Post;
 import com.board.api.global.util.AuthorizationUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
 @Slf4j
@@ -28,13 +30,14 @@ public class CommentDeleteService {
     private final CommentRepository commentRepository;
     private final PointRepository pointRepository;
     private final AuthorizationUtil authorizationUtil;
+    private final MessageSource messageSource;
 
     @Transactional
     public void deleteComment(Long commentId) {
         // Comment
         Optional<Comment> optionalComment = commentRepository.findById(commentId);
         if(optionalComment.isEmpty()) {
-            throw new CommentException("Comment 가 존재하지 않습니다.");
+            throw new CommentException(messageSource.getMessage("exception.notfound", new String[]{"Comment"}, Locale.getDefault()));
         }
         Comment comment = optionalComment.get();
         // Member
@@ -44,7 +47,7 @@ public class CommentDeleteService {
 
         // 로그인 사용자가 댓글 작성자가 아니면 수정 불가
         if (!authorizationUtil.getLoginEmail().equals(member.getEmail())) {
-            throw new CommentException("Comment 에 대한 권한이 없습니다.");
+            throw new CommentException(messageSource.getMessage("exception.unauthorized", new String[]{"Comment"}, Locale.getDefault()));
         }
 
         // 게시물 작성자

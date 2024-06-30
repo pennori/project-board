@@ -19,10 +19,12 @@ import com.board.api.global.util.AuthorizationUtil;
 import io.jsonwebtoken.lang.Assert;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
 @Slf4j
@@ -34,6 +36,7 @@ public class CommentCreateService {
     private final PointRepository pointRepository;
     private final MemberRepository memberRepository;
     private final AuthorizationUtil authorizationUtil;
+    private final MessageSource messageSource;
 
     public CommentDto createComment(CommentRequest request) {
         Assert.notNull(request, "호출시 요청 정보가 비어서 들어올 수 없습니다.");
@@ -44,7 +47,7 @@ public class CommentCreateService {
         // Post
         Optional<Post> optionalPost = postRepository.findById(Long.valueOf(request.getPostId()));
         if (optionalPost.isEmpty()) {
-            throw new PostException("Post 가 존재하지 않습니다.");
+            throw new PostException(messageSource.getMessage("exception.notfound", new String[]{"Post"}, Locale.getDefault()));
         }
         Post post = optionalPost.get();
 
