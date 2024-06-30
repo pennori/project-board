@@ -8,7 +8,7 @@ import com.board.api.domain.comment.repository.CommentRepository;
 import com.board.api.domain.member.entity.Member;
 import com.board.api.domain.member.entity.MemberPoint;
 import com.board.api.domain.member.repository.MemberRepository;
-import com.board.api.domain.point.repository.PointHistoryRepository;
+import com.board.api.domain.point.repository.PointRepository;
 import com.board.api.domain.post.entity.Post;
 import com.board.api.domain.post.exception.PostException;
 import com.board.api.domain.post.repository.PostRepository;
@@ -35,7 +35,7 @@ import static org.mockito.Mockito.times;
 
 @DisplayName("CommentService 테스트")
 @SpringBootTest
-@MockBeans(@MockBean(PointHistoryRepository.class))
+@MockBeans(@MockBean(PointRepository.class))
 class CommentServiceTest {
 
     @Autowired

@@ -9,11 +9,11 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor
-public class PointHistory extends DateAndAuthor {
+public class Point extends DateAndAuthor {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(nullable = false)
-    private Long pointHistoryId;
+    private Long pointId;
 
     @Column(nullable = false)
     private Long memberId;
@@ -34,7 +34,7 @@ public class PointHistory extends DateAndAuthor {
     private Long score;
 
     @Builder
-    public PointHistory(Long memberId, Long postId, Long commentId, String category, String action, Long score, Long createdBy) {
+    public Point(Long memberId, Long postId, Long commentId, String category, String action, Long score, Long createdBy) {
         super(createdBy);
         this.memberId = memberId;
         this.postId = postId;

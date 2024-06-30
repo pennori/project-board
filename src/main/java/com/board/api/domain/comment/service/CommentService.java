@@ -10,9 +10,9 @@ import com.board.api.domain.member.entity.MemberPoint;
 import com.board.api.domain.member.enums.Action;
 import com.board.api.domain.member.enums.Category;
 import com.board.api.domain.member.repository.MemberRepository;
-import com.board.api.domain.point.entity.PointHistory;
+import com.board.api.domain.point.entity.Point;
 import com.board.api.domain.point.enums.PointType;
-import com.board.api.domain.point.repository.PointHistoryRepository;
+import com.board.api.domain.point.repository.PointRepository;
 import com.board.api.domain.post.entity.Post;
 import com.board.api.domain.post.exception.PostException;
 import com.board.api.domain.post.repository.PostRepository;
@@ -33,7 +33,7 @@ import java.util.Optional;
 public class CommentService {
     private final PostRepository postRepository;
     private final CommentRepository commentRepository;
-    private final PointHistoryRepository pointHistoryRepository;
+    private final PointRepository pointRepository;
     private final MemberRepository memberRepository;
     private final AuthorizationUtil authorizationUtil;
 
@@ -76,8 +76,8 @@ public class CommentService {
             memberPointFromPost.setScore(memberPointFromPost.getScore() + PointType.CREATE_BY.getScore());
             memberPointFromPost.setUpdatedBy(member.getMemberId());
 
-            PointHistory pointHistoryForComment =
-                    PointHistory.builder()
+            Point pointForComment =
+                    Point.builder()
                             .memberId(member.getMemberId())
                             .postId(post.getPostId())
                             .commentId(comment.getCommentId())
@@ -86,8 +86,8 @@ public class CommentService {
                             .score(PointType.CREATE_COMMENT.getScore())
                             .createdBy(member.getMemberId())
                             .build();
-            PointHistory pointHistoryForPost =
-                    PointHistory.builder()
+            Point pointForPost =
+                    Point.builder()
                             .memberId(postMember.getMemberId())
                             .postId(post.getPostId())
                             .commentId(comment.getCommentId())
@@ -97,11 +97,11 @@ public class CommentService {
                             .createdBy(member.getMemberId())
                             .build();
 
-            List<PointHistory> bunchOfPointHistory = new ArrayList<>();
-            bunchOfPointHistory.add(pointHistoryForComment);
-            bunchOfPointHistory.add(pointHistoryForPost);
+            List<Point> bunchOfPoint = new ArrayList<>();
+            bunchOfPoint.add(pointForComment);
+            bunchOfPoint.add(pointForPost);
 
-            pointHistoryRepository.saveAll(bunchOfPointHistory);
+            pointRepository.saveAll(bunchOfPoint);
         }
 
         return CommentDto.builder()
@@ -144,8 +144,8 @@ public class CommentService {
             memberPointFromPost.setScore(memberPointFromPost.getScore() + PointType.DELETE_BY.getScore());
             memberPointFromPost.setUpdatedBy(member.getMemberId());
 
-            PointHistory pointHistoryForComment =
-                    PointHistory.builder()
+            Point pointForComment =
+                    Point.builder()
                             .memberId(member.getMemberId())
                             .postId(post.getPostId())
                             .commentId(comment.getCommentId())
@@ -155,8 +155,8 @@ public class CommentService {
                             .createdBy(member.getMemberId())
                             .build();
 
-            PointHistory pointHistoryForPost =
-                    PointHistory.builder()
+            Point pointForPost =
+                    Point.builder()
                             .memberId(postMember.getMemberId())
                             .postId(post.getPostId())
                             .commentId(comment.getCommentId())
@@ -166,11 +166,11 @@ public class CommentService {
                             .createdBy(member.getMemberId())
                             .build();
 
-            List<PointHistory> bunchOfPointHistory = new ArrayList<>();
-            bunchOfPointHistory.add(pointHistoryForComment);
-            bunchOfPointHistory.add(pointHistoryForPost);
+            List<Point> bunchOfPoint = new ArrayList<>();
+            bunchOfPoint.add(pointForComment);
+            bunchOfPoint.add(pointForPost);
 
-            pointHistoryRepository.saveAll(bunchOfPointHistory);
+            pointRepository.saveAll(bunchOfPoint);
         }
 
         commentRepository.delete(comment);

@@ -1,6 +1,6 @@
 package com.board.api.domain.point.repository;
 
-import com.board.api.domain.point.entity.PointHistory;
+import com.board.api.domain.point.entity.Point;
 import com.board.api.domain.member.enums.Action;
 import com.board.api.domain.member.enums.Category;
 import com.board.api.global.config.QueryDSLConfig;
@@ -17,17 +17,17 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DisplayName("PointHistoryRepository 테스트")
 @DataJpaTest
 @Import({QueryDSLConfig.class, QueryDSLUtil.class})
-class PointHistoryRepositoryTest {
+class PointRepositoryTest {
 
     @Autowired
-    private PointHistoryRepository pointHistoryRepository;
+    private PointRepository pointRepository;
 
     @DisplayName("Point 증감 이력 저장")
     @Test
     void save() {
         // given
-        PointHistory pointHistory =
-                PointHistory.builder()
+        Point point =
+                Point.builder()
                         .memberId(1L)
                         .postId(1L)
                         .commentId(0L)
@@ -38,10 +38,10 @@ class PointHistoryRepositoryTest {
                         .build();
 
         // when
-        pointHistoryRepository.save(pointHistory);
+        pointRepository.save(point);
 
         //then
-        assertThat(pointHistory.getPointHistoryId()).isGreaterThan(0L);
+        assertThat(point.getPointId()).isGreaterThan(0L);
     }
 
 }

@@ -8,9 +8,9 @@ import com.board.api.domain.member.entity.MemberPoint;
 import com.board.api.domain.member.enums.Action;
 import com.board.api.domain.member.enums.Category;
 import com.board.api.domain.member.repository.MemberRepository;
-import com.board.api.domain.point.entity.PointHistory;
+import com.board.api.domain.point.entity.Point;
 import com.board.api.domain.point.enums.PointType;
-import com.board.api.domain.point.repository.PointHistoryRepository;
+import com.board.api.domain.point.repository.PointRepository;
 import com.board.api.domain.post.dto.PostCreationDto;
 import com.board.api.domain.post.dto.PostListViewDto;
 import com.board.api.domain.post.dto.PostModifyDto;
@@ -39,7 +39,7 @@ import java.util.*;
 public class PostService {
     private final MemberRepository memberRepository;
     private final PostRepository postRepository;
-    private final PointHistoryRepository pointHistoryRepository;
+    private final PointRepository pointRepository;
     private final CommentRepository commentRepository;
     private final AuthorizationUtil authorizationUtil;
 
@@ -65,8 +65,8 @@ public class PostService {
         memberPoint.setUpdatedBy(member.getMemberId());
 
         // point history 저장
-        PointHistory pointHistory =
-                PointHistory.builder()
+        Point point =
+                Point.builder()
                         .postId(post.getPostId())
                         .memberId(member.getMemberId())
                         .action(Action.CREATE.name())
@@ -74,7 +74,7 @@ public class PostService {
                         .score(PointType.CREATE_POST.getScore())
                         .createdBy(member.getMemberId())
                         .build();
-        pointHistoryRepository.save(pointHistory);
+        pointRepository.save(point);
 
         return PostCreationDto.builder().postId(post.getPostId()).build();
     }
@@ -163,7 +163,7 @@ public class PostService {
         decreaseCase.put("post_member_" + postMemberId, decreaseCase.getOrDefault("post_member_" + postMemberId, 0L) + PointType.CREATE_POST.getScore());
 
         // PointHistory param
-        List<PointHistory> bunchOfPointHistory = new ArrayList<>();
+        List<Point> bunchOfPoint = new ArrayList<>();
 
         // comment 삭제
         List<Comment> bunchOfComment = post.getBunchOfComment();
@@ -181,8 +181,8 @@ public class PostService {
                 }
 
                 // comment 삭제에 대한 point history 집합
-                PointHistory pointHistory =
-                        PointHistory.builder()
+                Point point =
+                        Point.builder()
                                 .memberId(commentMemberId)
                                 .postId(postId)
                                 .commentId(comment.getCommentId())
@@ -191,7 +191,7 @@ public class PostService {
                                 .score(decrease)
                                 .createdBy(postMemberId)
                                 .build();
-                bunchOfPointHistory.add(pointHistory);
+                bunchOfPoint.add(point);
 
             }
 
@@ -199,8 +199,8 @@ public class PostService {
         }
 
         // post 삭제에 대한 point history 저장
-        PointHistory pointHistory =
-                PointHistory.builder()
+        Point point =
+                Point.builder()
                         .memberId(postMemberId)
                         .postId(postId)
                         .commentId(0L)
@@ -209,10 +209,10 @@ public class PostService {
                         .score(PointType.DELETE_POST.getScore())
                         .createdBy(postMemberId)
                         .build();
-        bunchOfPointHistory.add(pointHistory);
+        bunchOfPoint.add(point);
 
         // PointHistory 저장
-        pointHistoryRepository.saveAll(bunchOfPointHistory);
+        pointRepository.saveAll(bunchOfPoint);
 
         // post 삭제
         postRepository.delete(post);
