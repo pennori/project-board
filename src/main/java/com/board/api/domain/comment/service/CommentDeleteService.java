@@ -14,6 +14,7 @@ import com.board.api.domain.post.entity.Post;
 import com.board.api.global.util.AuthorizationUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,6 +33,7 @@ public class CommentDeleteService {
     private final AuthorizationUtil authorizationUtil;
     private final MessageSource messageSource;
 
+    @CacheEvict(value = "board", allEntries = true)
     @Transactional
     public void deleteComment(Long commentId) {
         // Comment

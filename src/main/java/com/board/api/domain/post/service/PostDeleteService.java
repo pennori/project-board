@@ -16,6 +16,7 @@ import com.board.api.domain.post.repository.PostRepository;
 import com.board.api.global.util.AuthorizationUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,6 +36,7 @@ public class PostDeleteService {
     private final AuthorizationUtil authorizationUtil;
     private final MessageSource messageSource;
 
+    @CacheEvict(value = "board", key = "#postId")
     @Transactional
     public void deletePost(Long postId) {
         // Post

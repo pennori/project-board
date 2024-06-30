@@ -9,6 +9,7 @@ import com.board.api.global.util.AuthorizationUtil;
 import io.jsonwebtoken.lang.Assert;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,6 +26,7 @@ public class PostModifyService {
     private final AuthorizationUtil authorizationUtil;
     private final MessageSource messageSource;
 
+    @CacheEvict(value = "board", allEntries = true)
     @Transactional
     public PostModifyDto modifyPost(PostModifyRequest request) {
         Assert.notNull(request, "호출시 요청 정보가 비어서 들어올 수 없습니다.");

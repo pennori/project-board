@@ -9,6 +9,7 @@ import com.board.api.domain.post.exception.PostException;
 import com.board.api.domain.post.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,6 +28,7 @@ public class PostViewService {
     private final CommentRepository commentRepository;
     private final MessageSource messageSource;
 
+    @Cacheable(value = "board", key = "#postId")
     @Transactional(readOnly = true)
     public PostViewDto viewPost(Long postId) {
         // Post
