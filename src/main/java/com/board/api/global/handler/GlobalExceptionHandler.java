@@ -35,8 +35,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
         return ResponseEntity.badRequest().body(
                 ApiResponse.<Map<String, String>>builder()
-                        .resultCode(HttpStatus.BAD_REQUEST.value())
-                        .resultMessage(HttpStatus.BAD_REQUEST.name())
+                        .status(HttpStatus.BAD_REQUEST)
                         .data(errors)
                         .build()
         );
@@ -46,8 +45,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<ApiResponse<ErrorMessage>> feignExceptionHandler(final FeignException ex) {
         return ResponseEntity.internalServerError().body(
                 ApiResponse.<ErrorMessage>builder()
-                        .resultCode(HttpStatus.INTERNAL_SERVER_ERROR.value())
-                        .resultMessage(HttpStatus.INTERNAL_SERVER_ERROR.name())
+                        .status(HttpStatus.INTERNAL_SERVER_ERROR)
                         .data(new ErrorMessage(ex.getMessage()))
                         .build()
         );
@@ -57,8 +55,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<ApiResponse<ErrorMessage>> memberExceptionHandler(final MemberException ex) {
         return ResponseEntity.badRequest().body(
                 ApiResponse.<ErrorMessage>builder()
-                        .resultCode(HttpStatus.BAD_REQUEST.value())
-                        .resultMessage(HttpStatus.BAD_REQUEST.name())
+                        .status(HttpStatus.BAD_REQUEST)
                         .data(new ErrorMessage(ex.getMessage()))
                         .build()
         );
@@ -68,8 +65,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<ApiResponse<ErrorMessage>> postExceptionHandler(final PostException ex) {
         return ResponseEntity.badRequest().body(
                 ApiResponse.<ErrorMessage>builder()
-                        .resultCode(HttpStatus.BAD_REQUEST.value())
-                        .resultMessage(HttpStatus.BAD_REQUEST.name())
+                        .status(HttpStatus.BAD_REQUEST)
                         .data(new ErrorMessage(ex.getMessage()))
                         .build()
         );
@@ -79,8 +75,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<ApiResponse<ErrorMessage>> runtimeExceptionHandler(final RuntimeException ex) {
         return ResponseEntity.internalServerError().body(
                 ApiResponse.<ErrorMessage>builder()
-                        .resultCode(HttpStatus.INTERNAL_SERVER_ERROR.value())
-                        .resultMessage(HttpStatus.INTERNAL_SERVER_ERROR.name())
+                        .status(HttpStatus.INTERNAL_SERVER_ERROR)
                         .data(new ErrorMessage(ex.getMessage()))
                         .build()
         );
@@ -90,8 +85,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<Object> illegalArgumentExceptionHandler(final IllegalArgumentException ex) {
         return ResponseEntity.internalServerError().body(
                 ApiResponse.<ErrorMessage>builder()
-                        .resultCode(HttpStatus.INTERNAL_SERVER_ERROR.value())
-                        .resultMessage(HttpStatus.INTERNAL_SERVER_ERROR.name())
+                        .status(HttpStatus.INTERNAL_SERVER_ERROR)
                         .data(new ErrorMessage(ex.getMessage()))
                         .build()
         );
@@ -101,8 +95,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<ApiResponse<ErrorMessage>> illegalStateExceptionHandler(final IllegalStateException ex) {
         return ResponseEntity.internalServerError().body(
                 ApiResponse.<ErrorMessage>builder()
-                        .resultCode(HttpStatus.INTERNAL_SERVER_ERROR.value())
-                        .resultMessage(HttpStatus.INTERNAL_SERVER_ERROR.name())
+                        .status(HttpStatus.INTERNAL_SERVER_ERROR)
                         .data(new ErrorMessage(ex.getMessage()))
                         .build()
         );

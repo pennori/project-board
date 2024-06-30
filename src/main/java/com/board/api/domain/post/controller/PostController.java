@@ -31,8 +31,7 @@ public class PostController {
 
         return ResponseEntity.ok().body(
                 ApiResponse.<PostCreationDto>builder()
-                        .resultCode(HttpStatus.OK.value())
-                        .resultMessage(HttpStatus.OK.name())
+                        .status(HttpStatus.OK)
                         .data(dto)
                         .build()
         );
@@ -44,8 +43,7 @@ public class PostController {
 
         return ResponseEntity.ok().body(
                 ApiResponse.<Page<PostListViewDto>>builder()
-                        .resultCode(HttpStatus.OK.value())
-                        .resultMessage(HttpStatus.OK.name())
+                        .status(HttpStatus.OK)
                         .data(bunchOfDto)
                         .build()
         );
@@ -61,8 +59,7 @@ public class PostController {
 
         return ResponseEntity.ok().body(
                 ApiResponse.<PostViewDto>builder()
-                        .resultCode(HttpStatus.OK.value())
-                        .resultMessage(HttpStatus.OK.name())
+                        .status(HttpStatus.OK)
                         .data(dto)
                         .build()
         );
@@ -74,8 +71,7 @@ public class PostController {
 
         return ResponseEntity.ok().body(
                 ApiResponse.<PostModifyDto>builder()
-                        .resultCode(HttpStatus.OK.value())
-                        .resultMessage(HttpStatus.OK.name())
+                        .status(HttpStatus.OK)
                         .data(dto)
                         .build()
         );
@@ -87,8 +83,7 @@ public class PostController {
 
         return ResponseEntity.ok().body(
                 ApiResponse.builder()
-                        .resultCode(HttpStatus.OK.value())
-                        .resultMessage(HttpStatus.OK.name())
+                        .status(HttpStatus.OK)
                         .build()
         );
     }

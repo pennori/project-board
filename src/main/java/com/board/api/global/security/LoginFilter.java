@@ -93,8 +93,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         String result =
                 objectMapper.writeValueAsString(
                         ApiResponse.<LoginDto>builder()
-                                .resultCode(HttpStatus.OK.value())
-                                .resultMessage(HttpStatus.OK.name())
+                                .status(HttpStatus.OK)
                                 .data(LoginDto.builder().token(token).build())
                                 .build()
                 );
@@ -109,8 +108,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         String result =
                 objectMapper.writeValueAsString(
                         ApiResponse.builder()
-                                .resultCode(HttpStatus.UNAUTHORIZED.value())
-                                .resultMessage(HttpStatus.UNAUTHORIZED.name())
+                                .status(HttpStatus.UNAUTHORIZED)
                                 .build()
                 );
         response.setStatus(HttpStatus.UNAUTHORIZED.value());

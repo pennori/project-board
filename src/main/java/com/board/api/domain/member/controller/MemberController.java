@@ -28,8 +28,7 @@ public class MemberController {
 
         return ResponseEntity.ok().body(
                 ApiResponse.<SignUpDto>builder()
-                        .resultCode(HttpStatus.OK.value())
-                        .resultMessage(HttpStatus.OK.name())
+                        .status(HttpStatus.OK)
                         .data(signUpDto)
                         .build()
         );
@@ -41,8 +40,7 @@ public class MemberController {
 
         return ResponseEntity.ok()
                 .body(ApiResponse.<CurrentPointDto>builder()
-                        .resultCode(HttpStatus.OK.value())
-                        .resultMessage(HttpStatus.OK.name())
+                        .status(HttpStatus.OK)
                         .data(currentPointDto)
                         .build()
                 );

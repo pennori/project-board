@@ -23,8 +23,7 @@ public class CommentController {
 
         return ResponseEntity.ok().body(
                 ApiResponse.<CommentDto>builder()
-                        .resultCode(HttpStatus.OK.value())
-                        .resultMessage(HttpStatus.OK.name())
+                        .status(HttpStatus.OK)
                         .data(dto)
                         .build()
         );
@@ -36,8 +35,7 @@ public class CommentController {
 
         return ResponseEntity.ok().body(
                 ApiResponse.builder()
-                        .resultCode(HttpStatus.OK.value())
-                        .resultMessage(HttpStatus.OK.name())
+                        .status(HttpStatus.OK)
                         .build()
         );
     }
