@@ -52,7 +52,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
                                 LoginRequest.class
                         );
 
-                username = loginRequest.getEmail();
+                username = loginRequest.getUserId();
                 password = loginRequest.getPassword();
 
                 log.info("JSON 접속. email : {}, password : {}", username, password);

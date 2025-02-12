@@ -16,7 +16,7 @@ public class LoginRequest {
     @NotBlank
     @Email(regexp = "^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$")
     @Size(min = 1, max = 255)
-    private String email;
+    private String userId;
 
     @NotBlank
     @Size(min = 8, max = 16)

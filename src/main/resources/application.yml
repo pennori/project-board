@@ -12,9 +12,6 @@ spring:
     fallback-to-system-locale: true
     use-code-as-default-message: false
 
-  doc:
-    show-login-endpoint: true
-
   # H2 Console 설정
   h2:
     console:
@@ -40,6 +37,7 @@ spring:
 springdoc:
   swagger-ui:
     path: /swagger-ui
+  show-login-endpoint: true
 
 # JWT 설정
 jwt:
