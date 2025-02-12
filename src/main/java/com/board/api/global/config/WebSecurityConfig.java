@@ -25,67 +25,55 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor
 public class WebSecurityConfig {
 
+    private static final String[] PERMIT_ALL_PATTERNS = {
+            "/member/signup",
+            "/member/login",
+            "/v3/api-docs/**",
+            "/swagger-ui/**",
+            "/swagger-resources/**"
+    };
+
     private final AuthenticationConfiguration authenticationConfiguration;
     private final JWTUtil jwtUtil;
 
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
-        // AuthenticationManager Bean 등록
-        return configuration.getAuthenticationManager();
+    public AuthenticationManager authenticationManager() throws Exception {
+        return authenticationConfiguration.getAuthenticationManager();
     }
 
     @Bean
     @ConditionalOnProperty(name = "spring.h2.console.enabled", havingValue = "true")
     public WebSecurityCustomizer configureH2ConsoleEnable() {
-        // h2 console 사용 여부가 true 일 때만 Bean 생성
-        return web -> web.ignoring()
-                .requestMatchers(PathRequest.toH2Console());
+        return web -> web.ignoring().requestMatchers(PathRequest.toH2Console());
     }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        // csrf disable
-        http.csrf(AbstractHttpConfigurer::disable);
-
-        // From 로그인 방식 disable
-        http.formLogin(AbstractHttpConfigurer::disable);
-
-        // http basic 인증 방식 disable
-        http.httpBasic(AbstractHttpConfigurer::disable);
-
-        // 경로별 인가 작업
-        http.authorizeHttpRequests(
-                (auth) -> auth.requestMatchers(
-                        "/member/signup",
-                        "/member/login",
-                        "/v3/api-docs/**",
-                        "/swagger-ui/**",
-                        "/swagger-resources/**"
-                ).permitAll().anyRequest().authenticated()
-        );
-
-        // JWTFilter 등록
-        http.addFilterBefore(new JWTFilter(jwtUtil), LoginFilter.class);
-
-        // 필터 추가 LoginFilter 로 UsernamePasswordAuthenticationFilter 대체
-        LoginFilter loginFilter = new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil);
-        // Spring Security 에서 참조하는 login url 을 변경
-        loginFilter.setFilterProcessesUrl("/member/login");
-        // Spring security 에서 참조하는 키 값 username 을 userId 로 변경
-        loginFilter.setUsernameParameter("userId");
-        http.addFilterAt(loginFilter, UsernamePasswordAuthenticationFilter.class);
-
-        // 세션 설정
-        http.sessionManagement(
-                (session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-        );
-
+        configureHttpSecurity(http);
+        http.addFilterBefore(new JWTFilter(jwtUtil), LoginFilter.class)
+                .addFilterAt(createLoginFilter(), UsernamePasswordAuthenticationFilter.class);
         return http.build();
+    }
+
+    private void configureHttpSecurity(HttpSecurity http) throws Exception {
+        http.csrf(AbstractHttpConfigurer::disable)
+                .httpBasic(AbstractHttpConfigurer::disable)
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(PERMIT_ALL_PATTERNS).permitAll()
+                        .anyRequest().authenticated())
+                .sessionManagement(session -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+    }
+
+    private LoginFilter createLoginFilter() throws Exception {
+        LoginFilter loginFilter = new LoginFilter(authenticationManager(), jwtUtil);
+        loginFilter.setFilterProcessesUrl("/member/login");
+        loginFilter.setUsernameParameter("userId");
+        return loginFilter;
     }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
 }

@@ -11,11 +11,18 @@ import java.util.List;
 @EnableCaching
 @Configuration
 public class CacheConfig {
+
+    private static final String BOARD_CACHE_NAME = "board";
+
     @Bean
     public CacheManager cacheManager() {
+        return createConcurrentMapCacheManager();
+    }
+
+    private ConcurrentMapCacheManager createConcurrentMapCacheManager() {
         ConcurrentMapCacheManager cacheManager = new ConcurrentMapCacheManager();
         cacheManager.setAllowNullValues(false);
-        cacheManager.setCacheNames(List.of("board"));
+        cacheManager.setCacheNames(List.of(BOARD_CACHE_NAME));
         return cacheManager;
     }
 }

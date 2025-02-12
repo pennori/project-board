@@ -4,7 +4,7 @@ import com.board.api.domain.member.entity.Member;
 import com.board.api.domain.member.repository.MemberRepository;
 import com.board.api.domain.post.dto.PostListViewDto;
 import com.board.api.domain.post.entity.Post;
-import com.board.api.global.config.QueryDSLConfig;
+import com.board.api.global.config.JPAQueryFactoryConfig;
 import com.board.api.global.constants.Author;
 import com.board.api.global.util.QueryDSLUtil;
 import org.junit.jupiter.api.DisplayName;
@@ -22,7 +22,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("PostRepositoryTest")
 @DataJpaTest
-@Import({QueryDSLConfig.class, QueryDSLUtil.class})
+@Import({JPAQueryFactoryConfig.class, QueryDSLUtil.class})
 class PostRepositoryTest {
 
     @Autowired

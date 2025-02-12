@@ -3,7 +3,7 @@ package com.board.api.domain.member.repository;
 import com.board.api.domain.member.entity.Member;
 import com.board.api.domain.member.entity.MemberRole;
 import com.board.api.domain.member.entity.MemberPoint;
-import com.board.api.global.config.QueryDSLConfig;
+import com.board.api.global.config.JPAQueryFactoryConfig;
 import com.board.api.global.constants.Author;
 import com.board.api.global.enums.Role;
 import com.board.api.global.util.QueryDSLUtil;
@@ -19,7 +19,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("MemberRepository 테스트")
 @DataJpaTest
-@Import({QueryDSLConfig.class, QueryDSLUtil.class})
+@Import({JPAQueryFactoryConfig.class, QueryDSLUtil.class})
 class MemberRepositoryTest {
 
     @Autowired

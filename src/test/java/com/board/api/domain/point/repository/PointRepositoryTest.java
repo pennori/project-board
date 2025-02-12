@@ -3,7 +3,7 @@ package com.board.api.domain.point.repository;
 import com.board.api.domain.point.entity.Point;
 import com.board.api.domain.member.enums.Action;
 import com.board.api.domain.member.enums.Category;
-import com.board.api.global.config.QueryDSLConfig;
+import com.board.api.global.config.JPAQueryFactoryConfig;
 import com.board.api.global.constants.Author;
 import com.board.api.global.util.QueryDSLUtil;
 import org.junit.jupiter.api.DisplayName;
@@ -16,7 +16,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("PointHistoryRepository 테스트")
 @DataJpaTest
-@Import({QueryDSLConfig.class, QueryDSLUtil.class})
+@Import({JPAQueryFactoryConfig.class, QueryDSLUtil.class})
 class PointRepositoryTest {
 
     @Autowired
