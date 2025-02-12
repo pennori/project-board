@@ -1,0 +1,54 @@
+spring:
+  application:
+    name: project-board
+
+  # HTTP 서버 설정
+  messages:
+    basename: messages/message
+    always-use-message-format: false
+    # 캐시 주기(지정 사항 없음, null)
+    cache-duration: -1
+    encoding: UTF-8
+    fallback-to-system-locale: true
+    use-code-as-default-message: false
+
+  doc:
+    show-login-endpoint: true
+
+  # H2 Console 설정
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
+  datasource:
+    url: jdbc:h2:mem:board
+    driverClassName: org.h2.Driver
+    username: testid
+    password: testpw
+
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+        format_sql: true
+        show_sql: true
+    hibernate:
+      ddl-auto: create-drop
+
+
+# JWT 설정
+jwt:
+  secret-key: 11a32d195e11521927bc8cfcc007cd7ca93435a303c5552c139ad8e95a984f72
+  exp-time: 1800000
+
+# 양방향 암호화 설정
+crypt:
+  alg: AES/CBC/PKCS5Padding
+  key: abcdefghabcdefghabcdefghabcdefgh
+  iv: 0123456789abcdef
+
+
+server:
+  port: 80
