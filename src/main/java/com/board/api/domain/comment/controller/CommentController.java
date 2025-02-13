@@ -17,28 +17,37 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 public class CommentController {
+
+    private static final HttpStatus SUCCESS_STATUS = HttpStatus.OK;
+
     private final CommentCreateService commentCreateService;
     private final CommentDeleteService commentDeleteService;
 
     @PostMapping("/comment")
-    public ResponseEntity<ApiResponse<CommentDto>> createComment(@Valid @RequestBody CommentRequest request){
-        CommentDto dto = commentCreateService.createComment(request);
-
-        return ResponseEntity.ok().body(
-                ApiResponse.<CommentDto>builder()
-                        .status(HttpStatus.OK)
-                        .data(dto)
-                        .build()
-        );
+    public ResponseEntity<ApiResponse<CommentDto>> createComment(@Valid @RequestBody CommentRequest request) {
+        CommentDto createdComment = commentCreateService.createComment(request);
+        return buildApiResponse(createdComment);
     }
 
     @DeleteMapping("/comment/{commentId}")
     public ResponseEntity<ApiResponse<?>> deleteComment(@PathVariable @Positive Long commentId) {
         commentDeleteService.deleteComment(commentId);
+        return buildEmptyApiResponse();
+    }
 
-        return ResponseEntity.ok().body(
+    private <T> ResponseEntity<ApiResponse<T>> buildApiResponse(T data) {
+        return ResponseEntity.ok(
+                ApiResponse.<T>builder()
+                        .status(SUCCESS_STATUS)
+                        .data(data)
+                        .build()
+        );
+    }
+
+    private ResponseEntity<ApiResponse<?>> buildEmptyApiResponse() {
+        return ResponseEntity.ok(
                 ApiResponse.builder()
-                        .status(HttpStatus.OK)
+                        .status(SUCCESS_STATUS)
                         .build()
         );
     }
