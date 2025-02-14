@@ -30,7 +30,8 @@ public class WebSecurityConfig {
             "/member/login",
             "/v3/api-docs/**",
             "/swagger-ui/**",
-            "/swagger-resources/**"
+            "/swagger-resources/**",
+            "/docs/**"
     };
 
     private final AuthenticationConfiguration authenticationConfiguration;

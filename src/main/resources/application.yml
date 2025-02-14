@@ -39,7 +39,7 @@ springdoc:
     enabled: true
   swagger-ui:
     path: /swagger-ui
-    url: /docs/openapi.json
+    url: /docs/openapi3.json
   show-login-endpoint: true
 
 # JWT 설정

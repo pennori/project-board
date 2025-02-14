@@ -100,9 +100,7 @@ openapi3 {
     format = 'json'
     outputDirectory = 'build/resources/main/static/docs'
     // REST Docs 스니펫 경로 설정
-//    inputDirectory = file("${snippetsDir}")
-//    outputDirectory = file("src/main/resources/static/docs")
-
+    snippetsDirectory = snippetsDir
 }
 
 // QueryDSL 빌드 옵션
