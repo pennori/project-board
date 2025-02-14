@@ -18,7 +18,7 @@
 ## 테스트 방법
 
 #### Swagger
-* /swagger-ui/index.html 접속해서 진행
+* /swagger-ui 접속해서 진행
   * /member/signup 가입
   * /member/login 으로 jwt token 발급
   * authorization 항목에 bearer 빼고 token 입력해서 인증
