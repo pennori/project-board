@@ -35,8 +35,11 @@ spring:
       ddl-auto: create-drop
 
 springdoc:
+  api-docs:
+    enabled: true
   swagger-ui:
     path: /swagger-ui
+    url: /docs/openapi.json
   show-login-endpoint: true
 
 # JWT 설정

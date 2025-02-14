@@ -2,6 +2,9 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '3.3.1'
     id 'io.spring.dependency-management' version '1.1.5'
+    id 'org.asciidoctor.jvm.convert' version '3.3.2'
+    id 'com.epages.restdocs-api-spec' version '0.19.4'
+    id 'org.hidetake.swagger.generator' version '2.19.2'
 }
 
 group = 'com.board'
@@ -27,6 +30,7 @@ repositories {
 
 ext {
     set('springCloudVersion', "2023.0.2")
+    snippetsDir = file('build/generated-snippets')
 }
 
 dependencies {
@@ -36,8 +40,14 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
 
-    // swagger for spring boot 3.x
+    // Swagger UI
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0'
+
+    // Spring REST Docs
+    testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
+
+    // REST Docs API Spec 플러그인 의존성
+    testImplementation 'com.epages:restdocs-api-spec-mockmvc:0.19.4'
 
     // DB
     runtimeOnly 'com.h2database:h2'
@@ -45,25 +55,25 @@ dependencies {
     // ORM
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 
-    // queryDSL
+    // QueryDSL
     implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
-    annotationProcessor "com.querydsl:querydsl-apt:5.0.0:jakarta"
-    annotationProcessor "jakarta.annotation:jakarta.annotation-api"
-    annotationProcessor "jakarta.persistence:jakarta.persistence-api"
+    annotationProcessor 'com.querydsl:querydsl-apt:5.0.0:jakarta'
+    annotationProcessor 'jakarta.annotation:jakarta.annotation-api'
+    annotationProcessor 'jakarta.persistence:jakarta.persistence-api'
 
-    // lombok
+    // Lombok
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
 
-    // test
+    // Test dependencies
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
-    // EnumUtils
+    // Common utilities
     implementation 'org.apache.commons:commons-lang3:3.14.0'
 
-    // jwt
+    // JWT
     implementation 'io.jsonwebtoken:jjwt-api:0.12.3'
     implementation 'io.jsonwebtoken:jjwt-impl:0.12.3'
     implementation 'io.jsonwebtoken:jjwt-jackson:0.12.3'
@@ -79,11 +89,27 @@ tasks.named('test') {
     useJUnitPlatform()
 }
 
-// QueryDsl 빌드 옵션 (선택)
+openapi3 {
+    servers = [
+            // 2개 이상 설정하고자 하는 경우, 추가 가능
+            { url = "http://localhost:80"; description = "Local server" }
+    ]
+    title = "게시판 이용자의 포인트 관리 서비스 (토이 프로젝트)"
+    description = "Java 17 & Spring Boot 3.3.1."
+    version = "1.0.0"
+    format = 'json'
+    outputDirectory = 'build/resources/main/static/docs'
+    // REST Docs 스니펫 경로 설정
+//    inputDirectory = file("${snippetsDir}")
+//    outputDirectory = file("src/main/resources/static/docs")
+
+}
+
+// QueryDSL 빌드 옵션
 def querydslDir = layout.buildDirectory.dir("generated/querydsl").get().asFile
 
 sourceSets {
-    main.java.srcDirs += [ querydslDir ]
+    main.java.srcDirs += [querydslDir]
 }
 
 tasks.withType(JavaCompile).configureEach {
@@ -105,4 +131,6 @@ bootJar {
     archiveFileName = 'project-board.jar'
     archiveVersion = "0.0.1"
     mainClass = 'com.board.api.ProjectBoardApplication'
+    dependsOn(':test')
+    dependsOn(':openapi3')
 }
