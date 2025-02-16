@@ -39,7 +39,12 @@ springdoc:
     enabled: true
   swagger-ui:
     path: /swagger-ui
-    url: /docs/openapi3.json
+    # 여러 OpenAPI 스펙을 설정
+    urls:
+      - name: Spring Rest Docs
+        url: /docs/openapi3.json
+      - name: Swagger
+        url: /v3/api-docs
   show-login-endpoint: true
 
 # JWT 설정
