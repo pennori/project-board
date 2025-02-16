@@ -19,21 +19,20 @@ import org.springframework.http.MediaType;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
+import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.document;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
 @WebMvcTest(MemberController.class)
 @AutoConfigureMockMvc(addFilters = false)
@@ -75,7 +74,8 @@ class MemberControllerTest {
         request.setRole("ADMIN");
 
         // Act & Assert (테스트 실행 및 REST Docs 생성)
-        mockMvc.perform(post("/member/signup")
+        mockMvc.perform(RestDocumentationRequestBuilders.
+                        post("/member/signup")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
@@ -105,13 +105,13 @@ class MemberControllerTest {
         Mockito.when(memberPointService.getPoint()).thenReturn(mockCurrentPointDto);
 
         // Act & Assert (테스트 실행 및 REST Docs 생성)
-        mockMvc.perform(get("/member/point")
+        mockMvc.perform(RestDocumentationRequestBuilders.get("/member/point") // URL 템플릿 명시
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andDo(document("member-get-point",
-                        preprocessRequest(prettyPrint()), // 요청 전문을 보기 좋게 출력
-                        preprocessResponse(prettyPrint()), // 응답 전문을 보기 좋게 출력
-                        responseFields( // 응답 필드 문서화
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        responseFields(
                                 fieldWithPath("resultCode").description("결과 코드"),
                                 fieldWithPath("resultMessage").description("결과 메시지"),
                                 fieldWithPath("data.point").description("회원의 현재 포인트")
