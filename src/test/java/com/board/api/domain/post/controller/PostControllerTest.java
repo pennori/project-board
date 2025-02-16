@@ -1,7 +1,11 @@
 package com.board.api.domain.post.controller;
 
 import com.board.api.domain.post.dto.PostCreationDto;
+import com.board.api.domain.post.dto.PostListViewDto;
+import com.board.api.domain.post.dto.PostModifyDto;
+import com.board.api.domain.post.dto.PostViewDto;
 import com.board.api.domain.post.dto.request.PostCreateRequest;
+import com.board.api.domain.post.dto.request.PostModifyRequest;
 import com.board.api.domain.post.service.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,26 +19,30 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.MockBeans;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
+import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.document;
 import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @MockBeans({
-        @MockBean(PostModifyService.class),
-        @MockBean(PostViewService.class),
-        @MockBean(PostListViewService.class),
         @MockBean(PostDeleteService.class)
 })
 @WebMvcTest(PostController.class)
@@ -51,6 +59,12 @@ class PostControllerTest {
 
     @MockBean
     private PostCreateService postCreateService;
+    @MockBean
+    private PostModifyService postModifyService;
+    @MockBean
+    private PostViewService postViewService;
+    @MockBean
+    private PostListViewService postListViewService;
 
     @BeforeEach
     void setup(WebApplicationContext context, RestDocumentationContextProvider restDocumentation) {
@@ -202,4 +216,151 @@ class PostControllerTest {
                         )
                 ));
     }
+
+    @Test
+    @DisplayName("게시물 정보를 성공적으로 조회한다")
+    void getPost_Success() throws Exception {
+        long postId = 1L;
+
+        Mockito.when(postViewService.viewPost(postId))
+                .thenReturn(PostViewDto.builder()
+                        .postId(postId)
+                        .title("샘플 제목")
+                        .content("샘플 내용")
+                        .updatedAt(LocalDateTime.parse("2025-02-16T12:00:00"))
+                        .updatedBy(1L) // Replace "수정자" with a Long value, e.g., a user ID.
+                        .bunchOfCommentViewDto(null)
+                        .build());
+
+        mockMvc.perform(RestDocumentationRequestBuilders.get("/post/{id}", postId)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andDo(document("post-get-success",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        pathParameters(
+                                parameterWithName("id").description("조회할 게시물 ID")
+                        ),
+                        responseFields(
+                                fieldWithPath("resultCode").type(JsonFieldType.STRING).description("응답 코드"),
+                                fieldWithPath("resultMessage").type(JsonFieldType.STRING).description("응답 메시지"),
+                                fieldWithPath("data.postId").type(JsonFieldType.STRING).description("게시물 ID"),
+                                fieldWithPath("data.title").type(JsonFieldType.STRING).description("게시물 제목"),
+                                fieldWithPath("data.content").type(JsonFieldType.STRING).description("게시물 내용"),
+                                fieldWithPath("data.updatedAt").type(JsonFieldType.STRING).description("수정 시각"),
+                                fieldWithPath("data.updatedBy").type(JsonFieldType.STRING).description("수정자"),
+                                fieldWithPath("data.bunchOfCommentViewDto").type(JsonFieldType.NULL).description("댓글 정보 (null일 수 있음)")
+                        )
+                ));
+    }
+
+    @Test
+    @DisplayName("게시물 정보를 성공적으로 수정한다")
+    void modifyPost_Success() throws Exception {
+        // Given
+        PostModifyRequest modifyRequest = new PostModifyRequest();
+        modifyRequest.setPostId(String.valueOf(1L)); // postId를 요청 본문에 포함
+        modifyRequest.setTitle("수정된 제목");
+        modifyRequest.setContent("수정된 내용");
+
+        // Mock Service Layer
+        PostModifyDto mockResponse = PostModifyDto.builder()
+                .postId(1L) // 반환될 게시물 ID
+                .build();
+        Mockito.when(postModifyService.modifyPost(any(PostModifyRequest.class)))
+                .thenReturn(mockResponse); // 반환 값을 설정
+
+        // When & Then
+        mockMvc.perform(RestDocumentationRequestBuilders.put("/post") // "/post"로 요청
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(modifyRequest))) // 요청 본문에 JSON 데이터 포함
+                .andExpect(status().isOk()) // 200 상태 확인
+                .andExpect(jsonPath("$.resultCode").value("200")) // 응답 성공 코드 확인
+                .andExpect(jsonPath("$.data.postId").value(1)) // 반환된 postId 확인
+                .andDo(document("post-modify-success",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestFields(
+                                fieldWithPath("postId").type(JsonFieldType.STRING).description("수정할 게시물 ID"),
+                                fieldWithPath("title").type(JsonFieldType.STRING).description("수정할 게시물 제목"),
+                                fieldWithPath("content").type(JsonFieldType.STRING).description("수정할 게시물 내용")
+                        ),
+                        responseFields(
+                                fieldWithPath("resultCode").type(JsonFieldType.STRING).description("응답 코드"),
+                                fieldWithPath("resultMessage").type(JsonFieldType.STRING).description("응답 메시지"),
+                                fieldWithPath("data.postId").type(JsonFieldType.STRING).description("수정된 게시물 ID")
+                        )
+                ));
+    }
+
+    @Test
+    @DisplayName("게시물 목록을 성공적으로 조회한다")
+    void listPosts_Success() throws Exception {
+        // Mock 데이터 준비
+        PageImpl<PostListViewDto> mockPageData = new PageImpl<>(List.of(
+                PostListViewDto.builder()
+                        .postId(1L)
+                        .title("샘플 제목 1")
+                        .build(),
+                PostListViewDto.builder()
+                        .postId(2L)
+                        .title("샘플 제목 2")
+                        .build()
+        ));
+        Mockito.when(postListViewService.listViewPost(any()))
+                .thenReturn(mockPageData);
+
+        // MockMvc를 통한 요청 테스트
+        mockMvc.perform(RestDocumentationRequestBuilders.get("/post")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andDo(document("post-list-success",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        responseFields(
+                                fieldWithPath("resultCode").type(JsonFieldType.STRING).description("응답 코드"),
+                                fieldWithPath("resultMessage").type(JsonFieldType.STRING).description("응답 메시지"),
+                                fieldWithPath("data.content[].postId").type(JsonFieldType.STRING).description("게시물 ID"),
+                                fieldWithPath("data.content[].title").type(JsonFieldType.STRING).description("게시물 제목"),
+                                fieldWithPath("data.totalPages").type(JsonFieldType.NUMBER).description("총 페이지 수"),
+                                fieldWithPath("data.totalElements").type(JsonFieldType.NUMBER).description("총 게시물 수"),
+                                fieldWithPath("data.size").type(JsonFieldType.NUMBER).description("페이지 크기"),
+                                fieldWithPath("data.number").type(JsonFieldType.NUMBER).description("현재 페이지 번호"),
+                                fieldWithPath("data.first").type(JsonFieldType.BOOLEAN).description("첫 페이지 여부"),
+                                fieldWithPath("data.last").type(JsonFieldType.BOOLEAN).description("마지막 페이지 여부"),
+                                fieldWithPath("data.empty").type(JsonFieldType.BOOLEAN).description("비어 있는 페이지 여부"),
+                                fieldWithPath("data.content[].content").optional().type(JsonFieldType.STRING).description("게시물 내용 (nullable)"),
+                                fieldWithPath("data.content[].updatedAt").optional().type(JsonFieldType.STRING).description("수정된 날짜 (nullable)"),
+                                fieldWithPath("data.content[].updatedBy").optional().type(JsonFieldType.STRING).description("수정자 (nullable)"),
+                                fieldWithPath("data.sort.empty").type(JsonFieldType.BOOLEAN).description("정렬 정보가 비어 있는지 여부"),
+                                fieldWithPath("data.sort.unsorted").type(JsonFieldType.BOOLEAN).description("정렬되지 않은 상태 여부"),
+                                fieldWithPath("data.sort.sorted").type(JsonFieldType.BOOLEAN).description("정렬된 상태 여부"),
+                                fieldWithPath("data.numberOfElements").type(JsonFieldType.NUMBER).description("현재 페이지의 게시물 수"),
+                                fieldWithPath("data.pageable").optional().type(JsonFieldType.STRING).description("페이징 정보 (INSTANCE)").ignored()
+                        )
+                ));
+    }
+
+    @Test
+    @DisplayName("게시물을 성공적으로 삭제한다")
+    void deletePost_Success() throws Exception {
+        long postId = 1L;
+
+        mockMvc.perform(RestDocumentationRequestBuilders.delete("/post/{id}", postId)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andDo(document("post-delete-success",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        pathParameters(
+                                parameterWithName("id").description("삭제할 게시물 ID")
+                        ),
+                        responseFields(
+                                fieldWithPath("resultCode").type(JsonFieldType.STRING).description("응답 코드"),
+                                fieldWithPath("resultMessage").type(JsonFieldType.STRING).description("응답 메시지"),
+                                fieldWithPath("data").type(JsonFieldType.NULL).description("삭제 성공 시 데이터는 null")
+                        )
+                ));
+    }
+
 }
