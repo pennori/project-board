@@ -14,6 +14,7 @@ import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDoc
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.mock.mockito.MockBeans;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
@@ -30,6 +31,12 @@ import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+@MockBeans({
+        @MockBean(PostModifyService.class),
+        @MockBean(PostViewService.class),
+        @MockBean(PostListViewService.class),
+        @MockBean(PostDeleteService.class)
+})
 @WebMvcTest(PostController.class)
 @AutoConfigureMockMvc
 @ExtendWith(RestDocumentationExtension.class)
@@ -44,18 +51,6 @@ class PostControllerTest {
 
     @MockBean
     private PostCreateService postCreateService;
-
-    @MockBean
-    private PostModifyService postModifyService;
-
-    @MockBean
-    private PostViewService postViewService;
-
-    @MockBean
-    private PostListViewService postListViewService;
-
-    @MockBean
-    private PostDeleteService postDeleteService;
 
     @BeforeEach
     void setup(WebApplicationContext context, RestDocumentationContextProvider restDocumentation) {
