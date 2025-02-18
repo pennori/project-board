@@ -55,7 +55,7 @@ public class MemberService {
         MemberPoint memberPoint =
                 MemberPoint.builder()
                         .score(0L)
-                        .createdBy(Author.SYSTEM_ID)
+                        .createdBy(Author.SYSTEM_USER_ID)
                         .build();
         member.setMemberPoint(memberPoint);
     }
@@ -64,7 +64,7 @@ public class MemberService {
         MemberRole memberRole =
                 MemberRole.builder()
                         .name(request.getRole())
-                        .createdBy(Author.SYSTEM_ID)
+                        .createdBy(Author.SYSTEM_USER_ID)
                         .build();
         member.setMemberRole(memberRole);
     }
@@ -76,7 +76,7 @@ public class MemberService {
                         .password(passwordEncoder.encode(request.getPassword()))
                         .name(request.getName())
                         .regNo(cryptUtil.encrypt(request.getRegNo()))
-                        .createdBy(Author.SYSTEM_ID)
+                        .createdBy(Author.SYSTEM_USER_ID)
                         .build();
 
         memberRepository.save(member);

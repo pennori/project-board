@@ -41,7 +41,7 @@ class PostRepositoryTest {
                         .password("password")
                         .name("name")
                         .regNo("regNo")
-                        .createdBy(Author.SYSTEM_ID)
+                        .createdBy(Author.SYSTEM_USER_ID)
                         .build();
 
         testEntityManager.persist(member);

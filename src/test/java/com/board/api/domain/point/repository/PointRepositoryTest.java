@@ -34,7 +34,7 @@ class PointRepositoryTest {
                         .category(Category.POST.name())
                         .action(Action.CREATE.name())
                         .score(3L)
-                        .createdBy(Author.SYSTEM_ID)
+                        .createdBy(Author.SYSTEM_USER_ID)
                         .build();
 
         // when

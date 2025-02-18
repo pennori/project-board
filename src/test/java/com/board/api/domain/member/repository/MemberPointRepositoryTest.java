@@ -33,20 +33,20 @@ class MemberPointRepositoryTest {
                         .password("password")
                         .name("name")
                         .regNo("regNo")
-                        .createdBy(Author.SYSTEM_ID)
+                        .createdBy(Author.SYSTEM_USER_ID)
                         .build();
 
         MemberRole memberRole =
                 MemberRole.builder()
                         .name(Role.USER.name())
-                        .createdBy(Author.SYSTEM_ID)
+                        .createdBy(Author.SYSTEM_USER_ID)
                         .build();
         member.setMemberRole(memberRole);
 
         MemberPoint memberPoint =
                 MemberPoint.builder()
                         .score(100L)
-                        .createdBy(Author.SYSTEM_ID)
+                        .createdBy(Author.SYSTEM_USER_ID)
                         .build();
         member.setMemberPoint(memberPoint);
 
