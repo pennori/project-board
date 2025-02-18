@@ -8,7 +8,6 @@ public class ResponseUtil {
 
     private static final HttpStatus DEFAULT_STATUS = HttpStatus.OK;
 
-    // Main method to create ApiResponse
     private static <T> ApiResponse<T> createResponse(T data) {
         return ApiResponse.<T>builder()
                 .status(DEFAULT_STATUS)
