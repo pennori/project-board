@@ -38,7 +38,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         String username;
         String password;
 
-        if (MimeTypeUtils.APPLICATION_JSON_VALUE.equalsIgnoreCase(request.getContentType())) {
+        if (request.getContentType() != null && request.getContentType().startsWith(MimeTypeUtils.APPLICATION_JSON_VALUE)) {
             LoginRequest loginRequest = parseJsonRequest(request);
             if (loginRequest == null) {
                 throw new IllegalArgumentException("Invalid login request");
