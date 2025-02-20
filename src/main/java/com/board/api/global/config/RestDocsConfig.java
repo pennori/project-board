@@ -10,32 +10,27 @@ import org.springframework.context.annotation.Configuration;
 import java.util.Collections;
 
 @Configuration
-public class SwaggerConfig {
+public class RestDocsConfig {
     private final SecuritySchemeConfig securitySchemeConfig;
 
     @Autowired
-    public SwaggerConfig(SecuritySchemeConfig securitySchemeConfig) {
+    public RestDocsConfig(SecuritySchemeConfig securitySchemeConfig) {
         this.securitySchemeConfig = securitySchemeConfig;
     }
 
-
     @Bean
-    public OpenAPI openAPI() {
-        ApiMetadata apiMetadata = new ApiMetadata();
-
+    public OpenAPI restDocsOpenAPI() {
         return new OpenAPI()
-                .info(apiMetadata.createApiInfo())
+                .info(createApiInfo())
                 .components(new Components().addSecuritySchemes(SecuritySchemeConfig.BEARER_AUTH, securitySchemeConfig.createSecurityScheme()))
                 .security(Collections.singletonList(securitySchemeConfig.createSecurityRequirement()));
     }
 
-    private static class ApiMetadata {
-        public Info createApiInfo() {
-            return new Info()
-                    .title("게시판 이용자의 포인트 관리 서비스 (토이 프로젝트) - Swagger")
-                    .description("Java 17 & Spring Boot 3.3.1")
-                    .version("1.0.0");
-        }
+    private Info createApiInfo() {
+        return new Info()
+                .title("게시판 이용자의 포인트 관리 서비스 (토이 프로젝트) - Rest Docs")
+                .description("Java 17 & Spring Boot 3.3.1")
+                .version("1.0.0");
     }
 
 }
