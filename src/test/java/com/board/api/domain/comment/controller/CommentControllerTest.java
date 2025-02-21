@@ -39,6 +39,7 @@ import static org.springframework.restdocs.request.RequestDocumentation.pathPara
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@DisplayName("CommentController 테스트")
 @MockBeans({
         @MockBean(CommentDeleteService.class)
 })
@@ -71,14 +72,18 @@ class CommentControllerTest {
     @Test
     @DisplayName("댓글을 성공적으로 생성하고 200 OK를 반환한다")
     void createComment() throws Exception {
+        // given
         CommentRequest request = new CommentRequest();
         request.setPostId("1");
         request.setContent("This is a comment");
 
         CommentDto mockCommentDto = CommentDto.builder().postId(1L).commentId(1L).build();
+
+        // when
         when(commentCreateService.createComment(any(CommentRequest.class))).thenReturn(mockCommentDto);
 
-        mockMvc.perform(RestDocumentationRequestBuilders.post("/comment")
+        // then
+        mockMvc.perform(RestDocumentationRequestBuilders.post("/comments")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
@@ -106,9 +111,11 @@ class CommentControllerTest {
     @Test
     @DisplayName("댓글을 성공적으로 삭제한다")
     void deleteComment() throws Exception {
+        // given
         Long commentId = 1L;
 
-        mockMvc.perform(RestDocumentationRequestBuilders.delete("/comment/{id}", commentId)
+        // when, then
+        mockMvc.perform(RestDocumentationRequestBuilders.delete("/comments/{id}", commentId)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andDo(MockMvcRestDocumentationWrapper.document("comment-delete-success",

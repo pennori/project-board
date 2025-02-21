@@ -21,13 +21,13 @@ public class CommentController {
     private final CommentCreateService commentCreateService;
     private final CommentDeleteService commentDeleteService;
 
-    @PostMapping("/comment")
+    @PostMapping("/comments")
     public ResponseEntity<ApiResponse<CommentDto>> createComment(@Valid @RequestBody CommentRequest request) {
         CommentDto createdComment = commentCreateService.createComment(request);
         return ResponseUtil.buildResponseWithData(createdComment);
     }
 
-    @DeleteMapping("/comment/{commentId}")
+    @DeleteMapping("/comments/{commentId}")
     public ResponseEntity<ApiResponse<?>> deleteComment(@PathVariable @Positive Long commentId) {
         commentDeleteService.deleteComment(commentId);
         return ResponseUtil.buildEmptyResponse();

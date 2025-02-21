@@ -26,39 +26,39 @@
 
 #### Postman
 * 아래 json 파일을 Postman 에 import 후 진행 
-  * 프로젝트 내 /postman/project-board test.postman_collection.json
+  * 프로젝트 내 /postsman/project-board test.postman_collection.json
 
 ## 사양
 
 #### 게시물/댓글 작성시 이벤트가 발생하고 아래 API 로 이벤트를 전달.
-* [POST] /member/signup
+* [POST] /members/signup
   * 회원가입 API
-* [POST] /member/login
+* [POST] /members/login
   * 로그인 API 
   * 인증 토큰 반환 (이하의 API 호출시 인증 수단)
-* [GET] /member/point
+* [GET] /members/points
   * 로그인 회원의 현재 포인트 조회 API
   * 현재 포인트 반환
-* [POST] /post
+* [POST] /posts
   * 로그인 회원의 게시물 작성 API
   * 게시물 id 반환
-* [GET] /post
+* [GET] /posts
   * 게시물 목록 조회 API
   * 페이지 번호, 페이지 별 갯수, 정렬방식 요청
   * 페이징 정보, 게시물 id, 게시물 제목 목록 반환
-* [GET] /post/{postId}
+* [GET] /posts/{postId}
   * 게시물 상세 조회 API
   * 게시물 정보, 댓글 정보 반환
-* [PUT] /post
+* [PUT] /posts
   * 게시물 수정 API
   * 작성자가 아니면 수정 불가
   * 수정된 게시물 id 반환
-* [DELETE] /post/{postId}
+* [DELETE] /posts/{postId}
   * 게시물 삭제 API
-* [POST] /comment
+* [POST] /comments
   * 게시물에 대한 댓글 작성 API
   * 게시물 id 와 작성한 댓글 id 반환
-* [DELETE] /comment/{commentId}
+* [DELETE] /comments/{commentId}
   * 로그인 회원의 게시물에 대한 댓글 삭제 API
 
 #### 게시판 이용자들이 게시물을 작성할 때 포인트를 부여하고, 전체/개인에 대한 포인트 부여 히스토리와 개인 별 누적 포인트를 관리.

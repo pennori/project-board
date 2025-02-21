@@ -35,6 +35,7 @@ import static org.springframework.restdocs.operation.preprocess.Preprocessors.pr
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@DisplayName("MemberController 테스트")
 @WebMvcTest(MemberController.class)
 @AutoConfigureMockMvc
 @ExtendWith(RestDocumentationExtension.class)
@@ -66,11 +67,7 @@ class MemberControllerTest {
     @Test
     @DisplayName("회원 가입 성공하고 200 OK를 반환한다.")
     void signUp_Success() throws Exception {
-        // Arrange (Mock 데이터 준비)
-        SignUpDto mockSignUpDto = SignUpDto.builder().memberId(1L).build();
-        Mockito.when(memberService.createMember(any(SignUpRequest.class)))
-                .thenReturn(mockSignUpDto);
-
+        // given
         SignUpRequest request = new SignUpRequest();
         request.setEmail("testuser@example.com");
         request.setPassword("securePass1!");
@@ -78,9 +75,15 @@ class MemberControllerTest {
         request.setRegNo("700101-1234567");
         request.setRole("ADMIN");
 
-        // Act & Assert (테스트 실행 및 REST Docs 생성)
+        SignUpDto mockSignUpDto = SignUpDto.builder().memberId(1L).build();
+
+        // when
+        Mockito.when(memberService.createMember(any(SignUpRequest.class)))
+                .thenReturn(mockSignUpDto);
+
+        // then
         mockMvc.perform(RestDocumentationRequestBuilders.
-                        post("/member/signup")
+                        post("/members/signup")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
@@ -105,12 +108,14 @@ class MemberControllerTest {
     @Test
     @DisplayName("회원 포인트 조회 성공하고 200 OK를 반환한다.")
     void getMemberPoint_Success() throws Exception {
-        // Arrange (Mock 데이터 준비)
+        // given
         CurrentPointDto mockCurrentPointDto = CurrentPointDto.builder().point(1000L).build();
+
+        // when
         Mockito.when(memberPointService.getPoint()).thenReturn(mockCurrentPointDto);
 
-        // Act & Assert (테스트 실행 및 REST Docs 생성)
-        mockMvc.perform(RestDocumentationRequestBuilders.get("/member/point")
+        // then
+        mockMvc.perform(RestDocumentationRequestBuilders.get("/members/points")
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andDo(document("member-get-point",

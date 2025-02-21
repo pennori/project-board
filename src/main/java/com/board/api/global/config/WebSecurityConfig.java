@@ -26,8 +26,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class WebSecurityConfig {
 
     private static final String[] PERMIT_ALL_PATTERNS = {
-            "/member/signup",
-            "/member/login",
+            "/members/signup",
+            "/members/login",
             "/v3/api-docs/**",
             "/swagger-ui/**",
             "/swagger-resources/**",
@@ -68,7 +68,7 @@ public class WebSecurityConfig {
 
     private LoginFilter createLoginFilter() throws Exception {
         LoginFilter loginFilter = new LoginFilter(authenticationManager(), jwtUtil);
-        loginFilter.setFilterProcessesUrl("/member/login");
+        loginFilter.setFilterProcessesUrl("/members/login");
         loginFilter.setUsernameParameter("userId");
         return loginFilter;
     }

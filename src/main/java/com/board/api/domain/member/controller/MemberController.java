@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
-@RequestMapping("/member")
+@RequestMapping("/members")
 @RequiredArgsConstructor
 public class MemberController {
 
@@ -30,7 +30,7 @@ public class MemberController {
         return ResponseUtil.buildResponseWithData(signUpDto);
     }
 
-    @GetMapping("/point")
+    @GetMapping("/points")
     public ResponseEntity<ApiResponse<CurrentPointDto>> getMemberPoint() {
         log.info("회원 포인트 조회 요청");
         CurrentPointDto currentPointDto = memberPointService.getPoint();

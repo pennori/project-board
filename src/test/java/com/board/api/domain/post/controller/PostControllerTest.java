@@ -43,6 +43,7 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+@DisplayName("PostController 테스트")
 @MockBeans({
         @MockBean(PostDeleteService.class)
 })
@@ -81,13 +82,16 @@ class PostControllerTest {
     @Test
     @DisplayName("게시물을 성공적으로 생성하고 200 OK를 반환한다")
     void createPost_Success() throws Exception {
+        // given
         PostCreateRequest request = new PostCreateRequest();
         request.setTitle("샘플 제목");
         request.setContent("샘플 내용");
 
         PostCreationDto responseDto = PostCreationDto.builder().postId(1L).build();
+
         Mockito.when(postCreateService.createPost(any(PostCreateRequest.class))).thenReturn(responseDto);
 
+        // when, then
         mockMvc.perform(post("/posts")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
@@ -115,10 +119,12 @@ class PostControllerTest {
     @Test
     @DisplayName("제목이 비어 있으면 400 Bad Request를 반환한다")
     void createPost_Failure_BlankTitle() throws Exception {
+        // given
         PostCreateRequest request = new PostCreateRequest();
         request.setTitle("샘플 제목");
         request.setContent("");
 
+        // when, then
         mockMvc.perform(post("/posts")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
@@ -145,10 +151,12 @@ class PostControllerTest {
     @Test
     @DisplayName("내용이 비어 있으면 400 Bad Request를 반환한다")
     void createPost_Failure_BlankContent() throws Exception {
+        // given
         PostCreateRequest request = new PostCreateRequest();
         request.setTitle("샘플 제목");
         request.setContent(""); // 내용이 비어있는 요청으로 테스트 진행
 
+        // when, then
         mockMvc.perform(post("/posts")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
@@ -176,10 +184,12 @@ class PostControllerTest {
     @Test
     @DisplayName("제목이 최대 길이를 초과하면 400 Bad Request를 반환한다")
     void createPost_Failure_TitleTooLong() throws Exception {
+        // given
         PostCreateRequest request = new PostCreateRequest();
         request.setTitle("A".repeat(256));
         request.setContent("샘플 내용");
 
+        // when, then
         mockMvc.perform(post("/posts")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
@@ -211,10 +221,12 @@ class PostControllerTest {
     @Test
     @DisplayName("내용이 최대 길이를 초과하면 400 Bad Request를 반환한다")
     void createPost_Failure_ContentTooLong() throws Exception {
+        // given
         PostCreateRequest request = new PostCreateRequest();
         request.setTitle("샘플 제목");
         request.setContent("A".repeat(256));
 
+        // when, then
         mockMvc.perform(post("/posts")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
@@ -240,6 +252,7 @@ class PostControllerTest {
     @Test
     @DisplayName("게시물 정보를 성공적으로 조회한다")
     void getPost_Success() throws Exception {
+        // given
         long postId = 1L;
 
         Mockito.when(postViewService.viewPost(postId))
@@ -252,6 +265,7 @@ class PostControllerTest {
                         .bunchOfCommentViewDto(null)
                         .build());
 
+        // when, then
         mockMvc.perform(RestDocumentationRequestBuilders.get("/posts/{id}", postId)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -280,20 +294,20 @@ class PostControllerTest {
     @Test
     @DisplayName("게시물 정보를 성공적으로 수정한다")
     void modifyPost_Success() throws Exception {
-        // Given
+        // given
         PostModifyRequest modifyRequest = new PostModifyRequest();
         modifyRequest.setPostId(String.valueOf(1L)); // postId를 요청 본문에 포함
         modifyRequest.setTitle("수정된 제목");
         modifyRequest.setContent("수정된 내용");
 
-        // Mock Service Layer
         PostModifyDto mockResponse = PostModifyDto.builder()
                 .postId(1L) // 반환될 게시물 ID
                 .build();
+
         Mockito.when(postModifyService.modifyPost(any(PostModifyRequest.class)))
                 .thenReturn(mockResponse); // 반환 값을 설정
 
-        // When & Then
+        // when, then
         mockMvc.perform(RestDocumentationRequestBuilders.put("/posts") // "/post"로 요청
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(modifyRequest))) // 요청 본문에 JSON 데이터 포함
@@ -322,7 +336,7 @@ class PostControllerTest {
     @Test
     @DisplayName("게시물 목록을 성공적으로 조회한다")
     void listPosts_Success() throws Exception {
-        // Mock 데이터 준비
+        // given
         PageImpl<PostListViewDto> mockPageData = new PageImpl<>(List.of(
                 PostListViewDto.builder()
                         .postId(1L)
@@ -336,7 +350,7 @@ class PostControllerTest {
         Mockito.when(postListViewService.listViewPost(any()))
                 .thenReturn(mockPageData);
 
-        // MockMvc를 통한 요청 테스트
+        // when, then
         mockMvc.perform(RestDocumentationRequestBuilders.get("/posts")
                 .queryParam("page", "1")
                 .queryParam("size", "10")
@@ -381,8 +395,10 @@ class PostControllerTest {
     @Test
     @DisplayName("게시물을 성공적으로 삭제한다")
     void deletePost_Success() throws Exception {
+        // given
         long postId = 1L;
 
+        // when, then
         mockMvc.perform(RestDocumentationRequestBuilders.delete("/posts/{id}", postId)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())

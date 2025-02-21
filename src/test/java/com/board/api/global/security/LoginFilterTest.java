@@ -28,6 +28,7 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWit
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.document;
 
+@DisplayName("LoginFilter 테스트")
 @SpringBootTest
 @AutoConfigureMockMvc
 @AutoConfigureRestDocs
@@ -48,7 +49,7 @@ public class LoginFilterTest {
     @Test
     @DisplayName("회원 로그인 성공 테스트")
     public void loginEndpointTest() throws Exception {
-        // 테스트에 사용할 사용자 정보 설정
+        // given
         MemberDto memberDto = MemberDto.builder()
                 .email("testuser@example.com")
                 .password("securePass1!")
@@ -62,7 +63,6 @@ public class LoginFilterTest {
         request.setPassword("securePass1!");
 
         // AuthenticationManager.authenticate() 메서드가 성공적으로 인증을 반환하도록 모킹
-        // Authentication 객체 생성
         Authentication authentication = new UsernamePasswordAuthenticationToken(
                 customUserDetails,
                 null,
@@ -76,8 +76,9 @@ public class LoginFilterTest {
 
         when(authenticationManager.authenticate(any(Authentication.class))).thenReturn(authentication);
 
+        // when, then
         mockMvc.perform(RestDocumentationRequestBuilders.
-                        post("/member/login")
+                        post("/members/login")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
@@ -95,7 +96,7 @@ public class LoginFilterTest {
                         )
                 ));
 
-        // 모킹된 메소드 검증
+        // verify mocking
         verify(jwtUtil, times(1)).createJwt(anyString(), anyString(), anyLong());
     }
 }
