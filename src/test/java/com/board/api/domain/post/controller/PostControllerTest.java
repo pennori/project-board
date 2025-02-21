@@ -38,8 +38,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @MockBeans({
@@ -83,7 +82,7 @@ class PostControllerTest {
         PostCreationDto responseDto = PostCreationDto.builder().postId(1L).build();
         Mockito.when(postCreateService.createPost(any(PostCreateRequest.class))).thenReturn(responseDto);
 
-        mockMvc.perform(post("/post")
+        mockMvc.perform(post("/posts")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
@@ -111,7 +110,7 @@ class PostControllerTest {
         request.setTitle("샘플 제목");
         request.setContent("");
 
-        mockMvc.perform(post("/post")
+        mockMvc.perform(post("/posts")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isBadRequest())
@@ -138,7 +137,7 @@ class PostControllerTest {
         request.setTitle("샘플 제목");
         request.setContent(""); // 내용이 비어있는 요청으로 테스트 진행
 
-        mockMvc.perform(post("/post")
+        mockMvc.perform(post("/posts")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isBadRequest())
@@ -166,7 +165,7 @@ class PostControllerTest {
         request.setTitle("A".repeat(256));
         request.setContent("샘플 내용");
 
-        mockMvc.perform(post("/post")
+        mockMvc.perform(post("/posts")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isBadRequest())
@@ -198,7 +197,7 @@ class PostControllerTest {
         request.setTitle("샘플 제목");
         request.setContent("A".repeat(256));
 
-        mockMvc.perform(post("/post")
+        mockMvc.perform(post("/posts")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isBadRequest())
@@ -232,7 +231,7 @@ class PostControllerTest {
                         .bunchOfCommentViewDto(null)
                         .build());
 
-        mockMvc.perform(RestDocumentationRequestBuilders.get("/post/{id}", postId)
+        mockMvc.perform(RestDocumentationRequestBuilders.get("/posts/{id}", postId)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andDo(document("post-get-success",
@@ -271,7 +270,7 @@ class PostControllerTest {
                 .thenReturn(mockResponse); // 반환 값을 설정
 
         // When & Then
-        mockMvc.perform(RestDocumentationRequestBuilders.put("/post") // "/post"로 요청
+        mockMvc.perform(RestDocumentationRequestBuilders.put("/posts") // "/post"로 요청
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(modifyRequest))) // 요청 본문에 JSON 데이터 포함
                 .andExpect(status().isOk()) // 200 상태 확인
@@ -311,12 +310,20 @@ class PostControllerTest {
                 .thenReturn(mockPageData);
 
         // MockMvc를 통한 요청 테스트
-        mockMvc.perform(RestDocumentationRequestBuilders.get("/post")
-                        .contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(RestDocumentationRequestBuilders.get("/posts")
+                .param("page", "1")
+                .param("size", "10")
+                .param("sort","postId,desc")
+                .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andDo(document("post-list-success",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
+                        queryParameters(
+                                parameterWithName("page").description("조회할 게시물 페이지 번호").optional(),
+                                parameterWithName("size").description("조회할 게시물 전체 페이지 사이즈").optional(),
+                                parameterWithName("sort").description("조회할 게시물 정렬 키, 정렬 방식").optional()
+                        ),
                         responseFields(
                                 fieldWithPath("resultCode").type(JsonFieldType.STRING).description("응답 코드"),
                                 fieldWithPath("resultMessage").type(JsonFieldType.STRING).description("응답 메시지"),
@@ -346,7 +353,7 @@ class PostControllerTest {
     void deletePost_Success() throws Exception {
         long postId = 1L;
 
-        mockMvc.perform(RestDocumentationRequestBuilders.delete("/post/{id}", postId)
+        mockMvc.perform(RestDocumentationRequestBuilders.delete("/posts/{id}", postId)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andDo(document("post-delete-success",

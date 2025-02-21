@@ -30,31 +30,31 @@ public class PostController {
     private final PostListViewService postListViewService;
     private final PostDeleteService postDeleteService;
 
-    @PostMapping("/post")
+    @PostMapping("/posts")
     public ResponseEntity<ApiResponse<PostCreationDto>> createPost(@Valid @RequestBody PostCreateRequest request) {
         PostCreationDto dto = postCreateService.createPost(request);
         return ResponseUtil.buildResponseWithData(dto);
     }
 
-    @GetMapping("/post")
+    @GetMapping("/posts")
     public ResponseEntity<ApiResponse<Page<PostListViewDto>>> listViewPost(@PageableDefault Pageable pageable) {
         Page<PostListViewDto> bunchOfDto = postListViewService.listViewPost(pageable);
         return ResponseUtil.buildResponseWithData(bunchOfDto);
     }
 
-    @GetMapping("/post/{postId}")
+    @GetMapping("/posts/{postId}")
     public ResponseEntity<ApiResponse<PostViewDto>> viewPost(@PathVariable @Positive Long postId) {
         PostViewDto dto = postViewService.viewPost(postId);
         return ResponseUtil.buildResponseWithData(dto);
     }
 
-    @PutMapping("/post")
+    @PutMapping("/posts")
     public ResponseEntity<ApiResponse<PostModifyDto>> modifyPost(@Valid @RequestBody PostModifyRequest postRequest) {
         PostModifyDto dto = postModifyService.modifyPost(postRequest);
         return ResponseUtil.buildResponseWithData(dto);
     }
 
-    @DeleteMapping("/post/{postId}")
+    @DeleteMapping("/posts/{postId}")
     public ResponseEntity<ApiResponse<Object>> deletePost(@PathVariable @Positive Long postId) {
         postDeleteService.deletePost(postId);
         return ResponseUtil.buildResponseWithData(null);
