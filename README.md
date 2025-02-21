@@ -17,16 +17,12 @@
 
 ## 테스트 방법
 
-#### Swagger
+#### Spring REST Docs 와 Swagger 를 사용하여 작성 자동화된 API 명세서
 * /swagger-ui 접속해서 진행
-  * /member/signup 가입
-  * /member/login 으로 jwt token 발급
+  * /members/signup 가입
+  * /members/login 으로 jwt token 발급
   * authorization 항목에 bearer 빼고 token 입력해서 인증
   * 그 외 End Point 로 테스트
-
-#### Postman
-* 아래 json 파일을 Postman 에 import 후 진행 
-  * 프로젝트 내 /postsman/project-board test.postman_collection.json
 
 ## 사양
 
