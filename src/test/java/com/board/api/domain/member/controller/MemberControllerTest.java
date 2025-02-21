@@ -105,7 +105,7 @@ class MemberControllerTest {
         Mockito.when(memberPointService.getPoint()).thenReturn(mockCurrentPointDto);
 
         // Act & Assert (테스트 실행 및 REST Docs 생성)
-        mockMvc.perform(RestDocumentationRequestBuilders.get("/member/point") // URL 템플릿 명시
+        mockMvc.perform(RestDocumentationRequestBuilders.get("/member/point")
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andDo(document("member-get-point",
