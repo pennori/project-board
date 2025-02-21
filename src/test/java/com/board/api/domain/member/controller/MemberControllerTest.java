@@ -64,7 +64,7 @@ class MemberControllerTest {
     }
 
     @Test
-    @DisplayName("회원 가입 성공 테스트")
+    @DisplayName("회원 가입 성공하고 200 OK를 반환한다.")
     void signUp_Success() throws Exception {
         // Arrange (Mock 데이터 준비)
         SignUpDto mockSignUpDto = SignUpDto.builder().memberId(1L).build();
@@ -103,7 +103,7 @@ class MemberControllerTest {
     }
 
     @Test
-    @DisplayName("회원 포인트 조회 성공 테스트")
+    @DisplayName("회원 포인트 조회 성공하고 200 OK를 반환한다.")
     void getMemberPoint_Success() throws Exception {
         // Arrange (Mock 데이터 준비)
         CurrentPointDto mockCurrentPointDto = CurrentPointDto.builder().point(1000L).build();
