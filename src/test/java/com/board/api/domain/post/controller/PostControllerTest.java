@@ -338,9 +338,9 @@ class PostControllerTest {
 
         // MockMvc를 통한 요청 테스트
         mockMvc.perform(RestDocumentationRequestBuilders.get("/posts")
-                .param("page", "1")
-                .param("size", "10")
-                .param("sort","id,desc")
+                .queryParam("page", "1")
+                .queryParam("size", "10")
+                .queryParam("sort","id,desc")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andDo(document("post-list-success",
