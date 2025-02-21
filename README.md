@@ -1,6 +1,6 @@
 # project-board
 #### 게시판 이용자의 포인트 관리 서비스 (토이 프로젝트)
-
+#### Spring REST Docs 와 Swagger 를 사용하여 API 명세서 작성 자동화
 ## 개발 환경
 
 #### Build : Gradle 8.8
@@ -17,7 +17,7 @@
 
 ## 테스트 방법
 
-#### Spring REST Docs 와 Swagger 를 사용하여 작성 자동화된 API 명세서
+#### Spring REST Docs + Swagger UI
 * /swagger-ui 접속해서 진행
   * /members/signup 가입
   * /members/login 으로 jwt token 발급
