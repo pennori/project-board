@@ -20,18 +20,19 @@ import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
+import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import static org.mockito.ArgumentMatchers.any;
 import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.document;
+import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
+import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
-import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
-import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(MemberController.class)
@@ -55,6 +56,10 @@ class MemberControllerTest {
     void setup(WebApplicationContext context, RestDocumentationContextProvider restDocumentation) {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(context)
                 .apply(MockMvcRestDocumentation.documentationConfiguration(restDocumentation)) // REST Docs 설정 추가
+                .defaultRequest(RestDocumentationRequestBuilders.get("/")
+                .header("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9."
+                                + "eyJzdWIiOiJ1c2VySWQiLCJleHAiOjE2MzI3MjM2MDAsImlhdCI6MTYzMjcyMDAwMH0."
+                                + "SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"))
                 .build();
     }
 
@@ -83,16 +88,16 @@ class MemberControllerTest {
                         preprocessRequest(prettyPrint()), // 요청 전문을 보기 좋게 출력
                         preprocessResponse(prettyPrint()), // 응답 전문을 보기 좋게 출력
                         requestFields( // 요청 필드 문서화
-                                fieldWithPath("email").description("회원의 이메일"),
-                                fieldWithPath("password").description("회원의 비밀번호"),
-                                fieldWithPath("name").description("회원의 이름"),
-                                fieldWithPath("regNo").description("회원의 주민등록번호"),
-                                fieldWithPath("role").description("회원의 권한")
+                                fieldWithPath("email").type(JsonFieldType.STRING).description("회원의 이메일"),
+                                fieldWithPath("password").type(JsonFieldType.STRING).description("회원의 비밀번호"),
+                                fieldWithPath("name").type(JsonFieldType.STRING).description("회원의 이름"),
+                                fieldWithPath("regNo").type(JsonFieldType.STRING).description("회원의 주민등록번호"),
+                                fieldWithPath("role").type(JsonFieldType.STRING).description("회원의 권한")
                         ),
                         responseFields( // 응답 필드 문서화
-                                fieldWithPath("resultCode").description("결과 코드"),
-                                fieldWithPath("resultMessage").description("결과 메시지"),
-                                fieldWithPath("data.memberId").description("회원 ID")
+                                fieldWithPath("resultCode").type(JsonFieldType.STRING).description("결과 코드"),
+                                fieldWithPath("resultMessage").type(JsonFieldType.STRING).description("결과 메시지"),
+                                fieldWithPath("data.memberId").type(JsonFieldType.STRING).description("회원 ID")
                         )
                 ));
     }
@@ -111,10 +116,13 @@ class MemberControllerTest {
                 .andDo(document("member-get-point",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
+                        requestHeaders(
+                                headerWithName("Authorization").description("Bearer 형식의 JWT 토큰을 포함한 인증 헤더 (실제 token 입력은 각 End Point 우측 자물쇠 아이콘 혹은 문서 최상단 Authorization 버튼 클릭 후 입력)")
+                        ),
                         responseFields(
-                                fieldWithPath("resultCode").description("결과 코드"),
-                                fieldWithPath("resultMessage").description("결과 메시지"),
-                                fieldWithPath("data.point").description("회원의 현재 포인트")
+                                fieldWithPath("resultCode").type(JsonFieldType.STRING).description("결과 코드"),
+                                fieldWithPath("resultMessage").type(JsonFieldType.STRING).description("결과 메시지"),
+                                fieldWithPath("data.point").type(JsonFieldType.STRING).description("회원의 현재 포인트")
                         )
                 ));
     }

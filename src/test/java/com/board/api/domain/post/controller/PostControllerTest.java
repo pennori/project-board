@@ -35,6 +35,8 @@ import java.util.List;
 
 import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.document;
 import static org.mockito.ArgumentMatchers.any;
+import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
+import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
@@ -69,6 +71,10 @@ class PostControllerTest {
     void setup(WebApplicationContext context, RestDocumentationContextProvider restDocumentation) {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(context)
                 .apply(MockMvcRestDocumentation.documentationConfiguration(restDocumentation))
+                .defaultRequest(RestDocumentationRequestBuilders.get("/")
+                .header("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9."
+                                + "eyJzdWIiOiJ1c2VySWQiLCJleHAiOjE2MzI3MjM2MDAsImlhdCI6MTYzMjcyMDAwMH0."
+                                + "SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"))
                 .build();
     }
 
@@ -91,6 +97,9 @@ class PostControllerTest {
                 .andDo(document("post-create-success",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
+                        requestHeaders(
+                                headerWithName("Authorization").description("Bearer 형식의 JWT 토큰을 포함한 인증 헤더 (실제 token 입력은 각 End Point 우측 자물쇠 아이콘 혹은 문서 최상단 Authorization 버튼 클릭 후 입력)")
+                        ),
                         requestFields(
                                 fieldWithPath("title").type(JsonFieldType.STRING).description("게시물 제목"),
                                 fieldWithPath("content").type(JsonFieldType.STRING).description("게시물 내용")
@@ -117,6 +126,9 @@ class PostControllerTest {
                 .andDo(document("post-create-failure-blank-content",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
+                        requestHeaders(
+                                headerWithName("Authorization").description("Bearer 형식의 JWT 토큰을 포함한 인증 헤더 (실제 token 입력은 각 End Point 우측 자물쇠 아이콘 혹은 문서 최상단 Authorization 버튼 클릭 후 입력)")
+                        ),
                         requestFields(
                                 fieldWithPath("title").type(JsonFieldType.STRING).description("게시물 제목"),
                                 fieldWithPath("content").type(JsonFieldType.STRING).description("게시물 내용 (필수)")
@@ -144,6 +156,9 @@ class PostControllerTest {
                 .andDo(document("post-create-failure-blank-content",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
+                        requestHeaders(
+                                headerWithName("Authorization").description("Bearer 형식의 JWT 토큰을 포함한 인증 헤더 (실제 token 입력은 각 End Point 우측 자물쇠 아이콘 혹은 문서 최상단 Authorization 버튼 클릭 후 입력)")
+                        ),
                         requestFields(
                                 fieldWithPath("title").type(JsonFieldType.STRING).description("게시물 제목"),
                                 fieldWithPath("content").type(JsonFieldType.STRING).description("게시물 내용 (필수)")
@@ -172,6 +187,9 @@ class PostControllerTest {
                 .andDo(document("post-create-failure-title-too-long",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
+                        requestHeaders(
+                                headerWithName("Authorization").description("Bearer 형식의 JWT 토큰을 포함한 인증 헤더 (실제 token 입력은 각 End Point 우측 자물쇠 아이콘 혹은 문서 최상단 Authorization 버튼 클릭 후 입력)")
+                        ),
                         requestFields(
                                 fieldWithPath("title")
                                         .type(JsonFieldType.STRING)
@@ -204,6 +222,9 @@ class PostControllerTest {
                 .andDo(document("post-create-failure-content-too-long",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
+                        requestHeaders(
+                                headerWithName("Authorization").description("Bearer 형식의 JWT 토큰을 포함한 인증 헤더 (실제 token 입력은 각 End Point 우측 자물쇠 아이콘 혹은 문서 최상단 Authorization 버튼 클릭 후 입력)")
+                        ),
                         requestFields(
                                 fieldWithPath("title").type(JsonFieldType.STRING).description("게시물 제목"),
                                 fieldWithPath("content").type(JsonFieldType.STRING).description("게시물 내용 (길이 255자 이내)")
@@ -237,6 +258,9 @@ class PostControllerTest {
                 .andDo(document("post-get-success",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
+                        requestHeaders(
+                                headerWithName("Authorization").description("Bearer 형식의 JWT 토큰을 포함한 인증 헤더 (실제 token 입력은 각 End Point 우측 자물쇠 아이콘 혹은 문서 최상단 Authorization 버튼 클릭 후 입력)")
+                        ),
                         pathParameters(
                                 parameterWithName("id").description("조회할 게시물 ID")
                         ),
@@ -279,6 +303,9 @@ class PostControllerTest {
                 .andDo(document("post-modify-success",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
+                        requestHeaders(
+                                headerWithName("Authorization").description("Bearer 형식의 JWT 토큰을 포함한 인증 헤더 (실제 token 입력은 각 End Point 우측 자물쇠 아이콘 혹은 문서 최상단 Authorization 버튼 클릭 후 입력)")
+                        ),
                         requestFields(
                                 fieldWithPath("postId").type(JsonFieldType.STRING).description("수정할 게시물 ID"),
                                 fieldWithPath("title").type(JsonFieldType.STRING).description("수정할 게시물 제목"),
@@ -313,16 +340,19 @@ class PostControllerTest {
         mockMvc.perform(RestDocumentationRequestBuilders.get("/posts")
                 .param("page", "1")
                 .param("size", "10")
-                .param("sort","postId,desc")
+                .param("sort","id,desc")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andDo(document("post-list-success",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
+                        requestHeaders(
+                                headerWithName("Authorization").description("Bearer 형식의 JWT 토큰을 포함한 인증 헤더 (실제 token 입력은 각 End Point 우측 자물쇠 아이콘 혹은 문서 최상단 Authorization 버튼 클릭 후 입력)")
+                        ),
                         queryParameters(
                                 parameterWithName("page").description("조회할 게시물 페이지 번호").optional(),
                                 parameterWithName("size").description("조회할 게시물 전체 페이지 사이즈").optional(),
-                                parameterWithName("sort").description("조회할 게시물 정렬 키, 정렬 방식").optional()
+                                parameterWithName("sort").description("조회할 게시물 정렬 키와 정렬 방식 배열").optional()
                         ),
                         responseFields(
                                 fieldWithPath("resultCode").type(JsonFieldType.STRING).description("응답 코드"),
@@ -359,6 +389,9 @@ class PostControllerTest {
                 .andDo(document("post-delete-success",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
+                        requestHeaders(
+                                headerWithName("Authorization").description("Bearer 형식의 JWT 토큰을 포함한 인증 헤더 (실제 token 입력은 각 End Point 우측 자물쇠 아이콘 혹은 문서 최상단 Authorization 버튼 클릭 후 입력)")
+                        ),
                         pathParameters(
                                 parameterWithName("id").description("삭제할 게시물 ID")
                         ),
