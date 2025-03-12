@@ -92,6 +92,18 @@ tasks.named('test') {
     useJUnitPlatform()
 }
 
+// openapi3.json 위치할 디렉토리 생성
+tasks.register('createDocsDir') {
+    doLast {
+        def outputDir = file('build/resources/main/static/docs')
+        if (!outputDir.exists()) {
+            outputDir.mkdirs()
+            println "Created directory: ${outputDir}"
+        }
+    }
+}
+
+
 openapi3 {
     servers = [
             // 2개 이상 설정하고자 하는 경우, 추가 가능
@@ -133,5 +145,6 @@ bootJar {
     archiveVersion = "0.0.1"
     mainClass = 'com.board.api.ProjectBoardApplication'
     dependsOn(':test')
+    dependsOn(':createDocsDir')
     dependsOn(':openapi3')
 }
