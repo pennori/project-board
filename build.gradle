@@ -107,7 +107,7 @@ tasks.register('createDocsDir') {
 openapi3 {
     servers = [
             // 2개 이상 설정하고자 하는 경우, 추가 가능
-            { url = "http://localhost:80"; description = "Local server" }
+            { url = "/"; description = "Any host server" }
     ]
     title = "게시판 이용자의 포인트 관리 서비스 (토이 프로젝트)"
     description = "Java 17 & Spring Boot 3.3.1."
