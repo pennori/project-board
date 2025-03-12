@@ -33,6 +33,7 @@ repositories {
 ext {
     set('springCloudVersion', "2023.0.2")
     snippetsDir = file('build/generated-snippets')
+    outputDir = file('build/resources/main/static/docs')
 }
 
 dependencies {
@@ -100,7 +101,7 @@ openapi3 {
     description = "Java 17 & Spring Boot 3.3.1."
     version = "1.0.0"
     format = 'json'
-    outputDirectory = 'build/resources/main/static/docs'
+    outputDirectory = outputDir
     // REST Docs 스니펫 경로 설정
     snippetsDirectory = snippetsDir
 }
